@@ -1,33 +1,29 @@
 # Contributing
 
-Thank you for using and improving material published by CASA-Trinity.
+Thank you for improving material in this repository.
 
 ## How to use published items
 
 1. Read the item’s `README.md` and [NOTICE.md](NOTICE.md).
-2. Prefer a test environment before production when the item changes a live system.
-3. Follow that item’s steps end to end (for SQL packages: F5 the whole file).
+2. **Do not test in Prod.**
+3. Follow that item’s steps end to end.
 
 ## Issues
 
-Open an issue when:
-
-- A published script or doc fails or is unclear.
-- You have a portable improvement that helps other sites.
+Open an issue when a published script or doc fails or is unclear, or when you have a portable improvement.
 
 Do **not** include:
 
 - Client names, chart IDs, or real clinical content
 - Login names, passwords, or connection strings
-- Internal CASA paths or private-repo dumps
 
 ## Pull requests
 
-- Keep contributions **portable** and free of customer-specific secrets.
+- Keep contributions portable and free of site-specific secrets.
 - One concern per PR.
-- Say how you tested (test environment when applicable).
+- Say how you tested (not in Prod).
 
-For SmartCare SQL packages: no `USE` of a customer database name, no named SQL logins, `ModifiedBy` from `SUSER_SNAME()` where applicable.
+Topic-specific conventions (SQL, naming, and so on) live in that topic’s folder README.
 
 ## Code of conduct
 

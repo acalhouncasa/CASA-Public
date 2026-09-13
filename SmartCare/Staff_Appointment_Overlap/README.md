@@ -12,7 +12,7 @@ CASA-Trinity · Shared SmartCare packaging · 09/12/2026
 
 Goal: hard-stop is on, Screen 46 is wired when safe, and you have a kill-switch.
 
-1. Open SSMS connected to the target SmartCare database (Train or a test copy first).
+1. Open SSMS connected to the target SmartCare database. **Do not test in Prod.**
 2. Run [SC_StaffAppointmentOverlap_apply_COMMIT.sql](SC_StaffAppointmentOverlap_apply_COMMIT.sql) start to finish (F5).
 3. Confirm the result grids:
    - Deployed = Y
@@ -114,4 +114,4 @@ The apply script does not drop the helper procedures. Leaving `ssp_StaffAppointm
 
 ## License and caution
 
-[MIT](../../LICENSE). Read [NOTICE.md](../../NOTICE.md) before production. CASA-Trinity is not Streamline. Test in Train first.
+[MIT](../../LICENSE). Read [NOTICE.md](../../NOTICE.md). CASA-Trinity is not Streamline. **Do not test in Prod.**

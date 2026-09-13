@@ -1,5 +1,5 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
-  - name: Streamline SmartCare Help Center
-    url: https://support.smartcarenet.com/
-    about: Official vendor documentation. This GitHub repo is not Streamline support.
+  - name: Topic folders
+    url: https://github.com/acalhouncasa/CASA-Public/tree/main
+    about: Open the folder README for product-specific notes (for example SmartCare).

@@ -1,23 +1,21 @@
 # Notice
 
-## Public sharing, not a product support channel
+## About this repository
 
-This repository is published by **CASA-Trinity** so others can reuse selected tools and documentation. It is not an official product release from any vendor.
+This repository is published by **CASA-Trinity** so others can reuse selected tools and documentation. It is not an official product release from any vendor. Folder READMEs say when a topic is tied to a specific product.
 
-When a folder relates to **SmartCare** (Streamline Healthcare Solutions): CASA-Trinity is a SmartCare customer. Those materials are **not** Streamline Help Center content. Streamline does not review or support them. Use vendor documentation for product questions.
+## Changing a live system
 
-## Use in a live system
+Some items change databases, applications, or how people save work.
 
-Some packages change databases or block saves (for example SmartCare SQL).
-
-- Run first on a **Train / test** environment when the item mutates a system.
-- Confirm you are connected to the database or system you intend.
-- Keep a disable or undo path before production.
+- **Do not test in Prod.**
+- Confirm you are connected to the system you intend.
+- Know how to turn the change off or undo it before you apply it.
 - Your organization is responsible for change control, backups, and user communication.
 
 ## No protected health information
 
-Do not put client names, chart numbers, or other PHI in issues, pull requests, screenshots, or sample data. Use fake staff and test clients only.
+Do not put client names, chart numbers, or other PHI in issues, pull requests, screenshots, or sample data.
 
 ## License
 

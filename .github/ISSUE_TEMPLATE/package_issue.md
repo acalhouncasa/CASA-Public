@@ -1,20 +1,20 @@
 ---
-name: Package question or bug
-about: Script error, unclear README, or SmartCare version mismatch. No PHI.
-title: "[Staff_Appointment_Overlap] "
+name: Question or bug
+about: Script error or unclear README. No PHI.
+title: "[folder] "
 labels: ["question"]
 ---
 
-**Package folder**
+**Folder**
 Example: `SmartCare/Staff_Appointment_Overlap`
 
 **What you did**
-Train or test database? Which file did you F5?
+Which file or steps? Confirm this was **not** Prod.
 
 **What happened**
-Paste SQL error text only. No client names, chart IDs, or production screenshots.
+Paste error text only. No client names, chart IDs, or production screenshots.
 
-**SmartCare / SQL Server (if known)**
+**Product / versions (if known)**
 Example: SmartCare R6, SQL Server 2019
 
 **Expected**
