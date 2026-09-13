@@ -1,0 +1,26 @@
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+ehthumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Secrets and local machine files (never commit)
+.env
+.env.*
+*.local.json
+*credentials*
+*token*
+*secret*
+graph_token_cache.json
+
+# Logs and scratch
+*.log
+*.tmp
+__pycache__/
+*.pyc

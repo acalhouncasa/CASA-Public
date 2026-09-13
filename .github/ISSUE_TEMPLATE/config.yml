@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Streamline SmartCare Help Center
+    url: https://support.smartcarenet.com/
+    about: Official vendor documentation. This GitHub repo is not Streamline support.
