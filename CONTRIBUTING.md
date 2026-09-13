@@ -1,38 +1,37 @@
 # Contributing
 
-Thank you for using and improving CASA-Trinity's public SmartCare packages.
+Thank you for using and improving material published by CASA-Trinity.
 
-## How to use a package
+## How to use published items
 
-1. Read the package `README.md` and [NOTICE.md](NOTICE.md).
-2. Open SSMS against a **Train** SmartCare database.
-3. Run the apply script start to finish (F5). Do not run a highlighted section.
-4. Smoke-test with fake staff, then decide whether your site will promote to production.
+1. Read the item’s `README.md` and [NOTICE.md](NOTICE.md).
+2. Prefer a test environment before production when the item changes a live system.
+3. Follow that item’s steps end to end (for SQL packages: F5 the whole file).
 
 ## Issues
 
 Open an issue when:
 
-- A script fails on a standard SmartCare database (include SQL Server / SmartCare version if you know it, and the **error text** only).
-- The README is unclear.
-- You have a portable improvement (naming, Screen 46 already wired, coexistence with another Appointments trigger).
+- A published script or doc fails or is unclear.
+- You have a portable improvement that helps other sites.
 
 Do **not** include:
 
-- Client names, chart IDs, or real appointment subjects
-- Server names or IPs that identify your agency if that is sensitive for you
-- Login names or passwords
+- Client names, chart IDs, or real clinical content
+- Login names, passwords, or connection strings
+- Internal CASA paths or private-repo dumps
 
 ## Pull requests
 
-- Keep scripts **portable**: no `USE` of a customer database name, no named SQL logins, `ModifiedBy` from `SUSER_SNAME()`.
-- One concern per PR (docs, apply script, undo script).
-- Match the existing SQL header block (author line may stay CASA-Trinity or add a co-author).
-- Test on Train. Say so in the PR.
+- Keep contributions **portable** and free of customer-specific secrets.
+- One concern per PR.
+- Say how you tested (test environment when applicable).
+
+For SmartCare SQL packages: no `USE` of a customer database name, no named SQL logins, `ModifiedBy` from `SUSER_SNAME()` where applicable.
 
 ## Code of conduct
 
-Be respectful. This is a small public repo for behavioral-health IT peers. Harassment or PHI dumps will be removed and the account blocked.
+Be respectful. Harassment or PHI dumps will be removed and the account blocked.
 
 ## License
 
