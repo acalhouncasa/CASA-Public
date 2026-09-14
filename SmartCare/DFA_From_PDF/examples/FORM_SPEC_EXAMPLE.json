@@ -11,34 +11,41 @@
   "requires_signature": "Y",
   "view_document_rdl": "RDLDFACommonReport",
   "stored_procedure": "ssp_GetDFADocumentsData",
+  "target_database": "YourSmartCareDatabase",
+  "global_code_categories": [
+    {
+      "category": "XExampleObsLevel",
+      "options": [
+        { "code_name": "Private room", "external_code1": "PrivateRoom" },
+        { "code_name": "Lounge", "external_code1": "LoungeArea" }
+      ]
+    }
+  ],
   "sections": [
     {
-      "name": "Assessment",
-      "section_enable_checkbox": false,
+      "section_label": "Assessment",
+      "section_enable_checkbox": "N",
       "groups": [
         {
-          "name": "Presentation",
+          "group_name": "presentation",
+          "group_label": "Presentation",
           "number_of_items_in_row": 1,
           "fields": [
             {
-              "column": "ChiefComplaint",
               "label": "",
-              "item_type": 5363,
-              "comment": "Long text; group name is the heading; item label blank"
+              "column_name": "ChiefComplaint",
+              "item_type": 5363
             },
             {
-              "column": "ObservationLevel",
               "label": "Observation level",
+              "column_name": "ObservationLevel",
               "item_type": 5365,
               "global_code_category": "XExampleObsLevel",
-              "options": [
-                { "code_name": "Private room", "external_code1": "PrivateRoom" },
-                { "code_name": "Lounge", "external_code1": "LoungeArea" }
-              ]
+              "each_radio_button_on_new_line": "Y"
             },
             {
-              "column": "NeedsFollowUp",
               "label": "Needs follow-up",
+              "column_name": "NeedsFollowUp",
               "item_type": 5362
             }
           ]

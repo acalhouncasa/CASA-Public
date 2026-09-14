@@ -8,7 +8,8 @@ Turn a paper form or screenshots into a **new** SmartCare DFA using a JSON spec,
 |-----|--------|
 | [PROCESS.md](PROCESS.md) | End-to-end steps |
 | [FORM_SPEC.md](FORM_SPEC.md) | What goes in the JSON spec |
-| [examples/FORM_SPEC_EXAMPLE.json](examples/FORM_SPEC_EXAMPLE.json) | Minimal example |
+| [starter/](starter/) | **Runnable** Python generator + schema |
+| [examples/FORM_SPEC_EXAMPLE.json](examples/FORM_SPEC_EXAMPLE.json) | Minimal example (matches starter) |
 | [PITFALLS.md](PITFALLS.md) | Layout, GlobalCodes, PDF, promote |
 | [PROMOTE.md](PROMOTE.md) | Greenfield vs merge when the form already exists |
 | [AI_PROMPT.md](AI_PROMPT.md) | What to ask the agent |
@@ -22,7 +23,7 @@ PDF / screenshots
       ↓
  FORM_SPEC.json   (table, sections, fields, ItemTypes, GUIDs)
       ↓
- Generator (your script) → 01_precheck / 02_globalcodes / 03_apply / 04_postcheck
+ starter/generate_dfa_sql.py → 01_precheck / 02_globalcodes / 03_apply / 04_postcheck
       ↓
  Human F5s mutating SQL in SSMS (one file at a time)
       ↓

@@ -2,7 +2,9 @@
 
 The spec is the contract between the PDF and the generator. Keep it in source control next to the form.
 
-## Required ideas (names may vary in your schema)
+## Required keys (starter schema)
+
+Contract: [starter/form_spec.schema.json](starter/form_spec.schema.json).
 
 | Field | Meaning |
 |-------|---------|
@@ -11,8 +13,12 @@ The spec is the contract between the PDF and the generator. Keep it in source co
 | `document_name` | DocumentCodes.DocumentName (staff see this) |
 | `screen_name` | Screens.ScreenName |
 | `form_collection_name` | New collection name for greenfield |
-| `sections[]` | Major headers → FormSections |
-| fields under sections/groups | ItemColumnName, ItemType, labels |
+| `sections[].section_label` | FormSections.SectionLabel |
+| `groups[].group_name` | Internal group key (required) |
+| `groups[].group_label` | Visible heading (optional; do not duplicate field labels) |
+| `fields[].label` / `column_name` / `item_type` | FormItems |
+| `global_code_categories[]` | New `X*` picklists (radios / dropdowns) |
+| `target_database` | Placeholder `YourSmartCareDatabase` → your non-Prod DB |
 
 ## GUIDs
 

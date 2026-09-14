@@ -36,6 +36,7 @@ Anything that only works with this agency’s private tree, credentials helpers,
 | Public path | What |
 |-------------|------|
 | `SmartCare/DFA_From_PDF/` | Portable process: PDF → FORM_SPEC → generated SQL → SSMS; pitfalls; promote; example prompt |
+| `SmartCare/DFA_From_PDF/starter/` | Sanitized `generate_dfa_sql.py` + schema (MIT); smoke-tested on example |
 | `AI/Working_With_Cursor/` | Human vs agent roles, chat habits, safety |
 
-Private generator code and site form packs stay in the private repo. Public pack teaches the method.
+Site form packs and private-only helpers stay in the private repo. Public starter uses placeholders (`YourSmartCareDatabase`), not agency hosts or logins.

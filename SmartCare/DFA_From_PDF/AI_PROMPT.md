@@ -15,7 +15,7 @@ Requirements:
 3. Ask me before inventing ambiguous column names or picklist labels.
 4. Radios: X* GlobalCodes, alphanumeric ExternalCode1, PrimaryDriven NULL, HasSubcodes N.
 5. Do not model wet signature lines as FormItems when RequiresSignature is Y.
-6. Generate numbered SQL: 01_precheck, optional 02_globalcodes, 03_apply_form, 04_postcheck.
+6. Generate numbered SQL with `SmartCare/DFA_From_PDF/starter/generate_dfa_sql.py` (or equivalent): 01_precheck, optional 02_globalcodes, 03_apply_form, 04_postcheck.
 7. No IDENTITY_INSERT of sample ids. Match on GUID. New FormCollection for greenfield.
 8. Give me **one** mutating script at a time. You run read-only precheck/postcheck if you can.
 9. Do not tell me to Import DFA in the browser. SSMS F5 only.

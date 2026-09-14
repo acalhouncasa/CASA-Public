@@ -30,7 +30,13 @@ Have the AI agent draft the first pass from the PDF, then you confirm ambiguous 
 
 ## 3. Generate SQL
 
-Run **your** generator against the spec (Python, PowerShell, etc.). It should emit:
+Use the public starter (stdlib Python):
+
+```powershell
+python "starter\generate_dfa_sql.py" --spec "path\to\FORM_SPEC.json"
+```
+
+See [starter/README.md](starter/README.md). Or use your own generator. It should emit:
 
 | Script | Mutates? | Role |
 |--------|----------|------|

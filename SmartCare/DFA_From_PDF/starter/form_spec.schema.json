@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smartcare-dfa-form-spec",
+  "title": "SmartCare DFA form spec",
+  "description": "JSON contract for starter/generate_dfa_sql.py. Portable identity and type rules for greenfield DFAs.",
+  "type": "object",
+  "required": ["form_name", "table_name", "document_name", "screen_name", "form_collection_name", "sections"],
+  "additionalProperties": true,
+  "properties": {
+    "form_name": { "type": "string" },
+    "table_name": {
+      "type": "string",
+      "pattern": "^CustomDocument[A-Za-z0-9]+$"
+    },
+    "document_name": { "type": "string" },
+    "screen_name": { "type": "string" },
+    "form_collection_name": { "type": "string" },
+    "form_guid": { "type": "string" },
+    "document_code_guid": { "type": "string" },
+    "screen_guid": { "type": "string" },
+    "service_note": { "type": "string", "enum": ["Y", "N"], "default": "N" },
+    "requires_signature": { "type": "string", "enum": ["Y", "N"], "default": "Y" },
+    "default_cosigner": {
+      "type": "string",
+      "enum": ["Y", "N"],
+      "default": "Y",
+      "description": "DocumentCodes.DefaultCoSigner. Y adds the client as co-signer (consent / financial agreement)."
+    },
+    "default_guardian": {
+      "type": "string",
+      "enum": ["Y", "N"],
+      "description": "DocumentCodes.DefaultGuardian. Y adds a guardian co-sign line."
+    },
+    "recreate_pdf_on_client_signature": {
+      "type": "string",
+      "enum": ["Y", "N"],
+      "description": "DocumentCodes.RecreatePDFOnClientSignature. Y refreshes the PDF after client pad-sign."
+    },
+    "patient_consent": {
+      "type": "string",
+      "enum": ["Y", "N"],
+      "description": "DocumentCodes.PatientConsent."
+    },
+    "default_co_signer": {
+      "type": ["string", "null"],
+      "enum": ["Y", "N", null],
+      "default": "Y",
+      "description": "DocumentCodes.DefaultCoSigner. Y adds a client co-sign line (wet pad)."
+    },
+    "default_guardian": {
+      "type": ["string", "null"],
+      "enum": ["Y", "N", null],
+      "description": "DocumentCodes.DefaultGuardian. Y adds a guardian co-sign line. Leave null unless you need it."
+    },
+    "patient_consent": {
+      "type": ["string", "null"],
+      "enum": ["Y", "N", null],
+      "description": "DocumentCodes.PatientConsent. Y only for Consents list / revoke flow. Leave null for ordinary DFAs."
+    },
+    "recreate_pdf_on_client_signature": {
+      "type": ["string", "null"],
+      "enum": ["Y", "N", null],
+      "description": "DocumentCodes.RecreatePDFOnClientSignature. Y so the PDF refreshes after the client pad-signs."
+    },
+    "run_steps_notes": {
+      "type": "string",
+      "description": "Extra paragraph appended to the generated form-folder RUN_STEPS.md."
+    },
+    "view_document_rdl": { "type": "string", "default": "RDLDFACommonReport" },
+    "stored_procedure": { "type": "string", "default": "ssp_GetDFADocumentsData" },
+    "validation_stored_procedure": {
+      "type": "string",
+      "description": "DocumentCodes.ValidationStoredProcedure. Gold: ssp_ValidateDocumentsFromDocumentValidations."
+    },
+    "document_validations": {
+      "type": "array",
+      "description": "Copied DocumentValidations. validation_logic may use {table} for the custom table name.",
+      "items": {
+        "type": "object",
+        "required": ["column_name", "validation_order"],
+        "properties": {
+          "column_name": { "type": "string" },
+          "validation_logic": { "type": "string" },
+          "validation_description": { "type": ["string", "null"] },
+          "error_message": { "type": "string" },
+          "validation_order": { "type": "integer" },
+          "tab_name": { "type": "string" },
+          "tab_order": { "type": "integer" },
+          "document_type": { "type": "integer" },
+          "section_name": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "target_database": { "type": "string", "default": "YourSmartCareDatabase" },
+    "host_document_code_id": {
+      "type": "integer",
+      "description": "Existing vendor DocumentCodeId (existing DocumentCodeId). Creates a Custom Fields tab via Screens.CustomFieldFormId. Does not INSERT DocumentCodes or FormCollections."
+    },
+    "form_type": {
+      "type": "integer",
+      "enum": [9467, 9468, 9469],
+      "description": "Forms.FormType. 9469 Documents is a common extra-tab FormType. 9467 Custom Fields is used for tall Custom Fields canvases."
+    },
+    "form_javascript_file": {
+      "type": "string",
+      "description": "Path to DFA FormJavascript (relative to FORM_SPEC.json). Loaded into Forms.FormJavascript; IsJavascriptOverride defaults to Y."
+    },
+    "is_javascript_override": { "type": "string", "enum": ["Y", "N"] },
+    "global_code_categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["category", "options"],
+        "properties": {
+          "category": { "type": "string", "maxLength": 20 },
+          "options": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                { "type": "string" },
+                {
+                  "type": "object",
+                  "required": ["code_name", "external_code1"],
+                  "properties": {
+                    "code_name": { "type": "string" },
+                    "code": { "type": "string" },
+                    "external_code1": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9]+$",
+                      "maxLength": 20,
+                      "description": "Alphanumeric token persisted on radio save (#97352). Do not use digits-only."
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["section_label", "groups"],
+        "properties": {
+          "id": { "type": "string" },
+          "section_label": { "type": "string" },
+          "sort_order": { "type": "integer" },
+          "number_of_columns": { "type": "integer", "default": 1 },
+          "form_section_guid": { "type": "string" },
+          "section_enable_checkbox": { "type": "string", "enum": ["Y", "N"] },
+          "section_enable_checkbox_text": { "type": ["string", "null"] },
+          "section_enable_checkbox_column_name": {
+            "type": ["string", "null"],
+            "description": "TYPE_YORN column on the custom table. Not a FormItem. Admin: Enable Checkbox / Text / Column Name."
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["group_name", "fields"],
+              "properties": {
+                "id": { "type": "string" },
+                "group_label": {
+                  "type": ["string", "null"],
+                  "description": "Group heading. Do not use the same string as any field label in the group (DFA prints both)."
+                },
+                "group_name": { "type": "string" },
+                "sort_order": { "type": "integer" },
+                "number_of_items_in_row": {
+                  "type": "integer",
+                  "default": 1,
+                  "description": "FormSectionGroups.NumberOfItemsInRow (admin Internal Form Layout). Wrap width. Leave Forms.TotalNumberOfColumns and FormSections.NumberOfColumns at 1. 4 = two labeled fields per row (5374+control twice). 2 = label+control or two checkboxes. 1 = full width."
+                },
+                "grid_type": { "type": ["string", "null"], "enum": ["G", "T", null] },
+                "custom_grid_table_name": { "type": ["string", "null"] },
+                "form_section_group_guid": { "type": "string" },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["label", "item_type"],
+                    "properties": {
+                      "id": { "type": "string" },
+                      "label": { "type": "string" },
+                      "column_name": { "type": "string" },
+                      "item_type": {
+                        "type": "integer",
+                        "description": "5361 TextBox, 5362 CheckBox, 5363 TextArea, 5365 Radio, 5366 Integer, 5367 Date, 5372 DropDown, 5374 Label"
+                      },
+                      "sort_order": { "type": "integer" },
+                      "each_radio_button_on_new_line": {
+                        "type": "string",
+                        "enum": ["Y", "N"],
+                        "description": "FormItems.EachRadioButtonOnNewLine. Use Y when radios should stack vertically."
+                      },
+                      "global_code_category": { "type": ["string", "null"] },
+                      "item_width": { "type": "integer" },
+                      "maximum_length": { "type": "integer" },
+                      "multiline_edit_field_height": {
+                        "type": ["integer", "null"],
+                        "description": "Do not set for normal multiline (5363). Leave null so SmartCare uses default height."
+                      },
+                      "grid_header": {
+                        "type": ["string", "null"],
+                        "description": "Visible grid header. Do not use Date, Time, or Phone alone — DFA skips those labels."
+                      },
+                "grid_column_width": { "type": ["integer", "null"] },
+                "form_item_guid": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
