@@ -28,3 +28,14 @@ See topic folders. All SQL/docs are rewritten without customer database names, h
 ## Hard exclusions (even if useful internally)
 
 Anything that only works with this agency’s private tree, credentials helpers, ticket corpora, named client/group Fix folders, or filled leadership reports stays out of this repo.
+
+---
+
+## 09/14/2026 — DFA + Cursor workflow
+
+| Public path | What |
+|-------------|------|
+| `SmartCare/DFA_From_PDF/` | Portable process: PDF → FORM_SPEC → generated SQL → SSMS; pitfalls; promote; example prompt |
+| `AI/Working_With_Cursor/` | Human vs agent roles, chat habits, safety |
+
+Private generator code and site form packs stay in the private repo. Public pack teaches the method.

@@ -16,7 +16,7 @@ Selected tools, scripts, and documentation that others may find useful.
 | Folder | What it is |
 |--------|------------|
 | [SmartCare/](SmartCare/) | Optional SmartCare packages and patterns |
-| [AI/](AI/) | Agent rules, lessons-learned workflow, coding conventions |
+| [AI/](AI/) | Cursor workflow, agent rules, lessons-learned, coding conventions |
 | [Guides/](Guides/) | Portable how-tos (repo routing, data dictionaries, Python setup, Power BI) |
 
 More folders may be added over time.

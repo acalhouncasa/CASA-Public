@@ -1,0 +1,49 @@
+{
+  "form_name": "Example Clinical Screen",
+  "table_name": "CustomDocumentExampleClinical",
+  "document_name": "Example Clinical Screen",
+  "screen_name": "Example Clinical Screen",
+  "form_collection_name": "Example Clinical Screen",
+  "form_guid": "00000000-0000-0000-0000-000000000001",
+  "document_code_guid": "00000000-0000-0000-0000-000000000002",
+  "screen_guid": "00000000-0000-0000-0000-000000000003",
+  "service_note": "N",
+  "requires_signature": "Y",
+  "view_document_rdl": "RDLDFACommonReport",
+  "stored_procedure": "ssp_GetDFADocumentsData",
+  "sections": [
+    {
+      "name": "Assessment",
+      "section_enable_checkbox": false,
+      "groups": [
+        {
+          "name": "Presentation",
+          "number_of_items_in_row": 1,
+          "fields": [
+            {
+              "column": "ChiefComplaint",
+              "label": "",
+              "item_type": 5363,
+              "comment": "Long text; group name is the heading; item label blank"
+            },
+            {
+              "column": "ObservationLevel",
+              "label": "Observation level",
+              "item_type": 5365,
+              "global_code_category": "XExampleObsLevel",
+              "options": [
+                { "code_name": "Private room", "external_code1": "PrivateRoom" },
+                { "code_name": "Lounge", "external_code1": "LoungeArea" }
+              ]
+            },
+            {
+              "column": "NeedsFollowUp",
+              "label": "Needs follow-up",
+              "item_type": 5362
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

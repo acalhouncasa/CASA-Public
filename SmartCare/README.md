@@ -9,6 +9,7 @@ Optional packages and patterns for **Streamline SmartCare**. Not Streamline Help
 | Folder | What it is |
 |--------|------------|
 | [Staff_Appointment_Overlap/](Staff_Appointment_Overlap/) | Busy staff double-book hard-stop (SQL) |
+| [DFA_From_PDF/](DFA_From_PDF/) | Build a new DFA from PDF/screenshots with AI + generated SQL |
 | [GlobalCodes/](GlobalCodes/) | Add picklist category + codes (SQL template) |
 | [Scoring/](Scoring/) | DFA FormJavascript live totals |
 | [FormItem_Column_Alignment/](FormItem_Column_Alignment/) | Truncation / wrong-control discovery SQL |
