@@ -1,5 +1,5 @@
 #define MyAppName "Local Coder"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "CASA-Trinity"
 #define SourceRoot ".."
 
@@ -47,6 +47,12 @@ Source: "{#SourceRoot}\Launch-LocalCoder.vbs"; DestDir: "{app}"; Flags: ignoreve
 Source: "{#SourceRoot}\harden-firewall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\Sign-LocalCoder.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\Uninstall-LocalCoder.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\doctor.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\Update-LocalCoder.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\TEAM.md"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\Check.cmd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\ruff.toml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\examples\*"; DestDir: "{app}\examples"; Flags: ignoreversion
 Source: "{#SourceRoot}\Install.cmd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\Start Local Coder.cmd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\templates\*"; DestDir: "{app}\templates"; Flags: ignoreversion

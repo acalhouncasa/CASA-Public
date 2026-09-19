@@ -9,16 +9,67 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-PREFERRED_MODELS = (
+PREFERRED_MODELS_FALLBACK = (
     "qwen3-coder:30b",
     "qwen3-coder:30b-a3b-q4_K_M",
     "qwen3:30b-a3b",
+    "qwen2.5-coder:14b",
+    "qwen2.5-coder:7b",
     "codellama:latest",
     "llama3:latest",
 )
 
+KIT_ROOT = Path(__file__).resolve().parent
 OLLAMA = "http://127.0.0.1:11434"
 CTX = "16384"
+
+
+def _read_json_file(path: Path) -> dict:
+    if not path.is_file():
+        return {}
+    try:
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def team_config() -> dict:
+    cfg = {
+        "preferredModels": list(PREFERRED_MODELS_FALLBACK),
+        "autoApproveCommands": True,
+    }
+    cfg.update(_read_json_file(KIT_ROOT / "templates" / "team-defaults.json"))
+    cfg.update(_read_json_file(KIT_ROOT / "ide-data" / "team-overrides.json"))
+    return cfg
+
+
+def preferred_models() -> tuple[str, ...]:
+    models = team_config().get("preferredModels")
+    if isinstance(models, list) and models:
+        return tuple(str(m) for m in models)
+    return PREFERRED_MODELS_FALLBACK
+
+
+def auto_approval() -> dict:
+    allow_cmd = bool(team_config().get("autoApproveCommands", True))
+    return {
+        "version": 1,
+        "enabled": True,
+        "favorites": [],
+        "maxRequests": 100,
+        "actions": {
+            "readFiles": True,
+            "readFilesExternally": True,
+            "editFiles": True,
+            "editFilesExternally": True,
+            "executeSafeCommands": allow_cmd,
+            "executeAllCommands": allow_cmd,
+            "useBrowser": False,
+            "useMcp": False,
+        },
+        "enableNotifications": False,
+    }
 
 DISMISSED_BANNER_IDS = (
     "cline-pass-home-promo-v2",
@@ -28,24 +79,6 @@ DISMISSED_BANNER_IDS = (
     "cline-pass-card",
     "cline-pass-limit-error",
 )
-
-AUTO_APPROVAL = {
-    "version": 1,
-    "enabled": True,
-    "favorites": [],
-    "maxRequests": 100,
-    "actions": {
-        "readFiles": True,
-        "readFilesExternally": True,
-        "editFiles": True,
-        "editFilesExternally": True,
-        "executeSafeCommands": True,
-        "executeAllCommands": True,
-        "useBrowser": False,
-        "useMcp": False,
-    },
-    "enableNotifications": False,
-}
 
 
 def ollama_models() -> list[str]:
@@ -64,10 +97,11 @@ def ollama_models() -> list[str]:
 
 def pick_model(available: list[str]) -> str:
     have = set(available)
-    for name in PREFERRED_MODELS:
+    preferred = preferred_models()
+    for name in preferred:
         if name in have:
             return name
-    return available[0] if available else PREFERRED_MODELS[0]
+    return available[0] if available else preferred[0]
 
 
 def cline_payload(model: str) -> dict:
@@ -102,7 +136,7 @@ def cline_payload(model: str) -> dict:
         "dismissedBanners": [
             {"bannerId": banner_id, "dismissedAt": 1} for banner_id in DISMISSED_BANNER_IDS
         ],
-        "autoApprovalSettings": AUTO_APPROVAL,
+        "autoApprovalSettings": auto_approval(),
         "vscodeTerminalExecutionMode": "backgroundExec",
         "terminalReuseEnabled": True,
         "mode": "act",
@@ -276,7 +310,7 @@ def write_cline_home(ide_data: Path, payload: dict, model: str) -> None:
         "clineWebToolsEnabled": False,
         "webSearchEnabled": False,
         "showFeatureTips": False,
-        "autoApprovalSettings": AUTO_APPROVAL,
+        "autoApprovalSettings": auto_approval(),
         "browserSettings": payload["browserSettings"],
         "telemetrySetting": "disabled",
         "optOutOfRemoteConfig": True,
@@ -289,7 +323,7 @@ def write_cline_home(ide_data: Path, payload: dict, model: str) -> None:
         "mode": "act",
         "vscodeTerminalExecutionMode": "backgroundExec",
         "terminalReuseEnabled": True,
-        "autoApprovalSettings": AUTO_APPROVAL,
+        "autoApprovalSettings": auto_approval(),
     }
 
     for home in homes:

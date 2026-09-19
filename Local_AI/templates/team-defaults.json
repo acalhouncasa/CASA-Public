@@ -1,0 +1,13 @@
+{
+  "preferredModels": [
+    "qwen3-coder:30b",
+    "qwen3-coder:30b-a3b-q4_K_M",
+    "qwen3:30b-a3b",
+    "qwen2.5-coder:14b",
+    "qwen2.5-coder:7b",
+    "codellama:latest",
+    "llama3:latest"
+  ],
+  "autoApproveCommands": true,
+  "comment": "Copy this file and set autoApproveCommands to false on a shared PC. Per-machine overrides: ide-data/team-overrides.json (created by setup.ps1 -Strict)."
+}

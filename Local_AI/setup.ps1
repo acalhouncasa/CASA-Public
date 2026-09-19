@@ -10,7 +10,8 @@ param(
     [switch]$SkipDeps,
     [switch]$PullModel,
     [string]$Model = "qwen3-coder:30b",
-    [switch]$NoShortcuts
+    [switch]$NoShortcuts,
+    [switch]$Strict
 )
 
 $ErrorActionPreference = "Stop"
@@ -278,10 +279,25 @@ if (-not $NoShortcuts) {
     Write-Host "Desktop: $(Join-Path $desk 'Local Coder.lnk')"
 }
 
+if ($Strict) {
+    Write-Step "Strict team mode (commands not auto-approved)"
+    $override = Join-Path $IdeData "team-overrides.json"
+    '{"autoApproveCommands": false}' | Set-Content -Path $override -Encoding utf8
+    $pyStrict = Find-Python
+    if ($pyStrict) {
+        if ($pyStrict -like "*\py.exe") {
+            & $pyStrict -3 (Join-Path $Root "seed_cline.py") $IdeData
+        } else {
+            & $pyStrict (Join-Path $Root "seed_cline.py") $IdeData
+        }
+    }
+}
+
 Write-Host ""
 Write-Host "Setup finished." -ForegroundColor Green
 Write-Host "  Start Menu: Local Coder"
 Write-Host "  Or: .\run.ps1"
+Write-Host "  Verify: .\doctor.ps1"
 Write-Host "  Optional admin lock: .\harden-firewall.ps1"
 Write-Host "Keep Cline on Ollama. Do not put PHI in a cloud IDE or browser chat."
 Stop-Transcript | Out-Null

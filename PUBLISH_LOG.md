@@ -53,3 +53,14 @@ Site form packs and private-only helpers stay in the private repo. Public starte
 | `Local_AI/HOW_IT_WORKS.md` | Architecture (isolated profile, Cline seed, GitHub block) |
 
 Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, no personal analysis notebooks, no packed EXEs. Not HIPAA certified.
+
+---
+
+## 09/19/2026 — Local Coder 1.1.0 (small team)
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/TEAM.md` | Per-user kit, updates, shared vs local, Strict mode |
+| `Local_AI/doctor.ps1` | Health check (Ollama, model, venv, Cline provider) |
+| `Local_AI/Update-LocalCoder.ps1` | Refresh scripts without wiping ide-data / SQLite |
+| `Local_AI/examples/` | Synthetic monthly encounters (not PHI) |

@@ -3,7 +3,11 @@
 This kit is meant to look like ordinary internal software. The way to do that
 is **transparency and publisher signatures**, not packing tricks.
 
-Staff install steps: [INSTALL.md](INSTALL.md). PHI limits: [HIPAA.md](HIPAA.md).
+Staff install: [INSTALL.md](INSTALL.md). Team habits: [TEAM.md](TEAM.md).
+PHI limits: [HIPAA.md](HIPAA.md).
+
+After every install or update, staff run `.\doctor.ps1` (or `Check.cmd`) and
+send FAIL lines only — no screenshots of live charts.
 
 ## What will still warn, and why that is correct
 
@@ -32,6 +36,7 @@ Quiet installs come from one of these, in order of preference:
 - Ship GitHub Copilot or another hosted coding agent
 - Claim the kit is “HIPAA certified” or “100% HIPAA safe”
 - Commit `ide-data`, `.venv`, or `data\*.sqlite` to git (those can hold PHI)
+- Zip a used kit that already has `ide-data` or real CSVs
 
 ## Build a share zip
 
@@ -39,7 +44,16 @@ Quiet installs come from one of these, in order of preference:
 .\Pack-ShareKit.ps1
 ```
 
-That writes `dist\LocalCoder-1.0.0.zip` plus `dist\SHA256SUMS.txt`.
+That writes `dist\LocalCoder-1.1.0.zip` plus `dist\SHA256SUMS.txt`.
+
+On a PC that already has Local Coder, refresh scripts without wiping the
+profile:
+
+```powershell
+.\Update-LocalCoder.ps1 -From "D:\Incoming\Local_AI"
+python .\seed_cline.py .\ide-data
+.\doctor.ps1
+```
 
 Optional offline payload (vendor-signed files, still separate):
 
@@ -50,9 +64,9 @@ Optional offline payload (vendor-signed files, still separate):
 ## Hash check after download
 
 ```powershell
-Get-FileHash .\LocalCoder-1.0.0.zip -Algorithm SHA256
+Get-FileHash .\LocalCoder-1.1.0.zip -Algorithm SHA256
 # compare to SHA256SUMS.txt from the same drop
-Unblock-File .\LocalCoder-1.0.0.zip   # only after the hash matches
+Unblock-File .\LocalCoder-1.1.0.zip   # only after the hash matches
 ```
 
 ## Sign (when the agency has a cert)
@@ -76,6 +90,7 @@ you can sign it. Unsigned `Setup.exe` will show SmartScreen; that is expected.
 - Do not run as SYSTEM if you want a per-user VSCodium profile
 - Run model pull as a separate, long-running step (`ollama pull`) so the
   Intune window does not time out
+- Detection should not require `ide-data` (that folder is created per user)
 
 ## Network the installer needs (online mode)
 

@@ -25,16 +25,21 @@ $copyFiles = @(
     "INSTALL.md",
     "HIPAA.md",
     "HOW_IT_WORKS.md",
+    "TEAM.md",
     "IT.md",
     "WELCOME.md",
     "setup.ps1",
     "run.ps1",
     "seed_cline.py",
     "setup-datasci.ps1",
+    "doctor.ps1",
+    "Update-LocalCoder.ps1",
     ".clinerules",
+    "ruff.toml",
     "harden-firewall.ps1",
     "Sign-LocalCoder.ps1",
     "Install.cmd",
+    "Check.cmd",
     "Launch-LocalCoder.vbs",
     "Start Local Coder.cmd",
     "Uninstall-LocalCoder.ps1"
@@ -52,6 +57,10 @@ Copy-Item (Join-Path $Root "WELCOME.md") (Join-Path $Stage "WELCOME.md") -Force
 if (Test-Path (Join-Path $Root "data\README.txt")) {
     New-Item -ItemType Directory -Force -Path (Join-Path $Stage "data") | Out-Null
     Copy-Item (Join-Path $Root "data\README.txt") (Join-Path $Stage "data\README.txt") -Force
+}
+if (Test-Path (Join-Path $Root "examples")) {
+    New-Item -ItemType Directory -Force -Path (Join-Path $Stage "examples") | Out-Null
+    Copy-Item (Join-Path $Root "examples\*") (Join-Path $Stage "examples") -Force
 }
 Copy-Item (Join-Path $Root "pack\LocalCoder.iss") (Join-Path $Stage "LocalCoder.iss") -ErrorAction SilentlyContinue
 Copy-Item (Join-Path $Root "Pack-ShareKit.ps1") (Join-Path $Stage "Pack-ShareKit.ps1") -Force

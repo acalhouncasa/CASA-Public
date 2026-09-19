@@ -151,6 +151,7 @@ Be explicit with your privacy officer. Residual paths we know about:
 - [ ] Disk encryption (BitLocker) and patching already required
 - [ ] Working folder is **not** consumer-synced
 - [ ] Named Windows accounts; screen lock; no shared PHI login
+- [ ] One Local Coder folder **per user** (do not copy `ide-data` between PCs)
 - [ ] Workforce told: Local Coder only; never Copilot or a hosted chat for PHI
 - [ ] Workforce told: do not switch Cline off Ollama
 - [ ] Optional firewall script reviewed by IT

@@ -47,5 +47,11 @@ if (-not (Test-Path $sqlite)) {
     Write-Host "Created $sqlite"
 }
 
+$demo = Join-Path $Root "examples\load_demo.py"
+if (Test-Path $demo) {
+    Write-Host "Loading synthetic demo table (not PHI)..."
+    & $venvPy $demo $sqlite
+}
+
 Write-Host "Data science venv ready: $venvPy"
 Write-Host "Use that interpreter in Local Coder. Do not pip-install cloud SDKs into it."

@@ -7,11 +7,13 @@ Prompts and completions are meant to stay on the workstation (`127.0.0.1:11434`)
 | Doc | Read it for |
 |-----|-------------|
 | [INSTALL.md](INSTALL.md) | Full install, first launch, verify, troubleshooting |
+| [TEAM.md](TEAM.md) | Small-team habits, updates, shared vs local files |
 | [HIPAA.md](HIPAA.md) | PHI limits, residual risk, and every control we added |
 | [HOW_IT_WORKS.md](HOW_IT_WORKS.md) | Architecture: isolated profile, Cline seed, Python/SQL |
 | [IT.md](IT.md) | Sharing, hashes, Authenticode, Intune |
 | [THIRD_PARTY.md](THIRD_PARTY.md) | Upstream licenses and official download sites |
 | [WELCOME.md](WELCOME.md) | Short in-editor reminder |
+| [examples/](examples/) | Synthetic monthly-encounter demo (not PHI) |
 
 ## Use at your own risk
 
@@ -30,24 +32,28 @@ Read [HIPAA.md](HIPAA.md) before you open a chart, claim, or export in Local Cod
 - GitHub login and `github.com` git remotes blocked **inside this window only**
 - Local Python venv (pandas, SQLAlchemy, scikit-learn, Jupyter, ruff)
 - On-disk SQLite at `data\local.sqlite` (no database server)
+- `doctor.ps1` health check and `Update-LocalCoder.ps1` (refreshes scripts, leaves PHI folders alone)
 - Optional Windows Firewall lock so VSCodium cannot reach the public internet
 
 ## Quick start
 
-Detailed steps, prerequisites, offline mode, and verify checks: **[INSTALL.md](INSTALL.md)**.
+Detailed steps: **[INSTALL.md](INSTALL.md)**. Small team: **[TEAM.md](TEAM.md)**.
 
 ```powershell
 # 1. Copy this folder to a local working path (not OneDrive if you can avoid it)
 # 2. Open PowerShell in that copy
 .\setup.ps1 -PullModel
+.\doctor.ps1
 .\run.ps1
 ```
 
-Or double-click `Install.cmd`, then `Start Local Coder.cmd`.
+Or double-click `Install.cmd`, then `Check.cmd`, then `Start Local Coder.cmd`.
+
+Shared / training PC: `.\setup.ps1 -PullModel -Strict` (terminal commands are not auto-approved).
 
 ## Hardware
 
-`qwen3-coder:30b` (Q4) is the intended coding model. It needs a recent NVIDIA GPU with about **24 GB VRAM** (for example RTX 4090). Smaller Ollama models will run on less VRAM; quality will drop.
+`qwen3-coder:30b` (Q4) is the intended coding model. It needs a recent NVIDIA GPU with about **24 GB VRAM**. Laptops can use `qwen2.5-coder:14b` or `7b` — set the order in `templates\team-defaults.json`.
 
 ## What this is not
 

@@ -178,6 +178,19 @@ Or double-click `Install.cmd` (same script; it pauses at the end so you can read
 Setup finished.
   Start Menu: Local Coder
   Or: .\run.ps1
+  Verify: .\doctor.ps1
+```
+
+6. Run the health check before anyone opens real data:
+
+```powershell
+.\doctor.ps1
+```
+
+Shared PC (front desk / training room): add `-Strict` so the agent does not auto-approve terminal commands.
+
+```powershell
+.\setup.ps1 -PullModel -Strict
 ```
 
 6. If a step fails, open the newest file under `logs\install-*.log` and see [section 12](#12-troubleshooting).
@@ -385,6 +398,7 @@ Habits:
 | Python packages fail | Confirm `py -3 --version`. Re-run `.\setup-datasci.ps1`. |
 | Out of VRAM / model tiny-slow | Use a smaller model (section 6). Do not load two 30B models. |
 | Script is blocked | `Unblock-File` the scripts after you trust the hash/source. |
+| Not sure the box is still local | Run `.\doctor.ps1`. FAIL on Cline provider means someone left Ollama. |
 
 ---
 
@@ -409,16 +423,23 @@ Get-NetFirewallRule | Where-Object DisplayName -like 'LocalCoder *' | Remove-Net
 
 ## 14. Share with another workstation (same agency)
 
-Do **not** email a packed unsigned mega-installer.
+Do **not** email a used kit that already has `ide-data` or `data\*.sqlite`. Pack from a clean copy, or use the updater on the receiving PC.
 
 ```powershell
-cd C:\LocalCoder
 .\Pack-ShareKit.ps1
 ```
 
-Send `dist\LocalCoder-1.0.0.zip` and `dist\SHA256SUMS.txt`. Recipients follow section 4 option C, then section 5.
+On the receiving PC, if Local Coder is already installed:
 
-IT notes, Intune sketch, and Authenticode: [IT.md](IT.md).
+```powershell
+.\Update-LocalCoder.ps1 -From "D:\Incoming\Local_AI"
+python .\seed_cline.py .\ide-data
+.\doctor.ps1
+```
+
+Send `dist\LocalCoder-1.1.0.zip` and `dist\SHA256SUMS.txt` for a first-time drop. Recipients follow section 4 option C, then section 5.
+
+IT notes, Intune sketch, and Authenticode: [IT.md](IT.md). Small-team rules: [TEAM.md](TEAM.md).
 
 ---
 
