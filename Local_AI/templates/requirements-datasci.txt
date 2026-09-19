@@ -1,0 +1,14 @@
+# Local-only data science + SQL. No cloud LLM SDKs.
+pandas>=2.2
+numpy>=1.26
+scipy>=1.13
+scikit-learn>=1.5
+matplotlib>=3.9
+seaborn>=0.13
+SQLAlchemy>=2.0
+openpyxl>=3.1
+pyarrow>=16.0
+jupyter>=1.0
+ipykernel>=6.29
+ruff>=0.6
+python-dotenv>=1.0

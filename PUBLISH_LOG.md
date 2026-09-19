@@ -40,3 +40,16 @@ Anything that only works with this agency’s private tree, credentials helpers,
 | `AI/Working_With_Cursor/` | Human vs agent roles, chat habits, safety |
 
 Site form packs and private-only helpers stay in the private repo. Public starter uses placeholders (`YourSmartCareDatabase`), not agency hosts or logins.
+
+---
+
+## 09/18/2026 — Local Coder (on-device AI)
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/` | Portable kit: VSCodium + Cline + Ollama on `127.0.0.1`. Scripts, branding, Python/SQL venv setup. |
+| `Local_AI/INSTALL.md` | Full workstation install, verify, offline, uninstall |
+| `Local_AI/HIPAA.md` | Use-at-your-own-risk limits plus every control we shipped |
+| `Local_AI/HOW_IT_WORKS.md` | Architecture (isolated profile, Cline seed, GitHub block) |
+
+Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, no personal analysis notebooks, no packed EXEs. Not HIPAA certified.

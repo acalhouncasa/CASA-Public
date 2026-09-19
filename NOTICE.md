@@ -17,6 +17,10 @@ Some items change databases, applications, or how people save work.
 
 Do not put client names, chart numbers, or other PHI in issues, pull requests, screenshots, or sample data.
 
+## Local Coder (`Local_AI/`)
+
+The on-device editor kit is **use at your own risk**. It is not HIPAA certified. Read [Local_AI/HIPAA.md](Local_AI/HIPAA.md) before you open PHI in that editor. Do not put PHI in Cursor.
+
 ## License
 
 Code and documentation in this repository are under the [MIT License](LICENSE). The software is provided as-is, without warranty.

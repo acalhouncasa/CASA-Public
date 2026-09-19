@@ -11,4 +11,6 @@ Portable patterns for using AI agents on EHR, analytics, and documentation work.
 
 **Do not test in Prod** when a rule leads to database or system changes.
 
+Cursor is a **cloud** product. Do not put PHI in Cursor. For an on-device coding agent (VSCodium + Cline + Ollama), see [Local_AI/](../Local_AI/) and read [Local_AI/HIPAA.md](../Local_AI/HIPAA.md) first.
+
 These are not product documentation from any EHR vendor.

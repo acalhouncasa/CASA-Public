@@ -16,6 +16,7 @@ Selected tools, scripts, and documentation that others may find useful.
 | Folder | What it is |
 |--------|------------|
 | [SmartCare/](SmartCare/) | Optional SmartCare packages and patterns |
+| [Local_AI/](Local_AI/) | Local Coder: on-device VSCodium + Cline + Ollama (use at your own risk; not HIPAA certified) |
 | [AI/](AI/) | Cursor workflow, agent rules, lessons-learned, coding conventions |
 | [Guides/](Guides/) | Portable how-tos (repo routing, data dictionaries, Python setup, Power BI) |
 

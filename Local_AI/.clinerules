@@ -1,0 +1,17 @@
+Local Coder rules. Inference is Ollama on 127.0.0.1 only. Never use cloud LLM APIs, ClinePass, OpenRouter, or web fetch.
+
+Python
+- Interpreter: this kit's `.venv\Scripts\python.exe` (pandas, numpy, SQLAlchemy, scikit-learn, Jupyter, ruff).
+- Prefer that venv. Do not `pip install` OpenAI / Anthropic / Azure / Google cloud SDKs.
+- For analysis: pandas + matplotlib/seaborn. Save figures and CSVs under the workspace `data\` folder.
+
+SQL
+- Default database: workspace `data\local.sqlite` (SQLite, on disk, no server).
+- Use `sqlite3` or SQLAlchemy `sqlite:///data/local.sqlite`.
+- Put reusable queries in `.sql` files. Do not send dumps to remote hosts.
+- If the user has another local DB (SQL Server Express, Postgres on localhost), keep the connection string on 127.0.0.1 and never enable cloud sync.
+
+Code
+- Write complete, runnable Python/SQL. Run it in the terminal and fix failures.
+- No GitHub remotes, no gist, no Copilot.
+- PHI stays on this PC. Do not paste it into Cursor or a browser.

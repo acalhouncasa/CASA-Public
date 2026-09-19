@@ -24,3 +24,14 @@ graph_token_cache.json
 *.tmp
 __pycache__/
 *.pyc
+
+# Local Coder runtime (can hold PHI after first use — never commit)
+Local_AI/ide-data/
+Local_AI/ide-extensions/
+Local_AI/.venv/
+Local_AI/dist/
+Local_AI/logs/
+Local_AI/data/*.sqlite
+Local_AI/data/*.csv
+Local_AI/data/*.xlsx
+Local_AI/data/*.parquet
