@@ -283,5 +283,5 @@ Write-Host "Setup finished." -ForegroundColor Green
 Write-Host "  Start Menu: Local Coder"
 Write-Host "  Or: .\run.ps1"
 Write-Host "  Optional admin lock: .\harden-firewall.ps1"
-Write-Host "Do not put PHI in Cursor or Microsoft VS Code."
+Write-Host "Keep Cline on Ollama. Do not put PHI in a cloud IDE or browser chat."
 Stop-Transcript | Out-Null

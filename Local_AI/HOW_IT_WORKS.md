@@ -4,16 +4,14 @@ This page is the architecture. Install steps are in [INSTALL.md](INSTALL.md). PH
 
 ## Why a separate product
 
-Cursor is a VS Code fork with a strong agent. It is also a **cloud** product. Connecting Cursor to Ollama does not keep prompts on-prem: Cursor still builds context on Cursor’s servers.
-
-Microsoft VS Code + Copilot and Visual Studio + Copilot are the same class of problem.
+Hosted coding IDEs still send prompts off-box, even when you attach a local model. Microsoft VS Code + Copilot and Visual Studio + Copilot are the same class of problem.
 
 Local Coder is a thin, auditable wrapper around three existing open-source pieces:
 
 | Piece | Role |
 |-------|------|
 | [VSCodium](https://github.com/VSCodium/vscodium) | Editor UI (VS Code without Microsoft branding/telemetry defaults) |
-| [Cline](https://open-vsx.org/extension/saoudrizwan/claude-dev) | Agent: read, edit, grep, terminal — same *job* as Cursor Agent |
+| [Cline](https://open-vsx.org/extension/saoudrizwan/claude-dev) | Agent: read, edit, grep, terminal |
 | [Ollama](https://github.com/ollama/ollama) | Local model server on `127.0.0.1:11434` |
 
 The value of this folder is **how those three are launched and seeded**, not a new model.
@@ -124,7 +122,7 @@ A second 30B “SQL model” would fight a 24 GB GPU for VRAM. Coding quality fo
 Trusted for inference:   Ollama on 127.0.0.1, weights on disk, GPU
 Trusted for editing:     whatever folder you opened (can contain PHI)
 Not trusted:             Cline if the user picks a cloud provider
-Not trusted:             Cursor, browsers, OneDrive, USB, other terminals
+Not trusted:             hosted IDEs, browsers, OneDrive, USB, other terminals
 Not trusted:             this public GitHub repository
 ```
 

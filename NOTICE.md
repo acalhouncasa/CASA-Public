@@ -19,7 +19,7 @@ Do not put client names, chart numbers, or other PHI in issues, pull requests, s
 
 ## Local Coder (`Local_AI/`)
 
-The on-device editor kit is **use at your own risk**. It is not HIPAA certified. Read [Local_AI/HIPAA.md](Local_AI/HIPAA.md) before you open PHI in that editor. Do not put PHI in Cursor.
+The on-device editor kit is **use at your own risk**. It is not HIPAA certified. Read [Local_AI/HIPAA.md](Local_AI/HIPAA.md) before you open PHI in Local Coder. Do not put PHI in a hosted IDE or browser chat.
 
 ## License
 

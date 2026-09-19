@@ -14,7 +14,7 @@ This is the full install path for another agency or a new workstation. Read [NOT
 
 1. Your privacy / compliance officer knows you intend to run a **local** LLM on a workstation.
 2. You understand the residual risks in [HIPAA.md](HIPAA.md) (OneDrive, other apps, a user switching Cline to a cloud provider, agent terminal commands).
-3. You will **not** paste PHI into Cursor, Copilot, ChatGPT, or a browser assistant.
+3. You will **not** paste PHI into Copilot, ChatGPT, or a browser assistant.
 4. You will keep working files on a disk your organization already treats as in-scope (BitLocker, access control, backup rules).
 
 If any of those are “no,” stop. Publish the folder as documentation only.
@@ -24,7 +24,7 @@ If any of those are “no,” stop. Publish the folder as documentation only.
 | The installer does | The installer does not |
 |---|---|
 | Install VSCodium and Ollama from **winget** or `payload\` | Pack those EXEs into one unsigned dropper |
-| Install Cline and Python/SQL extensions from **Open VSX** into an isolated profile | Touch your everyday VS Code / Cursor profile |
+| Install Cline and Python/SQL extensions from **Open VSX** into an isolated profile | Touch your everyday VS Code profile |
 | Seed Cline to Ollama on `127.0.0.1:11434` | Create a Cline cloud account |
 | Create a local `.venv` and `data\local.sqlite` | Install cloud LLM SDKs |
 | Create Start Menu / Desktop shortcuts | Turn off Defender, SmartScreen, or antivirus |
@@ -363,7 +363,7 @@ Habits:
 - Keep Web Fetch and MCP off.
 - Save query output under `data\` on this PC. Do not gist it.
 - Git remotes to github.com fail **inside Local Coder only**. Everyday git outside this window is unchanged.
-- Do not open this working copy as a Cursor / VS Code workspace for PHI work.
+- Do not open this working copy in a hosted IDE or Microsoft VS Code for PHI work.
 
 ---
 
@@ -425,7 +425,7 @@ IT notes, Intune sketch, and Authenticode: [IT.md](IT.md).
 ## 15. What not to do
 
 - Do not claim this install is HIPAA certified.
-- Do not put PHI in Cursor, Copilot, or this GitHub repo.
+- Do not put PHI in Copilot, a hosted chat, or this GitHub repo.
 - Do not instruct staff to turn off Defender or SmartScreen.
 - Do not wrap VSCodium + Ollama in ps2exe / a self-extracting EXE.
 - Do not `pip install` hosted LLM SDKs into `.venv`.

@@ -15,12 +15,12 @@ If you need a covered-entity determination, stop and talk to compliance. Do not 
 | Statement | True? |
 |-----------|--------|
 | Prompts are designed to stay on `127.0.0.1` (Ollama) when you use this kit as documented | Yes |
-| Cursor / Copilot / ChatGPT are safe for PHI if you “turn on privacy mode” | **No** |
+| Hosted IDEs / Copilot / ChatGPT are safe for PHI if you “turn on privacy mode” | **No** |
 | This repo or kit is HIPAA certified | **No** |
 | Local inference replaces a BAA, audit log, or disk encryption | **No** |
 | A user can still leak PHI (OneDrive, USB, browser, switching Cline to a cloud API) | **Yes** |
 
-**Do not put PHI in Cursor.** Cursor is a cloud product. Even “local model” / BYOK setups still send prompt-construction traffic through Cursor’s backend. That is why this kit exists.
+**Do not put PHI in a hosted IDE or browser chat.** Those products still send prompt-construction traffic through a vendor backend, even when you point them at a local model. Local Coder exists so the default path never does that.
 
 ---
 
@@ -45,9 +45,8 @@ These controls are in the scripts. They are not a complete HIPAA program. They a
 
 | Control | Where | Why |
 |---------|--------|-----|
-| Not Cursor, not Microsoft VS Code, not Visual Studio + Copilot | Product choice | Those products send prompts or telemetry off-box |
-| Continue.dev is rejected | Docs | Continue was acquired by Cursor |
-| Isolated `--user-data-dir` (`ide-data\`) and `--extensions-dir` (`ide-extensions\`) | `run.ps1`, `setup.ps1` | Everyday Copilot / Cursor / personal VS Code settings cannot mix in |
+| Not Microsoft VS Code, not Visual Studio + Copilot, not a hosted IDE agent | Product choice | Those products send prompts or telemetry off-box |
+| Isolated `--user-data-dir` (`ide-data\`) and `--extensions-dir` (`ide-extensions\`) | `run.ps1`, `setup.ps1` | Everyday Copilot / personal VS Code settings cannot mix in |
 | `CLINE_DIR=ide-data\cline-home` | `run.ps1` | Current Cline builds store provider and onboarding in `~/.cline`, not only VS Code sqlite. Isolation stops the cloud “free model / Create my Account” picker |
 
 ### Local inference only
@@ -130,7 +129,7 @@ This **does not** block git remotes in an ordinary Windows terminal outside Loca
 
 Be explicit with your privacy officer. Residual paths we know about:
 
-1. **The human.** Paste into Outlook, Teams, a browser, a ticket, or Cursor and the control is gone.
+1. **The human.** Paste into Outlook, Teams, a browser, a ticket, or a hosted chat and the control is gone.
 2. **OneDrive / Desktop redirection / consumer sync.** If `data\` or the workspace lives in a sync root, PHI leaves the PC.
 3. **Other processes.** USB, RDP clipboards, screen share, print to PDF, email.
 4. **Cline provider switch.** Settings UI can still be pointed at OpenAI, Anthropic, OpenRouter, or ClinePass. Seed sets the default; it is not a hardware interlock.
@@ -152,7 +151,7 @@ Be explicit with your privacy officer. Residual paths we know about:
 - [ ] Disk encryption (BitLocker) and patching already required
 - [ ] Working folder is **not** consumer-synced
 - [ ] Named Windows accounts; screen lock; no shared PHI login
-- [ ] Workforce told: Local Coder only; never Cursor / Copilot for PHI
+- [ ] Workforce told: Local Coder only; never Copilot or a hosted chat for PHI
 - [ ] Workforce told: do not switch Cline off Ollama
 - [ ] Optional firewall script reviewed by IT
 - [ ] Retention / wipe procedure for `ide-data` and `data\`
@@ -164,10 +163,9 @@ Be explicit with your privacy officer. Residual paths we know about:
 
 Even after this kit is installed on the same PC:
 
-- Cursor (this includes asking Cursor to “just look at the file”)
+- Hosted IDE agents (including “just look at this file” in another editor)
 - Microsoft VS Code + GitHub Copilot
 - Visual Studio + GitHub Copilot
-- Continue.dev
 - Cline with any provider other than local Ollama
 - ChatGPT, Claude.ai, Gemini, Copilot Chat in a browser
 - This public repository’s Issues and Pull Requests
@@ -180,4 +178,4 @@ Even after this kit is installed on the same PC:
 2. Follow [SECURITY.md](../SECURITY.md) (private vulnerability reporting).
 3. Follow your agency incident process.
 
-Related Cursor-era habits (cloud tool): [AI/Working_With_Cursor/SAFETY.md](../AI/Working_With_Cursor/SAFETY.md).
+Related hosted-tool habits (different product): [AI/Working_With_Cursor/SAFETY.md](../AI/Working_With_Cursor/SAFETY.md). That folder is not Local Coder.

@@ -29,7 +29,7 @@ Quiet installs come from one of these, in order of preference:
 - Convert `setup.ps1` to an EXE with ps2exe / similar (high false-positive rate)
 - Wrap Ollama + VSCodium inside one self-extracting archive
 - Instruct users to turn off SmartScreen or Windows Defender
-- Ship Cursor, GitHub Copilot, or Continue.dev (cloud / Cursor-owned)
+- Ship GitHub Copilot or another hosted coding agent
 - Claim the kit is “HIPAA certified” or “100% HIPAA safe”
 - Commit `ide-data`, `.venv`, or `data\*.sqlite` to git (those can hold PHI)
 

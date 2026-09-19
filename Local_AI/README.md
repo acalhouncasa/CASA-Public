@@ -2,7 +2,7 @@
 
 A **local** coding agent for Windows: **VSCodium + Cline + Ollama**.
 
-Prompts and completions are meant to stay on the workstation (`127.0.0.1:11434`). This is **not** Cursor, **not** Microsoft VS Code, and **not** GitHub Copilot.
+Prompts and completions are meant to stay on the workstation (`127.0.0.1:11434`). Local Coder is its own kit — not a hosted IDE and not GitHub Copilot.
 
 | Doc | Read it for |
 |-----|-------------|
@@ -19,13 +19,13 @@ Prompts and completions are meant to stay on the workstation (`127.0.0.1:11434`)
 
 CASA-Trinity publishes the scripts as-is under MIT so other Streamline agencies can reuse the pattern. **Your organization owns** the decision to run it, the hardware, the change control, and any PHI that later sits in the working folder.
 
-Do **not** put PHI in Cursor (including this public repo’s issues). Cursor still sends prompts through a cloud backend.
+Do **not** put PHI in a hosted IDE or browser chat. Those products send prompts through a cloud backend.
 
-Read [HIPAA.md](HIPAA.md) before you open a chart, claim, or export in this editor.
+Read [HIPAA.md](HIPAA.md) before you open a chart, claim, or export in Local Coder.
 
 ## What you get
 
-- Isolated VSCodium profile (separate from everyday VS Code / Cursor)
+- Isolated VSCodium profile (separate from everyday VS Code)
 - Cline locked to **Ollama on localhost** (cloud onboarding and ClinePass banners dismissed)
 - GitHub login and `github.com` git remotes blocked **inside this window only**
 - Local Python venv (pandas, SQLAlchemy, scikit-learn, Jupyter, ruff)
@@ -54,6 +54,4 @@ Or double-click `Install.cmd`, then `Start Local Coder.cmd`.
 - Not an official vendor product or support channel
 - Not a replacement for SmartCare, SSMS, or your EHR
 - Not a place to store PHI in this GitHub repository
-- Not Cursor BYOK / Privacy Mode (those still leave the box)
-
-Related Cursor *habits* (cloud tool, different risk): [AI/Working_With_Cursor/](../AI/Working_With_Cursor/).
+- Not a hosted “bring your own key” IDE (those still leave the box)
