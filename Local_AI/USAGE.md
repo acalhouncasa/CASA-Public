@@ -4,7 +4,7 @@ Talon is the editor on the left and the agent on the right. Keep **Cline → Oll
 
 ## Best folder setup
 
-Use **one main kit** plus **named work folders**. Do not File → Open Folder on a PHI tree (that drops the kit and the venv).
+Use **one main kit** plus **named work folders**. File → Open Folder no longer replaces the kit; it adds the folder beside Talon.
 
 | Root you see in Explorer | What belongs there |
 |--------------------------|--------------------|
