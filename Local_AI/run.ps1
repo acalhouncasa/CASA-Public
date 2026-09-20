@@ -156,12 +156,8 @@ $launchArgs = @(
     "--crash-reporter-directory=`"$(Join-Path $IdeData 'crashes')`"",
     "`"$openTarget`""
 )
-$usage = Join-Path $Root "USAGE.md"
-$guideFlag = Join-Path $IdeData "ui-guide-shown.txt"
-if ((Test-Path $usage) -and -not (Test-Path $guideFlag)) {
-    $launchArgs += "`"$usage`""
-    Set-Content -Path $guideFlag -Value (Get-Date).ToString("o") -Encoding utf8
-}
+# Do not pass USAGE.md as a launch file. That expands the Talon root
+# and lets VSCodium Release Notes steal the editor tab.
 $learnPy = Join-Path $Root "learn\talon_learn.py"
 $venvPy = Join-Path $Root ".venv\Scripts\pythonw.exe"
 if (-not (Test-Path $venvPy)) { $venvPy = Join-Path $Root ".venv\Scripts\python.exe" }

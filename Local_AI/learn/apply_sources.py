@@ -87,6 +87,41 @@ def file_uri(path: Path) -> dict:
     }
 
 
+def tree_handle(folder: Path) -> str:
+    uri = folder.resolve().as_uri()
+    return f"{uri}::{uri}"
+
+
+def collapse_kit_in_explorer(ide: Path, kit: Path, extra_folders: list[Path]) -> None:
+    """Persist Explorer so the Talon root is collapsed before the window opens."""
+    expanded = []
+    for folder in extra_folders:
+        try:
+            expanded.append(tree_handle(folder))
+        except OSError:
+            continue
+    state = {
+        "focus": [],
+        "selection": [],
+        "expanded": expanded,
+        "scrollTop": 0,
+    }
+    payload = json.dumps(state, separators=(",", ":"))
+    ws_root = ide / "User" / "workspaceStorage"
+    if not ws_root.is_dir():
+        return
+    for db_path in ws_root.glob("*/state.vscdb"):
+        con = sqlite3.connect(str(db_path))
+        try:
+            con.execute(
+                "INSERT OR REPLACE INTO ItemTable (key, value) VALUES (?, ?)",
+                ("workbench.explorer.treeViewState", payload),
+            )
+            con.commit()
+        finally:
+            con.close()
+
+
 def trust_folders(ide: Path, folders: list[Path]) -> None:
     db = ide / "User" / "globalStorage" / "state.vscdb"
     if not db.is_file():
@@ -228,7 +263,10 @@ def main() -> int:
     }
     ws_path = ide / "Talon.code-workspace"
     ws_path.write_text(json.dumps(workspace, indent=2), encoding="utf-8")
-    trust_folders(ide, [Path(item["path"]) for item in folders])
+    folder_paths = [Path(item["path"]) for item in folders]
+    trust_folders(ide, folder_paths)
+    extras = [p for p in folder_paths[1:] if p.exists()]
+    collapse_kit_in_explorer(ide, kit, extras)
 
     settings_path = ide / "User" / "settings.json"
     settings = load_json(settings_path, {})

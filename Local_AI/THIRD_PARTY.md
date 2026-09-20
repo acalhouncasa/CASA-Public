@@ -1,6 +1,6 @@
 # Third-party software
 
-Local Coder does not replace these projects. The toolkit installs them from
+Talon does not replace these projects. The kit installs them from
 their official sources (winget or publisher-signed installers you place in
 `payload\`).
 

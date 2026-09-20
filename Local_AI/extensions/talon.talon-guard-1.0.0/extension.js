@@ -4,6 +4,7 @@ const fs = require("fs");
 
 let kit = "";
 let busy = false;
+let openedGuide = false;
 
 function resolveKit(context) {
   const fromEnv = process.env.TALON_KIT;
@@ -182,14 +183,54 @@ async function reopenKit() {
   await vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(ws), false);
 }
 
+async function closeVendorNotes() {
+  for (const group of vscode.window.tabGroups.all) {
+    for (const tab of group.tabs) {
+      const label = String(tab.label || "");
+      if (/getting started/i.test(label)) {
+        continue;
+      }
+      if (/release notes|what.?s new|walkthrough|welcome/i.test(label)) {
+        try {
+          await vscode.window.tabGroups.close(tab, true);
+        } catch (_) {
+          /* tab already gone */
+        }
+      }
+    }
+  }
+}
+
+async function openGettingStarted() {
+  const usage = path.join(kit, "USAGE.md");
+  const flag = path.join(kit, "ide-data", "ui-guide-shown.txt");
+  if (!fs.existsSync(usage) || openedGuide || fs.existsSync(flag)) {
+    return;
+  }
+  openedGuide = true;
+  const doc = await vscode.workspace.openTextDocument(usage);
+  await vscode.window.showTextDocument(doc, {
+    preview: false,
+    preserveFocus: true,
+    viewColumn: vscode.ViewColumn.One,
+  });
+  fs.mkdirSync(path.dirname(flag), { recursive: true });
+  fs.writeFileSync(flag, new Date().toISOString(), "utf8");
+}
+
 async function collapseTalonRoot() {
   if (!kitIsOpen()) {
     return;
   }
   try {
-    await vscode.commands.executeCommand("workbench.files.action.collapseExplorerFolders");
+    await vscode.commands.executeCommand("workbench.view.explorer");
+    await vscode.commands.executeCommand("list.collapseAll");
   } catch (_) {
-    return;
+    try {
+      await vscode.commands.executeCommand("workbench.files.action.collapseExplorerFolders");
+    } catch (_) {
+      return;
+    }
   }
   const kitN = norm(kit);
   for (const folder of vscode.workspace.workspaceFolders || []) {
@@ -275,8 +316,15 @@ function activate(context) {
     })
   );
   enforceKit();
-  setTimeout(() => collapseTalonRoot(), 400);
-  setTimeout(() => collapseTalonRoot(), 1600);
+  const settle = async () => {
+    await closeVendorNotes();
+    await openGettingStarted();
+    await collapseTalonRoot();
+  };
+  settle();
+  setTimeout(settle, 500);
+  setTimeout(settle, 1600);
+  setTimeout(() => collapseTalonRoot(), 4000);
 }
 
 function deactivate() {}

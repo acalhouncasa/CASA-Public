@@ -282,17 +282,15 @@ The path is remembered in `ide-data\last-workspace.txt`.
 ### First-run checklist (do this once)
 
 1. Title bar says **Talon**.
-2. Right sidebar is **Cline** (robot), already open.
-3. Cline **API Provider = Ollama**, base URL `http://127.0.0.1:11434`.
-4. Model is `qwen3-coder:30b` (or the smaller model you pulled).
-5. You are **not** asked to “Create my Account” / pick a free cloud model. If you are, close Cline, run `python .\seed_cline.py .\ide-data`, then `.\run.ps1` again.
-6. Auto-approve: Read, Edit, and Commands may be on. **Web Fetch and MCP stay off.**
-7. Left activity bar: Explorer is active. Source Control (git) icon is hidden.
-8. Read [USAGE.md](USAGE.md). Talon stays the main root. Attach project/PHI folders with Connect — do not File → Open Folder on PHI only.
-9. Title bar should say `Talon — local — … — Ollama up`. Command Palette starters map / SQL / memory are optional.
-8. Status bar / Python interpreter: `.\.venv\Scripts\python.exe`.
-9. SQLTools connection **Local SQLite** points at `data\local.sqlite`.
-10. Do not sign in to GitHub. GitHub login is disabled in this profile.
+2. Getting started (`USAGE.md`) is the first editor tab. VSCodium Release Notes should not be in front.
+3. The **Talon** root in Explorer is collapsed.
+4. Right sidebar is **Cline**, already open, provider **Ollama** at `http://127.0.0.1:11434`.
+5. Model is `qwen3-coder:30b` (or the smaller model you pulled).
+6. You are not asked to create a Cline account. If you are, close Talon, run `python .\seed_cline.py .\ide-data`, then `.\run.ps1`.
+7. Auto-approve: Read, Edit, and Commands may be on. Web Fetch and MCP stay off.
+8. Source Control (git) is hidden. Do not sign in to GitHub.
+9. Python interpreter is `.\.venv\Scripts\python.exe`. SQLTools **Local SQLite** points at `data\local.sqlite`.
+10. Attach work with **Talon Connect** or File → Add Folder to Workspace. File → Open Folder only adds a folder.
 
 Type a simple prompt in Cline, for example: “Create `data\hello.py` that prints hello, run it with the venv python.” Confirm it uses `.venv\Scripts\python.exe`.
 

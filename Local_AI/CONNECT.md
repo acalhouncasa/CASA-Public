@@ -1,52 +1,60 @@
-# Connect a folder or database
+# Connect
 
-UI walkthrough (Explorer, Cline, what not to click): [USAGE.md](USAGE.md).
+Attach a local project folder, PHI folder, or database. The Talon kit remains the first Explorer root.
 
-Yes: staff can attach **a local PHI folder** and **a local database** without rewriting the kit. Use `Connect.cmd` (or `.\Connect-Talon.ps1`).
+UI reference: [Getting started](USAGE.md).
 
-## Are they limited by the open folder?
+---
 
-**In Explorer, yes — unless you connect.** VSCodium only lists folders in the current workspace. Cline also treats that workspace as home.
+## Workspace limit
 
-Talon now opens a **multi-root workspace**:
+Explorer and Cline only list folders in the current workspace. Connect adds folders beside the kit so extracts are visible without opening the kit as a dump of files.
 
-1. **Talon** — this kit (Python venv, memory, scripts)
-2. **Each connected PHI folder** — their extracts
+After Connect, Explorer shows:
 
-So they are not stuck inside `C:\Talon`. After Connect, both trees show on the left. The background learner watches every connected folder, not just the one they clicked last.
+1. **Talon** — this kit (Python environment, memory, scripts), collapsed on launch
+2. **Each connected folder** — project scripts and/or PHI extracts
 
-Cline can also read a file outside the workspace if you give it a full local path (`readFilesExternally` is on). Prefer Connect so they can *see* the files.
+The background learner watches every connected folder.
 
-Do not open a consumer OneDrive folder if it will hold PHI.
+Cline can read a file outside the workspace if you give it a full local path. Prefer Connect so the files appear in Explorer.
 
-File → Open Folder does **not** replace the kit. Talon Guard adds that folder to the existing workspace and reopens Talon. File → Add Folder to Workspace is the intended UI.
+Do not connect a consumer OneDrive, Desktop, or Downloads path if it will hold PHI.
 
-## What Connect sets up
+**File → Open Folder** does not replace the kit. Talon restores the workspace and adds the folder you selected. **File → Add Folder to Workspace** is the intended command.
 
-| Source | What you pick | What Talon does |
-|--------|---------------|-----------------|
-| Local folder | File-picker for a directory | Added to the workspace + learner |
-| SQLite file | `.sqlite` / `.db` | SQLTools connection + parent folder in the workspace |
-| SQL Server on this PC | Server + database, Windows auth | SQLTools MSSQL connection (`127.0.0.1` preferred) |
+---
 
-Saved in `ide-data\sources.json` (this PC only, not git). Passwords: use Windows auth when you can. SQL logins stay in that local file.
+## What Connect configures
 
-Connect **dedupes** paths, **warns** on OneDrive / Desktop / Downloads, and can **remove** a connection (menu item 5). Project vs PHI is only a label in Explorer.
+| Source | Selection | Result |
+|--------|-----------|--------|
+| Local folder | Directory picker | Added to the workspace and the learner |
+| SQLite file | `.sqlite` / `.db` | SQLTools connection; parent folder added to the workspace |
+| SQL Server on this PC | Server and database, Windows authentication | SQLTools MSSQL connection (`127.0.0.1` preferred) |
+
+Connections are stored in `ide-data\sources.json` on this PC only. Use Windows authentication when possible. SQL passwords, if entered, stay in that local file.
+
+Connect refuses duplicate paths, warns on OneDrive / Desktop / Downloads, and can remove a connection (menu item 5). Project versus PHI is a label in Explorer.
+
+---
 
 ## Commands
 
 ```powershell
-.\Connect-Talon.ps1                  # menu + pickers
+.\Connect-Talon.ps1
 .\Connect-Talon.ps1 -Folder "D:\PHI"
 .\Connect-Talon.ps1 -Sqlite "D:\PHI\extract.sqlite"
 .\Connect-Talon.ps1 -SqlServer "127.0.0.1" -SqlDatabase "ScratchReporting"
-.\run.ps1                            # reopen last workspace + all connections
+.\run.ps1
 ```
 
-SQLTools: click the database icon, pick the connection name you added.
+In SQLTools, open the database icon and select the connection name you added.
+
+---
 
 ## Limits
 
-- Cloud databases and VPN-only hosts are out of scope for a “local PHI” kit. Keep the server on `127.0.0.1` or a machine your privacy officer already treats as on-prem.
-- SQL Server needs the SQLTools MSSQL driver (`setup.ps1` installs it) and a local ODBC / SQL client as usual.
-- Workspace Trust: click **Trust** on the PHI folder the first time.
+- Cloud databases and VPN-only hosts are out of scope. Keep the server on `127.0.0.1` or a host your privacy officer already treats as on-premises.
+- SQL Server requires the SQLTools MSSQL driver (`setup.ps1` installs it) and a local ODBC or SQL client.
+- Trust connected local folders when the editor prompts. Cloud-synced paths are not auto-trusted.

@@ -1,14 +1,13 @@
-# Talon — Local AI
+# Talon
 
-On-device. Cline stays on **Ollama** (`127.0.0.1`). No cloud keys.
+Local AI for this workstation. Cline stays on **Ollama** at `127.0.0.1`. Do not create a Cline account.
 
-**Folders:** Talon (this kit) stays the main root and starts collapsed. Attach a **project** folder and/or a **PHI** folder with **Talon Connect** or File → Add Folder to Workspace. File → Open Folder only adds; it cannot drop the kit.
+The **Talon** kit is the first Explorer root and starts collapsed. Attach a project folder or a PHI folder with **Talon Connect** or **File → Add Folder to Workspace**. File → Open Folder adds a folder; it does not replace the kit.
 
-Full UI walkthrough: [USAGE.md](USAGE.md).
+Read [Getting started](USAGE.md).
 
-1. Trust any new folder when asked.
-2. Open a file from Project or PHI on the left.
-3. Ask Cline on the right.
-4. SQLTools (database icon) is for connected SQLite / local SQL Server.
-5. `memory\` is local and may hold PHI. Back it up with `Backup.cmd`, not OneDrive.
-6. Command Palette: **Talon: Starter — map this folder** / **list SQL tables** / **read memory index**.
+1. Open a file from Project or PHI.
+2. Ask Cline on the right.
+3. SQLTools (database icon) is the connected SQLite or local SQL Server.
+4. `memory\` may contain PHI. Back it up with `Backup.cmd` on a local disk, not OneDrive.
+5. Command Palette: **Talon: Starter — map this folder**, **list SQL tables**, or **read memory index**.

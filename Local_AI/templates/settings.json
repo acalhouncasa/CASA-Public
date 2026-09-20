@@ -5,6 +5,7 @@
   "workbench.enableExperiments": false,
   "workbench.settings.enableNaturalLanguageSearch": false,
   "workbench.startupEditor": "none",
+  "workbench.welcomePage.walkthroughs.openOnInstall": false,
   "explorer.autoReveal": false,
   "window.openFoldersInNewWindow": "off",
   "workbench.editor.empty.hint": "hidden",

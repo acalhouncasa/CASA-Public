@@ -476,6 +476,8 @@ def apply_agent_layout(ide_data: Path) -> None:
                 ]
                 _put(con, "workbench.activity.placeholderViewlets", activity_ph)
 
+            _put(con, "releaseNotes/lastVersion", "99.99.99")
+            _put(con, "workbench.startupEditor", "none")
             _put(con, "workbench.auxiliarybar.activepanelid", CLINE_CONTAINER)
             _put(con, "workbench.auxiliaryBar.empty", False)
             size = _read_json(con, "workbench.auxiliaryBar.size", 420)
