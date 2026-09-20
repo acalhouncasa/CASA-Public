@@ -1,4 +1,4 @@
-Local working data for Local Coder.
+﻿Local working data for Talon.
 
 - local.sqlite is created by setup-datasci.ps1.
 - setup-datasci.ps1 also loads examples\monthly_encounters.csv (synthetic, not PHI).

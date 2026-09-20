@@ -1,7 +1,7 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Install Local Coder (VSCodium + Cline + local Ollama).
+  Install Talon - Local AI (VSCodium + Cline + local Ollama).
 .DESCRIPTION
   Pulls publisher-signed apps from winget or from payload\. Does not pack
   other installers into a self-extracting EXE.
@@ -76,7 +76,7 @@ function Apply-Letterpress {
             if (Test-Path $dest) { Copy-Item $codeIcon $dest -Force }
         }
     }
-    Write-Host "VSCodium marks set to Local Coder brackets."
+    Write-Host "VSCodium marks set to Talon."
 }
 
 function Find-Ollama {
@@ -137,7 +137,7 @@ function Install-SilentPayload([string]$Pattern, [string]$WingetId) {
     Install-WingetPackage $WingetId
 }
 
-Write-Step "Local Coder setup"
+Write-Step "Talon - Local AI setup"
 Write-Host "Kit:    $Root"
 Write-Host "Log:    $Transcript"
 Write-Host "This installer uses official VSCodium, Ollama, and Cline packages."
@@ -217,7 +217,7 @@ if ($py) {
         & $py (Join-Path $Root "seed_cline.py") $IdeData
     }
 } else {
-    Write-Warning "Python not found. Open Local Coder once, then pick Ollama in Cline settings."
+    Write-Warning "Python not found. Open Talon once, then pick Ollama in Cline settings."
 }
 
 Write-Step "Python + SQL extensions (Open VSX, isolated profile)"
@@ -245,7 +245,7 @@ foreach ($ext in $localExt) {
 }
 
 if ($py) {
-    Write-Step "Local data-science venv (pandas, SQLAlchemy, Jupyter)"
+    Write-Step 'Local data-science venv (pandas, SQLAlchemy, Jupyter)'
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "setup-datasci.ps1")
 }
 
@@ -258,25 +258,25 @@ if ($PullModel) {
 
 if (-not $NoShortcuts) {
     Write-Step "Shortcuts"
-    $programs = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Local Coder"
+    $programs = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Talon"
     New-Item -ItemType Directory -Force -Path $programs | Out-Null
     $wscript = New-Object -ComObject WScript.Shell
-    $lnk = $wscript.CreateShortcut((Join-Path $programs "Local Coder.lnk"))
+    $lnk = $wscript.CreateShortcut((Join-Path $programs "Talon.lnk"))
     $vbs = Join-Path $Root "Launch-LocalCoder.vbs"
     $lnk.TargetPath = "$env:SystemRoot\System32\wscript.exe"
     $lnk.Arguments = "`"$vbs`""
     $lnk.WorkingDirectory = $Root
     $lnk.WindowStyle = 1
-    $lnk.Description = "Local Coder (on-device Ollama)"
+    $lnk.Description = "Talon - Local AI (on-device Ollama)"
     $ico = Join-Path $Root "branding\icon.ico"
     if (Test-Path $ico) {
         $lnk.IconLocation = "$ico,0"
     }
     $lnk.Save()
     $desk = [Environment]::GetFolderPath("Desktop")
-    Copy-Item (Join-Path $programs "Local Coder.lnk") (Join-Path $desk "Local Coder.lnk") -Force
+    Copy-Item (Join-Path $programs "Talon.lnk") (Join-Path $desk "Talon.lnk") -Force
     Write-Host "Start Menu: $programs"
-    Write-Host "Desktop: $(Join-Path $desk 'Local Coder.lnk')"
+    Write-Host "Desktop: $(Join-Path $desk 'Talon.lnk')"
 }
 
 if ($Strict) {
@@ -295,7 +295,7 @@ if ($Strict) {
 
 Write-Host ""
 Write-Host "Setup finished." -ForegroundColor Green
-Write-Host "  Start Menu: Local Coder"
+Write-Host "  Start Menu: Talon"
 Write-Host "  Or: .\run.ps1"
 Write-Host "  Verify: .\doctor.ps1"
 Write-Host "  Optional admin lock: .\harden-firewall.ps1"

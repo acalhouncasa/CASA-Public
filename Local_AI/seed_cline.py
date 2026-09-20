@@ -119,11 +119,15 @@ def cline_payload(model: str) -> dict:
         "clineWebToolsEnabled": False,
         "customPrompt": "compact",
         "customInstructions": (
-            "You are Local Coder's on-device agent. Use only Ollama on 127.0.0.1. "
+            "You are Talon, the on-device Local AI agent. Use only Ollama on 127.0.0.1. "
             "Prefer Python and SQL. Run code with this kit's .venv (pandas, numpy, "
             "SQLAlchemy, scikit-learn, Jupyter, ruff). Default DB is data/local.sqlite. "
             "Do not call cloud APIs, ClinePass, or web fetch. Do not pip-install OpenAI "
-            "or other hosted-LLM SDKs. Keep PHI on this PC."
+            "or other hosted-LLM SDKs. Keep PHI on this PC. "
+            "Without being asked: read memory/INDEX.md and WHAT_WORKED.md / FAILED.md "
+            "before repeating work; after each task write schema-only data maps under "
+            "memory/data-maps/ and a short lesson under memory/lessons/. Never store "
+            "row values, names, or chart IDs in memory files."
         ),
         "welcomeViewCompleted": True,
         "isNewUser": False,

@@ -1,4 +1,4 @@
-# How Local Coder works
+# How Talon works
 
 This page is the architecture. Install steps are in [INSTALL.md](INSTALL.md). PHI limits are in [HIPAA.md](HIPAA.md).
 
@@ -6,7 +6,7 @@ This page is the architecture. Install steps are in [INSTALL.md](INSTALL.md). PH
 
 Hosted coding IDEs still send prompts off-box, even when you attach a local model. Microsoft VS Code + Copilot and Visual Studio + Copilot are the same class of problem.
 
-Local Coder is a thin, auditable wrapper around three existing open-source pieces:
+Talon is a thin, auditable wrapper around three existing open-source pieces:
 
 | Piece | Role |
 |-------|------|
@@ -20,7 +20,7 @@ The value of this folder is **how those three are launched and seeded**, not a n
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│  Local Coder process (run.ps1)                              │
+│  Talon process (run.ps1)                              │
 │                                                             │
 │   VSCodium.exe                                              │
 │     --user-data-dir   <kit>\ide-data                        │
@@ -54,7 +54,7 @@ VSCodium without flags uses `%APPDATA%\VSCodium`. That would mix with any other 
 - `--user-data-dir` → `ide-data\` (settings, window layout, Cline sqlite, last workspace)
 - `--extensions-dir` → `ide-extensions\` (Cline, Python, Ruff, SQLTools, Jupyter only)
 
-A Desktop shortcut that opens stock VSCodium is **not** Local Coder. Use `Launch-LocalCoder.vbs` / `.\run.ps1`.
+A Desktop shortcut that opens stock VSCodium is **not** Talon. Use `Launch-LocalCoder.vbs` / `.\run.ps1`.
 
 ## How Cline is locked to Ollama
 
@@ -87,7 +87,7 @@ This is a tradeoff: fewer clicks, more need to watch the terminal. See residual 
 
 `run.ps1` sets `GIT_CONFIG_COUNT` and six `insteadOf` mappings so any `git` child process in that window treats GitHub URLs as invalid. It also clears `GH_*` tokens.
 
-It does **not** write `%USERPROFILE%\.gitconfig`. Everyday git outside Local Coder is unchanged. That is deliberate: a global rewrite would break agency source control on the same PC.
+It does **not** write `%USERPROFILE%\.gitconfig`. Everyday git outside Talon is unchanged. That is deliberate: a global rewrite would break agency source control on the same PC.
 
 ## Python and SQL (local toolchain)
 

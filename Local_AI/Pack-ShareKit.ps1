@@ -22,10 +22,8 @@ $copyFiles = @(
     "LICENSE.txt",
     "THIRD_PARTY.md",
     "README.md",
-    "INSTALL.md",
-    "HIPAA.md",
-    "HOW_IT_WORKS.md",
     "TEAM.md",
+    "LEARN.md",
     "IT.md",
     "WELCOME.md",
     "setup.ps1",
@@ -42,6 +40,7 @@ $copyFiles = @(
     "Check.cmd",
     "Launch-LocalCoder.vbs",
     "Start Local Coder.cmd",
+    "Start Talon.cmd",
     "Uninstall-LocalCoder.ps1"
 )
 foreach ($name in $copyFiles) {
@@ -61,6 +60,14 @@ if (Test-Path (Join-Path $Root "data\README.txt")) {
 if (Test-Path (Join-Path $Root "examples")) {
     New-Item -ItemType Directory -Force -Path (Join-Path $Stage "examples") | Out-Null
     Copy-Item (Join-Path $Root "examples\*") (Join-Path $Stage "examples") -Force
+}
+if (Test-Path (Join-Path $Root "learn")) {
+    New-Item -ItemType Directory -Force -Path (Join-Path $Stage "learn") | Out-Null
+    Copy-Item (Join-Path $Root "learn\*.py") (Join-Path $Stage "learn") -Force
+}
+if (Test-Path (Join-Path $Root "memory\README.txt")) {
+    New-Item -ItemType Directory -Force -Path (Join-Path $Stage "memory") | Out-Null
+    Copy-Item (Join-Path $Root "memory\README.txt") (Join-Path $Stage "memory\README.txt") -Force
 }
 Copy-Item (Join-Path $Root "pack\LocalCoder.iss") (Join-Path $Stage "LocalCoder.iss") -ErrorAction SilentlyContinue
 Copy-Item (Join-Path $Root "Pack-ShareKit.ps1") (Join-Path $Stage "Pack-ShareKit.ps1") -Force

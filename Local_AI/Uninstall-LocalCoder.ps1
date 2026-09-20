@@ -5,10 +5,12 @@ param(
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$programs = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Local Coder"
-if (Test-Path $programs) {
-    Remove-Item $programs -Recurse -Force
-    Write-Host "Removed Start Menu folder."
+foreach ($name in @("Local Coder", "Talon")) {
+    $programs = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\$name"
+    if (Test-Path $programs) {
+        Remove-Item $programs -Recurse -Force
+        Write-Host "Removed Start Menu folder: $name"
+    }
 }
 
 $kitDefault = Join-Path $env:LOCALAPPDATA "Programs\LocalCoder"

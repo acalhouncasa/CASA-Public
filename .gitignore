@@ -35,3 +35,9 @@ Local_AI/data/*.sqlite
 Local_AI/data/*.csv
 Local_AI/data/*.xlsx
 Local_AI/data/*.parquet
+Local_AI/memory/state.json
+Local_AI/memory/data-maps/
+Local_AI/memory/lessons/
+Local_AI/memory/WHAT_WORKED.md
+Local_AI/memory/FAILED.md
+Local_AI/memory/INDEX.md

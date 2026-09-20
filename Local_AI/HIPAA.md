@@ -20,7 +20,7 @@ If you need a covered-entity determination, stop and talk to compliance. Do not 
 | Local inference replaces a BAA, audit log, or disk encryption | **No** |
 | A user can still leak PHI (OneDrive, USB, browser, switching Cline to a cloud API) | **Yes** |
 
-**Do not put PHI in a hosted IDE or browser chat.** Those products still send prompt-construction traffic through a vendor backend, even when you point them at a local model. Local Coder exists so the default path never does that.
+**Do not put PHI in a hosted IDE or browser chat.** Those products still send prompt-construction traffic through a vendor backend, even when you point them at a local model. Talon exists so the default path never does that.
 
 ---
 
@@ -90,13 +90,13 @@ These controls are in the scripts. They are not a complete HIPAA program. They a
 | Control | Where | Why |
 |---------|--------|-----|
 | `github.gitAuthentication=false` and related GitHub UI off | `templates/settings.json` | No GitHub login prompt in the PHI window |
-| `GIT_CONFIG_COUNT` `url.*.insteadof` rewrites `https://github.com/`, `git@github.com:`, gist, and `http://github.com/` | `run.ps1` | `git push` / clone to GitHub fail **inside Local Coder only**. Your user `.gitconfig` is not edited |
+| `GIT_CONFIG_COUNT` `url.*.insteadof` rewrites `https://github.com/`, `git@github.com:`, gist, and `http://github.com/` | `run.ps1` | `git push` / clone to GitHub fail **inside Talon only**. Your user `.gitconfig` is not edited |
 | `GH_TOKEN`, `GITHUB_TOKEN`, `GH_ENTERPRISE_TOKEN` cleared | `run.ps1` | `gh` cannot silently use a token from the environment |
 | Copilot, GitHub PRs, GitHub auth, Remote Repositories, Azure Repos disabled in the isolated profile | `seed_cline.py` `DISABLED_EXTENSIONS` | Those extensions exist to talk to Microsoft / GitHub |
 | Source Control view hidden; `git.autoRepositoryDetection=false`; `git.openRepositoryInParentFolders=never` | settings + seed layout | Stops the “parent repo is E:\github” toast and a git icon that invites remotes |
 | `git.autofetch=false`, `git.terminalAuthentication=false` | `templates/settings.json` | No background fetch / askpass to a host |
 
-This **does not** block git remotes in an ordinary Windows terminal outside Local Coder.
+This **does not** block git remotes in an ordinary Windows terminal outside Talon.
 
 ### Python and SQL kept on-box
 
@@ -151,8 +151,8 @@ Be explicit with your privacy officer. Residual paths we know about:
 - [ ] Disk encryption (BitLocker) and patching already required
 - [ ] Working folder is **not** consumer-synced
 - [ ] Named Windows accounts; screen lock; no shared PHI login
-- [ ] One Local Coder folder **per user** (do not copy `ide-data` between PCs)
-- [ ] Workforce told: Local Coder only; never Copilot or a hosted chat for PHI
+- [ ] One Talon folder **per user** (do not copy `ide-data` between PCs)
+- [ ] Workforce told: Talon only; never Copilot or a hosted chat for PHI
 - [ ] Workforce told: do not switch Cline off Ollama
 - [ ] Optional firewall script reviewed by IT
 - [ ] Retention / wipe procedure for `ide-data` and `data\`
@@ -179,4 +179,4 @@ Even after this kit is installed on the same PC:
 2. Follow [SECURITY.md](../SECURITY.md) (private vulnerability reporting).
 3. Follow your agency incident process.
 
-Related hosted-tool habits (different product): [AI/Working_With_Cursor/SAFETY.md](../AI/Working_With_Cursor/SAFETY.md). That folder is not Local Coder.
+Related hosted-tool habits (different product): [AI/Working_With_Cursor/SAFETY.md](../AI/Working_With_Cursor/SAFETY.md). That folder is not Talon.

@@ -104,7 +104,20 @@ $launchArgs = @(
     "--crash-reporter-directory=`"$(Join-Path $IdeData 'crashes')`"",
     "`"$Workspace`""
 )
-Write-Host "Opening Local Coder (VSCodium + Cline + Ollama)..."
+$learnPy = Join-Path $Root "learn\talon_learn.py"
+$venvPy = Join-Path $Root ".venv\Scripts\pythonw.exe"
+if (-not (Test-Path $venvPy)) { $venvPy = Join-Path $Root ".venv\Scripts\python.exe" }
+if ((Test-Path $learnPy) -and (Test-Path $venvPy)) {
+    Start-Process -FilePath $venvPy -ArgumentList @(
+        "`"$learnPy`"",
+        "--watch",
+        "--kit", "`"$Root`"",
+        "--workspace", "`"$Workspace`""
+    ) -WindowStyle Hidden
+}
+
+Write-Host "Opening Talon — Local AI (VSCodium + Cline + Ollama)..."
 Write-Host "Workspace: $Workspace"
+Write-Host "Background learner is mapping data and lessons on this PC only."
 Write-Host "GitHub remotes and GitHub login are blocked in this window."
 Start-Process -FilePath $codium -ArgumentList $launchArgs

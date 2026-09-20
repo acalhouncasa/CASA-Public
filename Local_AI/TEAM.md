@@ -1,4 +1,4 @@
-# Local Coder for a small team
+# Talon — Local AI for a small team
 
 This kit is **per person, per PC**. Do not share `ide-data`, `.venv`, or `data\*.sqlite`. Those folders can hold PHI after first use.
 
@@ -8,7 +8,7 @@ Install steps: [INSTALL.md](INSTALL.md) (in the public pack) or `.\setup.ps1` he
 
 | Pattern | Use when | Do not |
 |---------|----------|--------|
-| **One kit folder per user** (`C:\LocalCoder` or `%LOCALAPPDATA%\Programs\LocalCoder`) | Default | Copy someone else’s `ide-data` |
+| **One kit folder per user** (`C:\\Talon` or `%LOCALAPPDATA%\Programs\LocalCoder`) | Default | Copy someone else’s `ide-data` |
 | **Project folder separate from the kit** | Shared scripts, SQL, notebooks | Open the kit folder as the only workspace if it already has PHI |
 | **Same model name on every GPU box** | You want comparable answers | Mix `qwen3-coder:30b` and a 7B without saying so |
 | **Laptop / no 24 GB VRAM** | Pull `qwen2.5-coder:14b` or `7b` (see `templates\team-defaults.json`) | Pull a second 30B on the same 24 GB card |
@@ -52,7 +52,7 @@ Then re-run `.\setup.ps1 -SkipDeps` only if you need new editor extensions.
 | This kit (scripts + docs) | `ide-data\`, `ide-extensions\` |
 | Project source with **no PHI** | `data\local.sqlite`, CSVs, notebooks with client rows |
 | `examples\` synthetic files | Anything that could identify a client |
-| `doctor.ps1` output (no paths to charts) | Screenshots of Local Coder with live data |
+| `doctor.ps1` output (no paths to charts) | Screenshots of Talon with live data |
 
 Hash-check zip drops. See `IT.md`.
 

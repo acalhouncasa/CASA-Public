@@ -1,4 +1,4 @@
-# Install Local Coder
+# Install Talon
 
 This is the full install path for another agency or a new workstation. Read [NOTICE.md](../NOTICE.md) and [HIPAA.md](HIPAA.md) first.
 
@@ -77,7 +77,7 @@ Copy **this entire `Local_AI` folder** to a working path that is **not** the Git
 Good:
 
 ```text
-C:\LocalCoder\
+C:\\Talon\
 D:\Tools\LocalCoder\
 ```
 
@@ -89,7 +89,7 @@ Avoid:
 | OneDrive / Desktop (if Desktop is redirected) | Consumer sync can take PHI off the box. |
 | A path you later zip and email | Runtime folders can contain client data. |
 
-If the path has a space (`Local Coder`), that is fine. Scripts quote their arguments.
+If the path has a space (`Talon`), that is fine. Scripts quote their arguments.
 
 After first run you will see extra folders. **Do not commit them:**
 
@@ -112,8 +112,8 @@ On a machine that may use git (this is the **public** repo; still no PHI):
 ```powershell
 gh auth switch --user YOUR_ORG_ACCOUNT   # if you use more than one GitHub login
 git clone https://github.com/acalhouncasa/CASA-Public.git
-Copy-Item -Recurse .\CASA-Public\Local_AI C:\LocalCoder
-cd C:\LocalCoder
+Copy-Item -Recurse .\CASA-Public\Local_AI C:\\Talon
+cd C:\\Talon
 ```
 
 ### Option B — Download ZIP from GitHub
@@ -121,12 +121,12 @@ cd C:\LocalCoder
 1. Open [https://github.com/acalhouncasa/CASA-Public](https://github.com/acalhouncasa/CASA-Public).
 2. Code → Download ZIP.
 3. Unzip.
-4. Copy the `Local_AI` folder to `C:\LocalCoder` (or your chosen path).
+4. Copy the `Local_AI` folder to `C:\\Talon` (or your chosen path).
 5. If Windows marked the zip: only unblock **after** you trust the source.
 
 ```powershell
 # Example after you copy out of the unzipped tree
-Unblock-File C:\LocalCoder\*.ps1, C:\LocalCoder\*.cmd, C:\LocalCoder\*.vbs
+Unblock-File C:\\Talon\*.ps1, C:\\Talon\*.cmd, C:\\Talon\*.vbs
 ```
 
 ### Option C — Agency share kit
@@ -153,7 +153,7 @@ Details: [IT.md](IT.md).
 2. Change to the working copy:
 
 ```powershell
-cd C:\LocalCoder
+cd C:\\Talon
 ```
 
 3. Confirm execution policy will allow a local script. The `.cmd` launchers already pass `-ExecutionPolicy Bypass` for that one file. From PowerShell you can also run:
@@ -176,7 +176,7 @@ Or double-click `Install.cmd` (same script; it pauses at the end so you can read
 
 ```text
 Setup finished.
-  Start Menu: Local Coder
+  Start Menu: Talon
   Or: .\run.ps1
   Verify: .\doctor.ps1
 ```
@@ -204,7 +204,7 @@ Shared PC (front desk / training room): add `-Strict` so the agent does not auto
 5. Sets user environment `OLLAMA_HOST=127.0.0.1:11434`.
 6. Creates `ide-data\` and `ide-extensions\`.
 7. Copies `templates\settings.json` and `templates\argv.json` into the isolated profile.
-8. Optionally replaces VSCodium watermark SVGs with Local Coder marks (unsigned resource files only; it does **not** patch `VSCodium.exe`).
+8. Optionally replaces VSCodium watermark SVGs with Talon marks (unsigned resource files only; it does **not** patch `VSCodium.exe`).
 9. Installs **Cline** (`saoudrizwan.claude-dev`) into the isolated extensions dir.
 10. Runs `seed_cline.py` so Cline is Ollama-only, telemetry off, ClinePass banners dismissed, web/MCP off.
 11. Installs Open VSX extensions: Python, debugpy, Ruff, SQLTools, SQLTools SQLite, Jupyter.
@@ -255,11 +255,11 @@ Do **not** pull a second 30B “SQL model” on a 24 GB card. The coding model p
 ## 7. First launch
 
 ```powershell
-cd C:\LocalCoder
+cd C:\\Talon
 .\run.ps1
 ```
 
-Or use **Start Menu → Local Coder** or `Start Local Coder.cmd`.
+Or use **Start Menu → Talon** or `Start Talon.cmd`.
 
 `run.ps1` will:
 
@@ -281,7 +281,7 @@ The path is remembered in `ide-data\last-workspace.txt`.
 
 ### First-run checklist (do this once)
 
-1. Title bar says **Local Coder**.
+1. Title bar says **Talon**.
 2. Right sidebar is **Cline** (robot), already open.
 3. Cline **API Provider = Ollama**, base URL `http://127.0.0.1:11434`.
 4. Model is `qwen3-coder:30b` (or the smaller model you pulled).
@@ -299,7 +299,7 @@ Type a simple prompt in Cline, for example: “Create `data\hello.py` that print
 ## 8. Verify Python and SQL
 
 ```powershell
-cd C:\LocalCoder
+cd C:\\Talon
 .\.venv\Scripts\python.exe -c "import pandas, numpy, sklearn, sqlalchemy, matplotlib; print('ok', pandas.__version__)"
 .\.venv\Scripts\python.exe -c "import sqlite3; sqlite3.connect(r'data\local.sqlite').execute('create table if not exists smoke(id int)'); print('sqlite ok')"
 ```
@@ -323,7 +323,7 @@ To rebuild the venv later:
 Elevated PowerShell:
 
 ```powershell
-cd C:\LocalCoder
+cd C:\\Talon
 .\harden-firewall.ps1
 ```
 
@@ -346,7 +346,7 @@ Do this **after** install and model pull. If you firewall first, winget / Open V
 1. On a networked PC, download publisher-signed installers (do not rename):
 
 ```powershell
-cd C:\LocalCoder
+cd C:\\Talon
 winget download -e --id VSCodium.VSCodium -d payload --accept-package-agreements --accept-source-agreements
 winget download -e --id Ollama.Ollama -d payload --accept-package-agreements --accept-source-agreements
 ```
@@ -364,7 +364,7 @@ winget download -e --id Ollama.Ollama -d payload --accept-package-agreements --a
 ## 11. Daily use
 
 ```powershell
-cd C:\LocalCoder
+cd C:\\Talon
 .\run.ps1
 # or
 .\run.ps1 -Workspace "D:\Work\MyProject"
@@ -375,7 +375,7 @@ Habits:
 - Keep Cline on **Ollama**. If anyone picks OpenAI / Anthropic / OpenRouter / ClinePass, prompts leave the box.
 - Keep Web Fetch and MCP off.
 - Save query output under `data\` on this PC. Do not gist it.
-- Git remotes to github.com fail **inside Local Coder only**. Everyday git outside this window is unchanged.
+- Git remotes to github.com fail **inside Talon only**. Everyday git outside this window is unchanged.
 - Do not open this working copy in a hosted IDE or Microsoft VS Code for PHI work.
 
 ---
@@ -405,13 +405,13 @@ Habits:
 ## 13. Uninstall
 
 ```powershell
-cd C:\LocalCoder
+cd C:\\Talon
 .\Uninstall-LocalCoder.ps1
 ```
 
 That removes Start Menu shortcuts. It leaves VSCodium and Ollama installed unless you pass `-RemoveDeps` (those apps may be used for other work).
 
-Then delete the working folder in Explorer (`C:\LocalCoder`), including `ide-data` and `data` if they hold PHI — follow your agency’s media sanitization procedure.
+Then delete the working folder in Explorer (`C:\\Talon`), including `ide-data` and `data` if they hold PHI — follow your agency’s media sanitization procedure.
 
 Firewall rules (if you applied them):
 
@@ -429,7 +429,7 @@ Do **not** email a used kit that already has `ide-data` or `data\*.sqlite`. Pack
 .\Pack-ShareKit.ps1
 ```
 
-On the receiving PC, if Local Coder is already installed:
+On the receiving PC, if Talon is already installed:
 
 ```powershell
 .\Update-LocalCoder.ps1 -From "D:\Incoming\Local_AI"

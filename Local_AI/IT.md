@@ -1,4 +1,4 @@
-# IT notes: sharing Local Coder without tripping security tools
+# IT notes: sharing Talon without tripping security tools
 
 This kit is meant to look like ordinary internal software. The way to do that
 is **transparency and publisher signatures**, not packing tricks.
@@ -46,7 +46,7 @@ Quiet installs come from one of these, in order of preference:
 
 That writes `dist\LocalCoder-1.1.0.zip` plus `dist\SHA256SUMS.txt`.
 
-On a PC that already has Local Coder, refresh scripts without wiping the
+On a PC that already has Talon, refresh scripts without wiping the
 profile:
 
 ```powershell

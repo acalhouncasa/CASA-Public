@@ -54,4 +54,4 @@ if (Test-Path $demo) {
 }
 
 Write-Host "Data science venv ready: $venvPy"
-Write-Host "Use that interpreter in Local Coder. Do not pip-install cloud SDKs into it."
+Write-Host "Use that interpreter in Talon. Do not pip-install cloud SDKs into it."

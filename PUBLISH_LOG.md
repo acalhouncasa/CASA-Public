@@ -64,3 +64,14 @@ Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, n
 | `Local_AI/doctor.ps1` | Health check (Ollama, model, venv, Cline provider) |
 | `Local_AI/Update-LocalCoder.ps1` | Refresh scripts without wiping ide-data / SQLite |
 | `Local_AI/examples/` | Synthetic monthly encounters (not PHI) |
+
+---
+
+## 09/20/2026 — Talon — Local AI 1.2.0
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/` | Rebranded as **Talon — Local AI** (icons, shortcuts, window title) |
+| `Local_AI/learn/talon_learn.py` | Background learner: data maps + lessons, no cell values |
+| `Local_AI/LEARN.md` | How memory works |
+| `Local_AI/memory/README.txt` | Runtime memory is local-only; not committed |

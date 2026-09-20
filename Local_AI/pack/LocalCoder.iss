@@ -1,4 +1,4 @@
-#define MyAppName "Local Coder"
+﻿#define MyAppName "Talon"
 #define MyAppVersion "1.1.0"
 #define MyAppPublisher "CASA-Trinity"
 #define SourceRoot ".."
@@ -54,15 +54,15 @@ Source: "{#SourceRoot}\Check.cmd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\ruff.toml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\examples\*"; DestDir: "{app}\examples"; Flags: ignoreversion
 Source: "{#SourceRoot}\Install.cmd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SourceRoot}\Start Local Coder.cmd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\Start Talon.cmd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\templates\*"; DestDir: "{app}\templates"; Flags: ignoreversion
 Source: "{#SourceRoot}\payload\README.txt"; DestDir: "{app}\payload"; Flags: ignoreversion
 Source: "{#SourceRoot}\data\README.txt"; DestDir: "{app}\data"; Flags: ignoreversion
 Source: "{#SourceRoot}\branding\*"; DestDir: "{app}\branding"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\Install or repair Local Coder"; Filename: "{app}\Install.cmd"
-Name: "{group}\Local Coder"; Filename: "{app}\Start Local Coder.cmd"
+Name: "{group}\Install or repair Talon"; Filename: "{app}\Install.cmd"
+Name: "{group}\Talon"; Filename: "{app}\Start Talon.cmd"
 Name: "{group}\Install instructions"; Filename: "{app}\INSTALL.md"
 Name: "{group}\HIPAA limits"; Filename: "{app}\HIPAA.md"
 Name: "{group}\IT notes"; Filename: "{app}\IT.md"

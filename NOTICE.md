@@ -17,9 +17,9 @@ Some items change databases, applications, or how people save work.
 
 Do not put client names, chart numbers, or other PHI in issues, pull requests, screenshots, or sample data.
 
-## Local Coder (`Local_AI/`)
+## Talon — Local AI (`Local_AI/`)
 
-The on-device editor kit is **use at your own risk**. It is not HIPAA certified. Read [Local_AI/HIPAA.md](Local_AI/HIPAA.md) before you open PHI in Local Coder. Do not put PHI in a hosted IDE or browser chat.
+The on-device editor kit is **use at your own risk**. It is not HIPAA certified. Read [Local_AI/HIPAA.md](Local_AI/HIPAA.md) before you open PHI in Talon. Do not put PHI in a hosted IDE or browser chat.
 
 ## License
 

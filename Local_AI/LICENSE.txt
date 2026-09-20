@@ -1,4 +1,4 @@
-Local Coder toolkit scripts — MIT License
+Talon toolkit scripts — MIT License
 
 Copyright (c) 2026 CASA-Trinity
 

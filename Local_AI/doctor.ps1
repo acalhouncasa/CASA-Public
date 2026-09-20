@@ -27,7 +27,7 @@ function Pass([string]$Message) { Write-Check "OK" $Message }
 function Warn([string]$Message) { $script:warn++; Write-Check "WARN" $Message }
 function Fail([string]$Message) { $script:fail++; Write-Check "FAIL" $Message }
 
-Write-Host "Local Coder doctor" -ForegroundColor Cyan
+Write-Host "Talon doctor" -ForegroundColor Cyan
 Write-Host "Kit: $Root"
 
 $versionFile = Join-Path $Root "VERSION"
@@ -107,6 +107,11 @@ if ($smi) {
 } else {
     Warn "nvidia-smi not found. 30B models need a large NVIDIA GPU."
 }
+
+$learn = Join-Path $Root "learn\talon_learn.py"
+if (Test-Path $learn) { Pass "Background learner learn\\talon_learn.py" } else { Warn "talon_learn.py missing" }
+$mem = Join-Path $Root "memory\INDEX.md"
+if (Test-Path $mem) { Pass "memory\\INDEX.md present" } else { Warn "memory not built yet (starts with run.ps1)" }
 
 $overrides = Join-Path $ide "team-overrides.json"
 if (Test-Path $overrides) { Pass "team-overrides.json present (Strict or custom)" }
