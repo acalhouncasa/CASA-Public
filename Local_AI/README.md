@@ -12,6 +12,7 @@ Prompts stay on the workstation (`127.0.0.1:11434`). Talon is its own kit.
 | [LEARN.md](LEARN.md) | Background data maps and lessons |
 | [TEAM.md](TEAM.md) | Small-team operations |
 | [HIPAA.md](HIPAA.md) | PHI limits and residual risk |
+| [FROM_STOCK.md](FROM_STOCK.md) | Stock VSCodium/Cline/Ollama vs what Talon changes |
 | [HOW_IT_WORKS.md](HOW_IT_WORKS.md) | Architecture |
 | [IT.md](IT.md) | Sharing, hashes, Authenticode |
 

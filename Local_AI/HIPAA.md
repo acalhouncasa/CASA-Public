@@ -41,6 +41,8 @@ That is the HIPAA-relevant benefit. It is also the limit: everything else on the
 
 These controls are in the scripts. They are not a complete HIPAA program. They are the list of things this kit actually does.
 
+Stock vs this wrapper (same facts, comparison layout): [FROM_STOCK.md](FROM_STOCK.md).
+
 ### Isolation from cloud IDEs
 
 | Control | Where | Why |

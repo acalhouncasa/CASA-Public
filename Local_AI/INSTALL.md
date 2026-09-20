@@ -1,6 +1,6 @@
 # Install Talon
 
-This is the full install path for another agency or a new workstation. Read [NOTICE.md](../NOTICE.md) and [HIPAA.md](HIPAA.md) first.
+This is the full install path for another agency or a new workstation. Read [NOTICE.md](../NOTICE.md) and [HIPAA.md](HIPAA.md) first. Stock VSCodium/Cline vs this wrapper: [FROM_STOCK.md](FROM_STOCK.md).
 
 **Use at your own risk.** The scripts do not disable Windows Defender or SmartScreen. They do not certify you for HIPAA.
 

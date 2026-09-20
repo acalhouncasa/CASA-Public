@@ -14,7 +14,7 @@ Talon is a thin, auditable wrapper around three existing open-source pieces:
 | [Cline](https://open-vsx.org/extension/saoudrizwan/claude-dev) | Agent: read, edit, grep, terminal |
 | [Ollama](https://github.com/ollama/ollama) | Local model server on `127.0.0.1:11434` |
 
-The value of this folder is **how those three are launched and seeded**, not a new model.
+The value of this folder is **how those three are launched and seeded**, not a new model. Row-by-row vs stock defaults: [FROM_STOCK.md](FROM_STOCK.md).
 
 ## Data path
 
