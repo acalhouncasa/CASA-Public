@@ -5,6 +5,10 @@
   },
   {
     "key": "ctrl+k ctrl+o",
+    "command": "-workbench.action.files.openFolderViaWorkspace"
+  },
+  {
+    "key": "ctrl+k ctrl+o",
     "command": "workbench.action.addRootFolder"
   },
   {

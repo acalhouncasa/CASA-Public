@@ -17,11 +17,11 @@ Prompts stay on the workstation (`127.0.0.1:11434`). Talon is its own kit.
 
 **Use at your own risk.** This kit is not HIPAA certified. Local PHI in `data\` and `memory\` is expected. Do not put PHI in a hosted chat or in this GitHub repository.
 
-Current kit: **1.4.3**. Launch always goes through `Open-Talon.cmd` so folder names with spaces stay one path. Git and GitHub stay off in this window (parent-folder prompt is Never). SQLTools does not auto-connect or ask to npm-install a driver on first open. The Python Environments helper is disabled.
+Current kit: **1.4.4**. Launch always goes through `Open-Talon.cmd` so folder names with spaces stay one path. Git and GitHub stay off in this window (parent-folder prompt is Never). SQLTools does not auto-connect or ask to npm-install a driver on first open. The Python Environments helper is disabled. **File → Open Folder** is removed from the File menu and the command palette.
 
 ## Folders
 
-Keep the Talon kit as the first Explorer root. It starts collapsed. Attach project and PHI folders with `Connect.cmd` or File → Add Folder to Workspace. File → Open Folder adds a folder; it does not replace the kit.
+Keep the Talon kit as the first Explorer root. It starts collapsed. Attach project and PHI folders with `Connect.cmd` or File → Add Folder to Workspace. File → Open Folder is not on the File menu.
 
 ## Quick start
 

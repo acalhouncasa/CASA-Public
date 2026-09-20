@@ -292,7 +292,7 @@ The path is remembered in `ide-data\last-workspace.txt`.
 9. Python interpreter is `.\.venv\Scripts\python.exe`. There is no “interpreter could not be resolved” toast and no Python Environments prompt.
 10. SQLTools knows about **Local SQLite** (`data\local.sqlite`) but does not auto-connect or ask to npm-install `sqlite3` on launch. Connect when you need the database.
 11. Explorer roots are the Talon kit (and any folders you attached). Profile folders such as Cache or Backups are not workspace roots.
-12. Attach work with **Talon Connect** or File → Add Folder to Workspace. File → Open Folder only adds a folder.
+12. Attach work with **Talon Connect** or File → Add Folder to Workspace. File → Open Folder is not on the File menu or in the command palette.
 
 Type a simple prompt in Cline, for example: “Create `data\hello.py` that prints hello, run it with the venv python.” Confirm it uses `.venv\Scripts\python.exe`.
 
@@ -396,6 +396,7 @@ Habits:
 | Explorer shows Cache, Backups, or `%LOCALAPPDATA%` as roots | A launch split a path that contains a space. Close that window. Start only from `Start Talon.cmd` / `Open-Talon.cmd`, not a raw `VSCodium.exe` command line. |
 | SQLTools asks to install `sqlite3@…` or announces Node | Expected only if you click Connect. Launch does not auto-connect. Node-detect notifications are off. |
 | Python “interpreter could not be resolved” | Confirm `.venv\Scripts\python.exe` exists (`.\setup-datasci.ps1`). Settings use a Windows path. The Python Environments extension is disabled. |
+| File → Open Folder is still listed | Close Talon fully and start from `Start Talon.cmd` so seed can write `menu.hiddenCommands`. Use Add Folder to Workspace or Connect. |
 | Desktop shortcut does nothing | Shortcut must call `wscript.exe` + `Launch-LocalCoder.vbs`. Re-run `.\setup.ps1` to recreate it. |
 | Title bar still looks like VSCodium | Cosmetic only. `setup.ps1` copies SVGs into `resources\app\out\media`. It will not patch `VSCodium.exe` (that would break Authenticode). |
 | winget blocked by policy | Use section 10 (`payload\`). |

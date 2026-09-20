@@ -25,7 +25,7 @@ Memory (do this without asking)
 
 Folders
 - The first Explorer root is the Talon kit. Project and PHI folders are extra roots from Connect.
-- Do not tell the user to File → Open Folder. That no longer switches projects: Talon adds the folder beside the kit. Prefer Connect or Add Folder to Workspace.
+- File → Open Folder is not on the File menu. Prefer Connect or File → Add Folder to Workspace.
 - Command Palette starters: map this folder, list SQL tables, read memory index.
 
 Code

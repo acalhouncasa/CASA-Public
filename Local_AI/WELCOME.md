@@ -2,7 +2,7 @@
 
 Local AI for this workstation. Cline stays on **Ollama** at `127.0.0.1`. Do not create a Cline account.
 
-The **Talon** kit is the first Explorer root and starts collapsed. Attach a project folder or a PHI folder with **Talon Connect** or **File → Add Folder to Workspace**. File → Open Folder adds a folder; it does not replace the kit.
+The **Talon** kit is the first Explorer root and starts collapsed. Attach a project folder or a PHI folder with **Talon Connect** or **File → Add Folder to Workspace**. File → Open Folder is not on the menu.
 
 Read [Getting started](USAGE.md).
 

@@ -403,6 +403,37 @@ def _cline_placeholder(ide_data: Path, existing: dict | None = None) -> dict:
     return item
 
 
+HIDDEN_OPEN_FOLDER_COMMANDS = (
+    "workbench.action.files.openFolder",
+    "workbench.action.files.openFolderViaWorkspace",
+)
+
+HIDDEN_OPEN_FOLDER_MENUS = (
+    "MenubarFileMenu",
+    "CommandPalette",
+)
+
+
+def hide_open_folder_menus(con: sqlite3.Connection) -> None:
+    """Remove File → Open Folder (and the command-palette twin) without
+    flipping openFolderWorkspaceSupport. That context key only swaps in
+    Open Folder Via Workspace, which still replaces the kit.
+    """
+    data = _read_json(con, "menu.hiddenCommands", {})
+    if not isinstance(data, dict):
+        data = {}
+    for menu_id in HIDDEN_OPEN_FOLDER_MENUS:
+        current = data.get(menu_id)
+        if not isinstance(current, list):
+            current = []
+        keep = [item for item in current if isinstance(item, str)]
+        for command in HIDDEN_OPEN_FOLDER_COMMANDS:
+            if command not in keep:
+                keep.append(command)
+        data[menu_id] = keep
+    _put(con, "menu.hiddenCommands", data)
+
+
 def vscodium_version() -> str:
     candidates = [
         Path(os.environ.get("LOCALAPPDATA", "")) / "Programs" / "VSCodium" / "resources" / "app" / "package.json",
@@ -501,6 +532,7 @@ def apply_agent_layout(ide_data: Path) -> None:
             # Must equal the installed VSCodium version. A fake version
             # (e.g. 99.99.99) makes Release Notes open on every launch.
             _put(con, "releaseNotes/lastVersion", vscodium_version())
+            hide_open_folder_menus(con)
             _put(con, "workbench.startupEditor", "none")
             _put(con, "workbench.auxiliarybar.activepanelid", CLINE_CONTAINER)
             _put(con, "workbench.auxiliaryBar.empty", False)

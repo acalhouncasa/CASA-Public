@@ -67,6 +67,16 @@ Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, n
 
 ---
 
+## 09/20/2026 — Talon — Local AI 1.4.4
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/` | **1.4.4.** File → Open Folder removed from the File menu and command palette (`menu.hiddenCommands`). Ctrl+K Ctrl+O adds a folder. |
+| `Local_AI/seed_cline.py` | Hide `workbench.action.files.openFolder` and the Via-Workspace twin. Does not flip `openFolderWorkspaceSupport` (that swap still replaces the kit). |
+| `Local_AI/USAGE.md` / `CONNECT.md` | Getting started 1.4.4: attach with Connect or Add Folder to Workspace. |
+
+---
+
 ## 09/20/2026 — Talon — Local AI 1.4.3
 
 | Public path | What |

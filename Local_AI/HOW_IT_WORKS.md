@@ -56,7 +56,7 @@ VSCodium without flags uses `%APPDATA%\VSCodium`. That would mix with any other 
 
 A Desktop shortcut that opens stock VSCodium is **not** Talon. Use `Launch-LocalCoder.vbs` → `run.ps1` → `Open-Talon.cmd`.
 
-Talon Guard 1.3.0 (`extensions\talon.talon-guard-1.3.0`, also shipped as a `.vsix`) stays in the isolated extensions dir. If someone uses File → Open Folder, Guard restores the kit workspace and adds the chosen folder. It also queues the local Getting started page. `Install-Guard.cmd` reinstalls the VSIX into this profile only.
+Talon Guard 1.3.0 (`extensions\talon.talon-guard-1.3.0`, also shipped as a `.vsix`) stays in the isolated extensions dir. `seed_cline.py` writes `menu.hiddenCommands` so **File → Open Folder** (and the command-palette twin) is hidden. We do not flip `openFolderWorkspaceSupport`; that only swaps in another Open Folder command that still replaces the kit. File → Add Folder to Workspace and Talon Connect remain. If someone opens a folder another way (Open Recent), Guard restores the kit workspace and adds the chosen folder. It also queues the local Getting started page. `Install-Guard.cmd` reinstalls the VSIX into this profile only.
 
 ## How Cline is locked to Ollama
 

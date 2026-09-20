@@ -130,7 +130,7 @@ $ico = Join-Path $Root "branding\icon.ico"
 if (Test-Path $ico) { Pass "Talon icon branding\\icon.ico" } else { Warn "branding\\icon.ico missing. Shortcuts will look like a script." }
 
 $guard = Join-Path $Root "extensions\talon.talon-guard-1.3.0\extension.js"
-if (Test-Path $guard) { Pass "Talon Guard extension present" } else { Warn "Talon Guard missing. File → Open Folder will drop the kit." }
+if (Test-Path $guard) { Pass "Talon Guard extension present" } else { Warn "Talon Guard missing. File → Open Folder is not locked off." }
 
 $backup = Join-Path $Root "Backup-TalonMemory.ps1"
 if (Test-Path $backup) { Pass "Memory backup script present" } else { Warn "Backup-TalonMemory.ps1 missing" }

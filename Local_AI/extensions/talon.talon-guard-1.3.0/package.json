@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "talon-guard",
   "displayName": "Talon Guard",
   "description": "Keeps the Talon kit workspace open and offers local Cline starters.",
@@ -16,6 +16,22 @@
       { "command": "talon.starterMapFolder", "title": "Talon: Starter - map this folder" },
       { "command": "talon.starterListSql", "title": "Talon: Starter - list SQL tables" },
       { "command": "talon.starterMemory", "title": "Talon: Starter - read memory index" }
+    ],
+    "menus": {
+      "MenubarFileMenu": [
+        {
+          "command": "talon.addFolder",
+          "group": "2_open",
+          "order": 2
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "talon.addFolder",
+        "key": "ctrl+k ctrl+o",
+        "mac": "cmd+k cmd+o"
+      }
     ]
   }
 }
