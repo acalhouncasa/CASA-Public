@@ -18,7 +18,7 @@ If you need a covered-entity determination, stop and talk to compliance. Do not 
 | Hosted IDEs / Copilot / ChatGPT are safe for PHI if you “turn on privacy mode” | **No** |
 | This repo or kit is HIPAA certified | **No** |
 | Local inference replaces a BAA, audit log, or disk encryption | **No** |
-| A user can still leak PHI (OneDrive, USB, browser, switching Cline to a cloud API) | **Yes** |
+| A user can still leak PHI (OneDrive, USB, browser, a prompt sent before Guard reloads, another editor) | **Yes** |
 
 **Do not put PHI in a hosted IDE or browser chat.** Those products still send prompt-construction traffic through a vendor backend, even when you point them at a local model. Talon exists so the default path never does that.
 
@@ -60,6 +60,7 @@ These controls are in the scripts. They are not a complete HIPAA program. They a
 | Mid-session provider watchdog: reset to Ollama and reload | Guard `lockClineToOllama` | Seed only helps on the next launch; this catches a switch while the window is open |
 | No cloud API keys written by seed | `seed_cline.py` | Seed never stores vendor tokens |
 | `.clinerules` + Cline `customInstructions` | kit root | Tell the agent: Ollama only; no ClinePass; no web fetch |
+| Title bar shows **Ollama up** or **Ollama down** | `learn/apply_sources.py` | Novice can see whether the local model is answering before they type |
 
 ### Cline cloud surfaces turned off
 
@@ -110,7 +111,25 @@ This **does not** block git remotes in an ordinary Windows terminal outside Talo
 | Default DB is `data\local.sqlite` (file, no server) | `setup-datasci.ps1`, SQLTools settings | SQL work can stay on disk |
 | Python language server = **Jedi**, not Pylance | `templates/settings.json` | Pylance / Microsoft language servers can send code for analysis |
 | `python.telemetry` / `python.experiments` off | `templates/settings.json` | Microsoft Python extension telemetry |
+| `ms-python.vscode-python-envs` disabled | `seed_cline.py` | That helper toasts and can talk to Microsoft account / env services |
+| Windows path for `.venv\Scripts\python.exe` | `learn/apply_sources.py` | Stops “interpreter could not be resolved,” which trains people to pick another Python |
+| SQLTools does not auto-connect; Node-detect toasts off; driver install auto-accept if they click Connect | `templates/settings.json` | First launch must not npm-install `sqlite3` or announce Node |
 | Jupyter remote notebook discovery off; widget CDN sources empty | `templates/settings.json` | Jupyter can otherwise pull remote kernels / scripts |
+
+### Workspace and first-run (keep the isolated kit)
+
+| Control | Where | Why |
+|---------|--------|-----|
+| Launch only through `Open-Talon.cmd` with quoted `--user-data-dir` | `run.ps1`, `Open-Talon.cmd` | A path with a space otherwise opens the wrong folders and drops the isolated profile |
+| `window.restoreWindows=none`, `files.hotExit=off` | `templates/settings.json` | Do not restore Release Notes or a previous unsafe layout |
+| `releaseNotes/lastVersion` = real VSCodium version | `seed_cline.py` | Fake versions made Release Notes open on every launch |
+| **File → Open Folder** hidden on the File menu and command palette | `seed_cline.py` `menu.hiddenCommands` | That command replaces the workspace and drops Guard / Cline isolation |
+| Ctrl+K Ctrl+O is Add Folder, not Open Folder | `templates/keybindings.json` | Same replacement risk on the default shortcut |
+| Talon Guard: Open Folder / Open Recent adds beside the kit | `extensions/talon.talon-guard-1.3.0` | If the menu item still runs, the kit stays the first root |
+| Kit root starts collapsed; Connect adds project/PHI folders | `learn/apply_sources.py`, `Connect-Talon.ps1` | Staff keep extracts out of the kit dump and out of File → Open Folder |
+| `doctor.ps1` / `Check.cmd` | kit root | Staff can confirm Ollama, Cline provider, Guard, and venv without screenshots of PHI |
+| `Backup.cmd` refuses OneDrive / consumer sync paths | `Backup-TalonMemory.ps1` | Memory zip is treated as PHI |
+| `setup.ps1 -Strict` | `setup.ps1` | Shared PCs: commands are not auto-approved, so `curl` / `pip` to a vendor needs a click |
 
 ### Process and sharing hygiene
 

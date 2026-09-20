@@ -67,6 +67,14 @@ Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, n
 
 ---
 
+## 09/20/2026 — HIPAA inventory complete for 1.4.5
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/HIPAA.md` | Added the later locks that were only in HOW_IT_WORKS/USAGE: Open Folder hide, quoted launch, restore/Release Notes, Python Envs disable, SQLTools first-run silence, title-bar Ollama status, doctor, Backup, Strict. |
+
+---
+
 ## 09/20/2026 — Talon — Local AI 1.4.5
 
 | Public path | What |
