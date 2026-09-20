@@ -1,24 +1,19 @@
 # Third-party software
 
-Talon does not replace these projects. The toolkit installs them from
-their official sources (winget, Open VSX, or publisher-signed files you place
-in `payload\`).
+Local Coder does not replace these projects. The toolkit installs them from
+their official sources (winget or publisher-signed installers you place in
+`payload\`).
 
 | Software | Publisher | License | Official source |
 |---|---|---|---|
 | VSCodium | VSCodium | MIT | https://github.com/VSCodium/vscodium |
 | Ollama | Ollama | MIT | https://github.com/ollama/ollama |
 | Cline | saoudrizwan / Cline | Apache-2.0 | https://open-vsx.org/extension/saoudrizwan/claude-dev |
-| Python | Python Software Foundation | PSF | https://www.python.org/ |
-| Python extension | Microsoft (Open VSX build) | MIT | https://open-vsx.org/extension/ms-python/python |
-| debugpy | Microsoft (Open VSX) | MIT | https://open-vsx.org/extension/ms-python/debugpy |
+| Python extension | Microsoft (Open VSX) | MIT | https://open-vsx.org/extension/ms-python/python |
 | Ruff | Astral | MIT | https://open-vsx.org/extension/charliermarsh/ruff |
 | SQLTools + SQLite | mtxr | MIT | https://open-vsx.org/extension/mtxr/sqltools |
+| SQLTools MSSQL | mtxr | MIT | https://open-vsx.org/extension/mtxr/sqltools-driver-mssql |
 | Jupyter | Microsoft (Open VSX) | MIT | https://open-vsx.org/extension/ms-toolsai/jupyter |
 
-Models pulled with `ollama pull` have their own licenses. Check the model page
-on https://ollama.com/library before you redistribute weights to another agency.
-
-PyPI packages listed in `templates/requirements-datasci.txt` (pandas, numpy,
-scikit-learn, SQLAlchemy, Jupyter, ruff, and others) keep their upstream
-licenses after `setup-datasci.ps1` installs them into `.venv`.
+Models pulled with `ollama pull` have their own licenses (check the model page
+on https://ollama.com/library before distributing weights to another agency).

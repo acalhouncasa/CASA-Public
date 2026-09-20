@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "name": "PHI data",
+      "path": "D:/Agency/LocalPHI"
+    }
+  ],
+  "databases": [
+    {
+      "name": "Extract SQLite",
+      "kind": "sqlite",
+      "path": "D:/Agency/LocalPHI/extract.sqlite"
+    },
+    {
+      "name": "Local SQL Server",
+      "kind": "mssql",
+      "server": "127.0.0.1",
+      "database": "ScratchReporting",
+      "trusted": true
+    }
+  ]
+}

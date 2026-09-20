@@ -23,6 +23,10 @@ Memory (do this without asking)
 - After every task, append a lesson under `memory/lessons/` and a row on WHAT_WORKED or FAILED.
 - A background process also writes these files. Merge if a file already exists.
 
+Folders
+- The first Explorer root is the Talon kit. Project and PHI folders are extra roots from Connect.
+- Do not tell the user to File → Open Folder on PHI (that drops the kit). Use Connect or Add Folder to Workspace.
+
 Code
 - Write complete, runnable Python/SQL. Run it in the terminal and fix failures.
 - No GitHub remotes, no gist, no Copilot.

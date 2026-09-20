@@ -65,6 +65,10 @@ $settingsText = Get-Content $settingsDest -Raw -Encoding utf8
 $settingsText = $settingsText.Replace("__LOCALCODER_PYTHON__", ($venvPy -replace "\\", "/"))
 $settingsText = $settingsText.Replace("__LOCALCODER_SQLITE__", ($sqlite -replace "\\", "/"))
 Set-Content -Path $settingsDest -Value $settingsText -Encoding utf8
+$apply = Join-Path $Root "learn\apply_sources.py"
+if (Test-Path $apply) {
+    python $apply $Root | Out-Null
+}
 python (Join-Path $Root "seed_cline.py") $IdeData | Out-Null
 
 $venvScripts = Join-Path $Root ".venv\Scripts"
@@ -96,28 +100,44 @@ $env:OLLAMA_ORIGINS = "http://127.0.0.1"
 # Cline's current bundle stores provider/onboarding in CLINE_DIR, not VS Code settings.
 $env:CLINE_DIR = Join-Path $IdeData "cline-home"
 
+$wsFile = Join-Path $IdeData "Talon.code-workspace"
+$openTarget = $Workspace
+if (Test-Path $wsFile) { $openTarget = $wsFile }
+
 # Quote paths so "Local AI" is not split into two argv tokens.
 $launchArgs = @(
     "--user-data-dir=`"$IdeData`"",
     "--extensions-dir=`"$IdeExt`"",
     "--disable-telemetry",
     "--crash-reporter-directory=`"$(Join-Path $IdeData 'crashes')`"",
-    "`"$Workspace`""
+    "`"$openTarget`""
 )
+$usage = Join-Path $Root "USAGE.md"
+$guideFlag = Join-Path $IdeData "ui-guide-shown.txt"
+if ((Test-Path $usage) -and -not (Test-Path $guideFlag)) {
+    $launchArgs += "`"$usage`""
+    Set-Content -Path $guideFlag -Value (Get-Date).ToString("o") -Encoding utf8
+}
 $learnPy = Join-Path $Root "learn\talon_learn.py"
 $venvPy = Join-Path $Root ".venv\Scripts\pythonw.exe"
 if (-not (Test-Path $venvPy)) { $venvPy = Join-Path $Root ".venv\Scripts\python.exe" }
+$learnArgs = @("`"$learnPy`"", "--watch", "--kit", "`"$Root`"", "--workspace", "`"$Workspace`"")
+$sourcesFile = Join-Path $IdeData "sources.json"
+if (Test-Path $sourcesFile) {
+    $src = Get-Content $sourcesFile -Raw -Encoding utf8 | ConvertFrom-Json
+    foreach ($folder in @($src.folders)) {
+        if ($folder.path) { $learnArgs += @("--workspace", "`"$($folder.path)`"") }
+    }
+}
 if ((Test-Path $learnPy) -and (Test-Path $venvPy)) {
-    Start-Process -FilePath $venvPy -ArgumentList @(
-        "`"$learnPy`"",
-        "--watch",
-        "--kit", "`"$Root`"",
-        "--workspace", "`"$Workspace`""
-    ) -WindowStyle Hidden
+    Start-Process -FilePath $venvPy -ArgumentList $learnArgs -WindowStyle Hidden
 }
 
-Write-Host "Opening Talon — Local AI (VSCodium + Cline + Ollama)..."
-Write-Host "Workspace: $Workspace"
+Write-Host "Opening Talon - Local AI (VSCodium + Cline + Ollama)..."
+Write-Host "Workspace: $openTarget"
+if (-not (Test-Path $sourcesFile)) {
+    Write-Host "No PHI folder connected yet. Run Connect.cmd to attach a local folder or database."
+}
 Write-Host "Background learner is mapping data and lessons on this PC only."
 Write-Host "GitHub remotes and GitHub login are blocked in this window."
 Start-Process -FilePath $codium -ArgumentList $launchArgs

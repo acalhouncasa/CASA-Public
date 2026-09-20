@@ -1,10 +1,13 @@
-# Talon
+# Talon — Local AI
 
-On-device coding agent. Model inference is **Ollama on `127.0.0.1`**.
+On-device. Cline stays on **Ollama** (`127.0.0.1`). No cloud keys.
 
-1. Confirm Cline (right sidebar) shows **API Provider = Ollama**.
-2. Do not create a Cline account. Do not paste cloud API keys.
-3. Python and SQL use this kit’s `.venv` and `data\local.sqlite`.
-4. Keep prompts in Talon. Do not paste PHI into a browser or hosted chat.
+**Folders:** Talon (this kit) stays the main root. Attach a **project** folder and/or a **PHI** folder with **Talon Connect**. Do not File → Open Folder on PHI or you drop the kit.
 
-This kit is **use at your own risk**. It is not HIPAA certified. Read [HIPAA.md](HIPAA.md).
+Full UI walkthrough: [USAGE.md](USAGE.md).
+
+1. Trust any new folder when asked.
+2. Open a file from Project or PHI on the left.
+3. Ask Cline on the right.
+4. SQLTools (database icon) is for connected SQLite / local SQL Server.
+5. `memory\` is local and may hold PHI. Do not copy it off this PC.

@@ -113,6 +113,16 @@ if (Test-Path $learn) { Pass "Background learner learn\\talon_learn.py" } else {
 $mem = Join-Path $Root "memory\INDEX.md"
 if (Test-Path $mem) { Pass "memory\\INDEX.md present" } else { Warn "memory not built yet (starts with run.ps1)" }
 
+$sources = Join-Path $ide "sources.json"
+if (Test-Path $sources) {
+    $src = Get-Content $sources -Raw -Encoding utf8 | ConvertFrom-Json
+    $nFold = @($src.folders).Count
+    $nDb = @($src.databases).Count
+    Pass "Connected sources: $nFold folder(s), $nDb database(s)"
+} else {
+    Warn "No PHI folder connected. Run Connect.cmd"
+}
+
 $overrides = Join-Path $ide "team-overrides.json"
 if (Test-Path $overrides) { Pass "team-overrides.json present (Strict or custom)" }
 

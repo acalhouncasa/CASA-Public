@@ -24,8 +24,11 @@ $copyFiles = @(
     "README.md",
     "TEAM.md",
     "LEARN.md",
+    "CONNECT.md",
+    "USAGE.md",
     "IT.md",
     "WELCOME.md",
+    "Connect-Talon.ps1",
     "setup.ps1",
     "run.ps1",
     "seed_cline.py",
@@ -41,6 +44,7 @@ $copyFiles = @(
     "Launch-LocalCoder.vbs",
     "Start Local Coder.cmd",
     "Start Talon.cmd",
+    "Connect.cmd",
     "Uninstall-LocalCoder.ps1"
 )
 foreach ($name in $copyFiles) {

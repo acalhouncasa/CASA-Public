@@ -491,20 +491,23 @@ def already_running(pid_path: Path) -> bool:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Talon local learner")
     parser.add_argument("--kit", default=str(Path(__file__).resolve().parents[1]))
-    parser.add_argument("--workspace", default="")
+    parser.add_argument("--workspace", action="append", default=[])
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--interval", type=int, default=20)
     args = parser.parse_args()
 
     kit = Path(args.kit).resolve()
-    workspace = Path(args.workspace).resolve() if args.workspace else kit
+    workspaces = [Path(item).resolve() for item in (args.workspace or []) if item]
     memory = kit / "memory"
     cline_home = kit / "ide-data" / "cline-home"
     state_path = memory / "state.json"
     pid_path = kit / "logs" / "talon-learn.pid"
     pid_path.parent.mkdir(parents=True, exist_ok=True)
 
-    roots = [kit / "data", kit / "examples", workspace]
+    roots = [kit / "data", kit / "examples"]
+    roots.extend(workspaces)
+    if not workspaces:
+        roots.append(kit)
     if args.watch and already_running(pid_path):
         print("talon-learn already running", flush=True)
         return 0
