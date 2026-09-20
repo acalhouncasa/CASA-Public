@@ -47,7 +47,7 @@ def main() -> int:
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as zf:
         zf.writestr("[Content_Types].xml", CONTENT_TYPES)
         zf.writestr("extension.vsixmanifest", MANIFEST)
-        for name in ("package.json", "extension.js", "getting-started.html"):
+        for name in ("package.json", "extension.js", "getting-started.html", "ollama-down.html"):
             path = EXT / name
             zf.writestr(f"extension/{name}", path.read_bytes())
     print(f"wrote {OUT}")

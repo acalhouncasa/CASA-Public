@@ -131,6 +131,13 @@ if (Test-Path $ico) { Pass "Talon icon branding\\icon.ico" } else { Warn "brandi
 
 $guard = Join-Path $Root "extensions\talon.talon-guard-1.3.0\extension.js"
 if (Test-Path $guard) { Pass "Talon Guard extension present" } else { Warn "Talon Guard missing. File → Open Folder is not locked off." }
+$ollamaPage = Join-Path $Root "extensions\talon.talon-guard-1.3.0\ollama-down.html"
+$guardJs = Get-Content $guard -Raw -ErrorAction SilentlyContinue
+if ((Test-Path $ollamaPage) -and $guardJs -match "lockClineToOllama" -and $guardJs -match "enforceOllamaGate") {
+    Pass "Ollama wait page and Cline provider lock"
+} else {
+    Warn "Ollama wait page or Cline provider lock missing from Guard"
+}
 
 $backup = Join-Path $Root "Backup-TalonMemory.ps1"
 if (Test-Path $backup) { Pass "Memory backup script present" } else { Warn "Backup-TalonMemory.ps1 missing" }

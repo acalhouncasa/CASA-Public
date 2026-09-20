@@ -263,7 +263,7 @@ Or use **Start Menu → Talon** or `Start Talon.cmd`.
 
 `run.ps1` will:
 
-1. Start Ollama if `http://127.0.0.1:11434/api/tags` does not answer.
+1. Start Ollama if `http://127.0.0.1:11434/api/tags` does not answer, then wait up to 45 seconds. If it stays down, Talon still opens on a local **Ollama is not running** page. Do not pick a cloud provider.
 2. Rebuild settings from `templates\settings.json` (Windows interpreter path, SQLite path, git locked off).
 3. Re-run `seed_cline.py`.
 4. Put `.venv\Scripts` on PATH for that process (`PYTHONNOUSERSITE=1`).
@@ -397,6 +397,8 @@ Habits:
 | SQLTools asks to install `sqlite3@…` or announces Node | Expected only if you click Connect. Launch does not auto-connect. Node-detect notifications are off. |
 | Python “interpreter could not be resolved” | Confirm `.venv\Scripts\python.exe` exists (`.\setup-datasci.ps1`). Settings use a Windows path. The Python Environments extension is disabled. |
 | File → Open Folder is still listed | Close Talon fully and start from `Start Talon.cmd` so seed can write `menu.hiddenCommands`. Use Add Folder to Workspace or Connect. |
+| “Ollama is not running” page | Start Ollama from the Start Menu, or wait. Do not pick OpenAI / ClinePass or paste an API key. |
+| Cline shows a cloud provider or API key box | Close that prompt. Guard resets Cline to Ollama and reloads. If it returns, close Talon and run `Start Talon.cmd`. |
 | Desktop shortcut does nothing | Shortcut must call `wscript.exe` + `Launch-LocalCoder.vbs`. Re-run `.\setup.ps1` to recreate it. |
 | Title bar still looks like VSCodium | Cosmetic only. `setup.ps1` copies SVGs into `resources\app\out\media`. It will not patch `VSCodium.exe` (that would break Authenticode). |
 | winget blocked by policy | Use section 10 (`payload\`). |

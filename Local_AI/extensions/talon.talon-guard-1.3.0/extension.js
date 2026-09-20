@@ -353,6 +353,248 @@ async function openStarter(fileName) {
   vscode.window.showInformationMessage("Starter copied. Paste it into Cline on the right (Ctrl+V).");
 }
 
+let ollamaPanel = null;
+let ollamaWasDown = false;
+let clineLockBusy = false;
+let lastClineReload = 0;
+
+function clineHome() {
+  return kit ? path.join(kit, "ide-data", "cline-home") : "";
+}
+
+function providersPath() {
+  return path.join(clineHome(), "data", "settings", "providers.json");
+}
+
+function globalSettingsPath() {
+  return path.join(clineHome(), "data", "settings", "global-settings.json");
+}
+
+function globalStatePath() {
+  return path.join(clineHome(), "data", "globalState.json");
+}
+
+function readJson(file, fallback) {
+  try {
+    if (!fs.existsSync(file)) {
+      return fallback;
+    }
+    const loaded = JSON.parse(fs.readFileSync(file, "utf8"));
+    return loaded && typeof loaded === "object" ? loaded : fallback;
+  } catch (_) {
+    return fallback;
+  }
+}
+
+function writeJson(file, data) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, JSON.stringify(data, null, 2), "utf8");
+}
+
+function ollamaUp() {
+  return new Promise((resolve) => {
+    const http = require("http");
+    const req = http.get("http://127.0.0.1:11434/api/tags", { timeout: 2000 }, (res) => {
+      res.resume();
+      resolve(res.statusCode === 200);
+    });
+    req.on("error", () => resolve(false));
+    req.on("timeout", () => {
+      req.destroy();
+      resolve(false);
+    });
+  });
+}
+
+function currentOllamaModel() {
+  const providers = readJson(providersPath(), {});
+  const model =
+    providers.providers &&
+    providers.providers.ollama &&
+    providers.providers.ollama.settings &&
+    providers.providers.ollama.settings.model;
+  return model || "qwen3-coder:30b";
+}
+
+function providersDrift(data) {
+  if (!data || typeof data !== "object") {
+    return false;
+  }
+  const last = String(data.lastUsedProvider || "").toLowerCase();
+  if (last && last !== "ollama") {
+    return true;
+  }
+  const providers = data.providers;
+  if (!providers || typeof providers !== "object") {
+    return false;
+  }
+  for (const key of Object.keys(providers)) {
+    if (key.toLowerCase() !== "ollama") {
+      return true;
+    }
+    const settings = (providers[key] && providers[key].settings) || {};
+    if (settings.provider && String(settings.provider).toLowerCase() !== "ollama") {
+      return true;
+    }
+    if (settings.apiKey || settings.openAiApiKey || settings.anthropicApiKey || settings.openRouterApiKey) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function settingsDrift(data) {
+  if (!data || typeof data !== "object") {
+    return false;
+  }
+  for (const key of ["planModeApiProvider", "actModeApiProvider", "apiProvider"]) {
+    const value = String(data[key] || "").toLowerCase();
+    if (value && value !== "ollama") {
+      return true;
+    }
+  }
+  return false;
+}
+
+function writeOllamaProviders(model) {
+  const now = new Date().toISOString();
+  writeJson(providersPath(), {
+    version: 1,
+    modes: {},
+    lastUsedProvider: "ollama",
+    providers: {
+      ollama: {
+        settings: {
+          provider: "ollama",
+          model,
+          baseUrl: "http://127.0.0.1:11434",
+        },
+        updatedAt: now,
+        tokenSource: "localcoder",
+      },
+    },
+  });
+}
+
+function forceOllamaSettings(file, model) {
+  const data = readJson(file, {});
+  data.planModeApiProvider = "ollama";
+  data.actModeApiProvider = "ollama";
+  data.apiProvider = "ollama";
+  data.ollamaBaseUrl = "http://127.0.0.1:11434";
+  data.planModeOllamaModelId = model;
+  data.actModeOllamaModelId = model;
+  delete data.apiKey;
+  delete data.openAiApiKey;
+  delete data.anthropicApiKey;
+  delete data.openRouterApiKey;
+  delete data.clineApiKey;
+  writeJson(file, data);
+}
+
+function lockClineToOllama(reason) {
+  if (clineLockBusy || !kit) {
+    return false;
+  }
+  clineLockBusy = true;
+  let reverted = false;
+  try {
+    const model = currentOllamaModel();
+    const providers = readJson(providersPath(), {});
+    if (providersDrift(providers)) {
+      writeOllamaProviders(model);
+      reverted = true;
+    }
+    if (settingsDrift(readJson(globalSettingsPath(), {}))) {
+      forceOllamaSettings(globalSettingsPath(), model);
+      reverted = true;
+    }
+    if (settingsDrift(readJson(globalStatePath(), {}))) {
+      forceOllamaSettings(globalStatePath(), model);
+      reverted = true;
+    }
+    if (reverted) {
+      writeStatus({ phase: "cline-lock", reason, resetTo: "ollama" });
+    }
+  } finally {
+    clineLockBusy = false;
+  }
+  return reverted;
+}
+
+async function showOllamaDown() {
+  if (ollamaPanel) {
+    ollamaPanel.reveal(vscode.ViewColumn.One);
+    return;
+  }
+  const htmlPath = path.join(__dirname, "ollama-down.html");
+  const html = fs.existsSync(htmlPath)
+    ? fs.readFileSync(htmlPath, "utf8")
+    : "<h1>Ollama is not running</h1><p>Do not pick a cloud provider.</p>";
+  ollamaPanel = vscode.window.createWebviewPanel(
+    "talon.ollamaDown",
+    "Ollama is not running",
+    vscode.ViewColumn.One,
+    { enableScripts: false, retainContextWhenHidden: true }
+  );
+  ollamaPanel.webview.html = html;
+  ollamaPanel.onDidDispose(() => {
+    ollamaPanel = null;
+  });
+}
+
+async function enforceOllamaGate() {
+  const up = await ollamaUp();
+  if (!up) {
+    ollamaWasDown = true;
+    await showOllamaDown();
+    return false;
+  }
+  if (ollamaPanel) {
+    ollamaPanel.dispose();
+    ollamaPanel = null;
+  }
+  if (ollamaWasDown) {
+    ollamaWasDown = false;
+    vscode.window.showInformationMessage("Ollama is up. Cline must stay on the local model.");
+  }
+  return true;
+}
+
+async function enforceClineLock(reason) {
+  const reverted = lockClineToOllama(reason);
+  if (!reverted) {
+    return;
+  }
+  const now = Date.now();
+  if (now - lastClineReload < 20000) {
+    vscode.window.showErrorMessage(
+      "Talon reset Cline to Ollama. Cloud models are not allowed. Do not paste an API key."
+    );
+    return;
+  }
+  lastClineReload = now;
+  vscode.window.showErrorMessage(
+    "Talon reset Cline to Ollama. Cloud models are not allowed. Reloading so Cline drops the cloud provider."
+  );
+  await vscode.commands.executeCommand("workbench.action.reloadWindow");
+}
+
+function watchClineHome(context) {
+  const dir = path.join(clineHome(), "data", "settings");
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+  try {
+    const watcher = fs.watch(dir, () => {
+      enforceClineLock("watch");
+    });
+    context.subscriptions.push({ dispose: () => watcher.close() });
+  } catch (_) {
+    /* first launch may not have the folder yet */
+  }
+}
+
 function activate(context) {
   kit = resolveKit(context);
   writeStatus({ phase: "activate" });
@@ -367,15 +609,25 @@ function activate(context) {
       enforceKit();
     })
   );
+  watchClineHome(context);
+  const lockTimer = setInterval(() => {
+    enforceClineLock("poll");
+    enforceOllamaGate();
+  }, 3000);
+  context.subscriptions.push({ dispose: () => clearInterval(lockTimer) });
   enforceKit();
+  enforceClineLock("activate");
   const settle = async (phase) => {
     const closed = await closeVendorNotes();
-    await openGettingStarted();
+    const ollamaReady = await enforceOllamaGate();
+    if (ollamaReady) {
+      await openGettingStarted();
+    }
     await collapseTalonRoot();
     writeStatus({
       phase,
       closedNotes: closed,
-      openedGuide: "webview",
+      openedGuide: ollamaReady ? "webview" : "ollama-down",
       folderCount: (vscode.workspace.workspaceFolders || []).length,
       workspaceFile: !!(vscode.workspace.workspaceFile && /talon\.code-workspace/i.test(vscode.workspace.workspaceFile.fsPath || "")),
     });

@@ -78,6 +78,10 @@ It also:
 
 `run.ps1` re-runs the seed every launch so a stray click is less sticky.
 
+During the session, Talon Guard watches `providers.json`, `global-settings.json`, and `globalState.json`. If the provider is not `ollama`, or a cloud API key appears, Guard rewrites those files to Ollama only and reloads the window so Cline drops the in-memory cloud provider.
+
+`run.ps1` also starts Ollama if needed and waits up to 45 seconds. If `127.0.0.1:11434` still does not answer, Guard shows `ollama-down.html` and tells the user not to pick a cloud model.
+
 ## Why the agent can edit without asking every time
 
 Staff were blocked by Cline’s approval UI (Read, Edit, Commands, plus “Proceed While Running”). Seed enables auto-approve for **local** file and command tools, and uses `backgroundExec` so a long `powershell` does not freeze the UI.
@@ -113,7 +117,7 @@ A second 30B “SQL model” would fight a 24 GB GPU for VRAM. Coding quality fo
 ## What happens at `.\run.ps1`
 
 1. Find `VSCodium.exe`.
-2. Probe Ollama; if down, start `ollama serve`.
+2. Probe Ollama; if down, start `ollama serve` and wait up to 45 seconds. Write `ide-data\ollama-status.json`.
 3. Remember / accept `-Workspace`.
 4. Copy Talon Guard 1.3.0, rebuild settings from the template, seed Cline.
 5. Export venv PATH, GitHub block, `CLINE_DIR`, `OLLAMA_HOST`.

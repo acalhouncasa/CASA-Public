@@ -67,6 +67,16 @@ Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, n
 
 ---
 
+## 09/20/2026 — Talon — Local AI 1.4.5
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/` | **1.4.5.** Wait for Ollama before the editor is useful; local wait page if it stays down. |
+| `Local_AI/run.ps1` | Start `ollama serve` if needed; wait up to 45s; write `ollama-status.json`. |
+| `Local_AI/extensions/talon.talon-guard-1.3.0` | Mid-session watchdog: if Cline leaves Ollama, reset provider files and reload. `ollama-down.html`. |
+
+---
+
 ## 09/20/2026 — Talon — Local AI 1.4.4
 
 | Public path | What |

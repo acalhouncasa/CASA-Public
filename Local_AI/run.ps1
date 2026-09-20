@@ -29,17 +29,49 @@ if (-not (Test-Path (Join-Path $IdeData "User\settings.json"))) {
     throw "Isolated profile is missing. Run .\setup.ps1 first."
 }
 
-try {
-    $null = Invoke-RestMethod -Uri "http://127.0.0.1:11434/api/tags" -TimeoutSec 3
-} catch {
-    Write-Host "Starting Ollama..."
+function Test-Ollama {
+    try {
+        $null = Invoke-RestMethod -Uri "http://127.0.0.1:11434/api/tags" -TimeoutSec 3
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+function Write-OllamaStatus([bool]$Up) {
+    $status = @{
+        up = $Up
+        checked = (Get-Date).ToString("o")
+        url = "http://127.0.0.1:11434/api/tags"
+    }
+    New-Item -ItemType Directory -Force -Path $IdeData | Out-Null
+    $status | ConvertTo-Json | Set-Content -Path (Join-Path $IdeData "ollama-status.json") -Encoding utf8
+}
+
+if (-not (Test-Ollama)) {
+    Write-Host "Ollama is not answering. Starting it and waiting..."
     $ollama = Join-Path $env:LOCALAPPDATA "Programs\Ollama\ollama.exe"
     if (Test-Path $ollama) {
         Start-Process $ollama -ArgumentList "serve" -WindowStyle Hidden
-        Start-Sleep -Seconds 3
     } else {
-        throw "Ollama is not running and was not found. Start Ollama, then retry."
+        Write-Host "Ollama.exe was not found. Talon will open on the local 'Ollama is not running' page."
+        Write-Host "Do not pick a cloud provider in Cline."
     }
+}
+
+$deadline = (Get-Date).AddSeconds(45)
+while (-not (Test-Ollama)) {
+    if ((Get-Date) -ge $deadline) { break }
+    Start-Sleep -Seconds 2
+    Write-Host "Waiting for Ollama on 127.0.0.1:11434..."
+}
+
+$ollamaReady = Test-Ollama
+Write-OllamaStatus $ollamaReady
+if ($ollamaReady) {
+    Write-Host "Ollama is up."
+} else {
+    Write-Host "Ollama is still down. Opening Talon on the local wait page — do not use a cloud model."
 }
 
 $lastFile = Join-Path $IdeData "last-workspace.txt"

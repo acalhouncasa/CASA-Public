@@ -17,7 +17,7 @@ Prompts stay on the workstation (`127.0.0.1:11434`). Talon is its own kit.
 
 **Use at your own risk.** This kit is not HIPAA certified. Local PHI in `data\` and `memory\` is expected. Do not put PHI in a hosted chat or in this GitHub repository.
 
-Current kit: **1.4.4**. Launch always goes through `Open-Talon.cmd` so folder names with spaces stay one path. Git and GitHub stay off in this window (parent-folder prompt is Never). SQLTools does not auto-connect or ask to npm-install a driver on first open. The Python Environments helper is disabled. **File → Open Folder** is removed from the File menu and the command palette.
+Current kit: **1.4.5**. Launch waits for Ollama on `127.0.0.1:11434`. If it is down, Talon opens a local wait page instead of Cline’s cloud picker. If someone switches Cline off Ollama, Guard resets it and reloads. Launch goes through `Open-Talon.cmd` so folder names with spaces stay one path. Git and GitHub stay off. **File → Open Folder** is not on the File menu.
 
 ## Folders
 

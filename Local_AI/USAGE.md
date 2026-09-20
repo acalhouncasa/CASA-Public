@@ -1,6 +1,6 @@
 # Getting started
 
-**Talon 1.4.4** · Local AI
+**Talon 1.4.5** · Local AI
 
 Talon is a coding agent that stays on this workstation. The file explorer is on the left. Cline is on the right and must remain on **Ollama**. Do not create a Cline account.
 
@@ -13,6 +13,7 @@ Talon is a coding agent that stays on this workstation. The file explorer is on 
 - **File → Open Folder** is not on the File menu. Use Add Folder to Workspace or Connect.
 - Python uses this kit’s `.venv`. SQLTools starts with `data\local.sqlite`.
 - Maps and lessons are written under `memory\` on this disk. Treat that folder as PHI.
+- Talon waits for Ollama before the editor is useful. If Cline is not on Ollama, Talon resets it and reloads. Do not paste a cloud API key.
 
 ---
 
@@ -79,6 +80,8 @@ The first reply after a cold start can take a minute while the local model loads
 | Python is not the venv | Status bar interpreter → `.venv\Scripts\python.exe` |
 | SQLTools is empty | Connect a SQLite file or local SQL Server, or use `data\local.sqlite` |
 | First Cline reply is slow | Wait. Launch warms `qwen3-coder:30b` in the background. |
+| “Ollama is not running” page | Start Ollama from the Start Menu, or wait. Do not pick a cloud provider. |
+| Cline shows OpenAI / ClinePass / an API key box | Close the prompt. Talon resets Cline to Ollama. If it comes back, close Talon and run `Start Talon.cmd`. |
 | Need a copy of lessons | `Backup.cmd` to a local folder. The zip is PHI. |
 
 Further reading: [CONNECT.md](CONNECT.md), [LEARN.md](LEARN.md), [HIPAA.md](HIPAA.md).

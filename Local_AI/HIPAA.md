@@ -56,6 +56,8 @@ These controls are in the scripts. They are not a complete HIPAA program. They a
 | `OLLAMA_HOST=127.0.0.1:11434` | `setup.ps1`, `run.ps1` | Bind the API to localhost, not a LAN/WAN interface |
 | `OLLAMA_ORIGINS=http://127.0.0.1` | `run.ps1` | Limit browser-origin access to the local API |
 | Cline `planModeApiProvider` / `actModeApiProvider` = `ollama` | `seed_cline.py` | Agent cannot start on OpenAI / Anthropic / OpenRouter |
+| Wait for Ollama before the editor is useful; local wait page if it stays down | `run.ps1`, Guard `ollama-down.html` | Cline’s cloud picker is what novices click when the local model is not up |
+| Mid-session provider watchdog: reset to Ollama and reload | Guard `lockClineToOllama` | Seed only helps on the next launch; this catches a switch while the window is open |
 | No cloud API keys written by seed | `seed_cline.py` | Seed never stores vendor tokens |
 | `.clinerules` + Cline `customInstructions` | kit root | Tell the agent: Ollama only; no ClinePass; no web fetch |
 
@@ -145,7 +147,7 @@ Be explicit with your privacy officer. Residual paths we know about:
 1. **The human.** Paste into Outlook, Teams, a browser, a ticket, or a hosted chat and the control is gone.
 2. **OneDrive / Desktop redirection / consumer sync.** If `data\` or the workspace lives in a sync root, PHI leaves the PC.
 3. **Other processes.** USB, RDP clipboards, screen share, print to PDF, email.
-4. **Cline provider switch.** Settings UI can still be pointed at OpenAI, Anthropic, OpenRouter, or ClinePass. Seed sets the default; it is not a hardware interlock.
+4. **Cline provider switch.** The settings UI can still be pointed at OpenAI, Anthropic, OpenRouter, or ClinePass. Guard resets the on-disk provider and reloads. That is not a hardware interlock: a prompt already sent before the reload can still leave the box. Cursor, Copilot, and browser chat are outside this kit.
 5. **Cline or VSCodium updates.** If someone turns updates back on, a new build can add cloud UI. Firewall + “update.mode=none” reduce this; they do not freeze bits forever.
 6. **Microsoft Python env helper.** Installing the Python extension may also drop `ms-python.vscode-python-envs` on disk. Seed disables that extension id. Keep Python experiments/telemetry off if it is ever re-enabled.
 7. **Agent terminal.** Auto-approved commands can `curl`, copy files, or open a browser. Web Fetch/MCP are off; raw PowerShell is not a sandbox.
