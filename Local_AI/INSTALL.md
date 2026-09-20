@@ -288,6 +288,7 @@ The path is remembered in `ide-data\last-workspace.txt`.
 5. You are **not** asked to “Create my Account” / pick a free cloud model. If you are, close Cline, run `python .\seed_cline.py .\ide-data`, then `.\run.ps1` again.
 6. Auto-approve: Read, Edit, and Commands may be on. **Web Fetch and MCP stay off.**
 7. Left activity bar: Explorer is active. Source Control (git) icon is hidden.
+8. Read [USAGE.md](USAGE.md). Talon stays the main root. Attach project/PHI folders with Connect — do not File → Open Folder on PHI only.
 8. Status bar / Python interpreter: `.\.venv\Scripts\python.exe`.
 9. SQLTools connection **Local SQLite** points at `data\local.sqlite`.
 10. Do not sign in to GitHub. GitHub login is disabled in this profile.
