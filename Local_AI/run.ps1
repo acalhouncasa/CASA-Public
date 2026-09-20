@@ -7,6 +7,17 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $IdeData = Join-Path $Root "ide-data"
 $IdeExt = Join-Path $Root "ide-extensions"
+$LaunchLog = Join-Path $IdeData "logs\launch.log"
+New-Item -ItemType Directory -Force -Path (Split-Path $LaunchLog) | Out-Null
+function Write-LaunchLog([string]$Message) {
+    $line = "{0}  {1}" -f (Get-Date).ToString("o"), $Message
+    Add-Content -Path $LaunchLog -Value $line -Encoding utf8
+}
+Write-LaunchLog "run.ps1 start"
+trap {
+    Write-LaunchLog ("ERROR: " + $_.Exception.Message)
+    throw
+}
 
 function Find-VSCodium {
     $candidates = @(
@@ -71,7 +82,7 @@ Write-OllamaStatus $ollamaReady
 if ($ollamaReady) {
     Write-Host "Ollama is up."
 } else {
-    Write-Host "Ollama is still down. Opening Talon on the local wait page — do not use a cloud model."
+    Write-Host "Ollama is still down. Opening Talon on the local wait page. Do not use a cloud model."
 }
 
 $lastFile = Join-Path $IdeData "last-workspace.txt"
@@ -89,30 +100,12 @@ if (-not (Test-Path $Workspace)) {
     throw "Workspace folder not found: $Workspace"
 }
 
-$guardSrc = Join-Path $Root "extensions\talon.talon-guard-1.3.0"
-$guardDst = Join-Path $IdeExt "talon.talon-guard-1.3.0"
-if (Test-Path $guardSrc) {
-    if (Test-Path $guardDst) { Remove-Item $guardDst -Recurse -Force }
-    Copy-Item $guardSrc $guardDst -Recurse -Force
-}
-
-$settingsDest = Join-Path $IdeData "User\settings.json"
-Copy-Item (Join-Path $Root "templates\settings.json") $settingsDest -Force
-$venvPy = Join-Path $Root ".venv\Scripts\python.exe"
-$sqlite = Join-Path $Root "data\local.sqlite"
-$settingsText = Get-Content $settingsDest -Raw -Encoding utf8
-$settingsText = $settingsText.Replace("__LOCALCODER_PYTHON__", ($venvPy -replace "\\", "/"))
-$settingsText = $settingsText.Replace("__LOCALCODER_SQLITE__", ($sqlite -replace "\\", "/"))
-Set-Content -Path $settingsDest -Value $settingsText -Encoding utf8
-$apply = Join-Path $Root "learn\apply_sources.py"
-if (Test-Path $apply) {
-    python $apply $Root | Out-Null
-}
-python (Join-Path $Root "seed_cline.py") $IdeData | Out-Null
+$kitPy = Join-Path $Root ".venv\Scripts\python.exe"
+if (-not (Test-Path $kitPy)) { $kitPy = "python" }
 
 $venvScripts = Join-Path $Root ".venv\Scripts"
 if (Test-Path $venvScripts) {
-    $env:Path = "$venvScripts;$env:Path"
+    $env:Path = $venvScripts + ';' + $env:Path
     $env:VIRTUAL_ENV = Join-Path $Root ".venv"
     $env:PYTHONNOUSERSITE = "1"
 }
@@ -139,12 +132,6 @@ $env:OLLAMA_ORIGINS = "http://127.0.0.1"
 $env:TALON_KIT = $Root
 # Cline's current bundle stores provider/onboarding in CLINE_DIR, not VS Code settings.
 $env:CLINE_DIR = Join-Path $IdeData "cline-home"
-
-$kbSrc = Join-Path $Root "templates\keybindings.json"
-$kbDest = Join-Path $IdeData "User\keybindings.json"
-if (Test-Path $kbSrc) {
-    Copy-Item $kbSrc $kbDest -Force
-}
 
 $mediaRoot = Split-Path $codium
 $media = Join-Path $mediaRoot "resources\app\out\media"
@@ -188,6 +175,60 @@ Get-CimInstance Win32_Process -Filter "Name = 'VSCodium.exe'" | ForEach-Object {
 }
 Start-Sleep -Seconds 2
 
+# Write profile state only after Talon is closed. If seed runs while
+# VSCodium is open, shutdown overwrites File-menu hides and Open Folder
+# comes back.
+$settingsDest = Join-Path $IdeData "User\settings.json"
+Copy-Item (Join-Path $Root "templates\settings.json") $settingsDest -Force
+$venvPy = Join-Path $Root ".venv\Scripts\python.exe"
+$sqlite = Join-Path $Root "data\local.sqlite"
+$settingsText = Get-Content $settingsDest -Raw -Encoding utf8
+$settingsText = $settingsText.Replace("__LOCALCODER_PYTHON__", ($venvPy -replace "\\", "/"))
+$settingsText = $settingsText.Replace("__LOCALCODER_SQLITE__", ($sqlite -replace "\\", "/"))
+Set-Content -Path $settingsDest -Value $settingsText -Encoding utf8
+$apply = Join-Path $Root "learn\apply_sources.py"
+if (Test-Path $apply) {
+    & $kitPy $apply $Root | Out-Null
+}
+& $kitPy (Join-Path $Root "seed_cline.py") $IdeData | Out-Null
+Write-LaunchLog "seeded profile"
+
+$kbSrc = Join-Path $Root "templates\keybindings.json"
+$kbDest = Join-Path $IdeData "User\keybindings.json"
+if (Test-Path $kbSrc) {
+    Copy-Item $kbSrc $kbDest -Force
+}
+
+# Copy Guard only after Talon is closed. Replacing it while VSCodium is
+# running marks the extension invalid and Getting started never opens.
+$guardSrc = Join-Path $Root "extensions\talon.talon-guard-1.3.0"
+$guardDst = Join-Path $IdeExt "talon.talon-guard-1.3.0"
+if (Test-Path $guardSrc) {
+    if (Test-Path $guardDst) { Remove-Item $guardDst -Recurse -Force }
+    Copy-Item $guardSrc $guardDst -Recurse -Force
+    $guardPkg = Join-Path $guardDst "package.json"
+    if ((Test-Path $guardPkg) -and (Test-Path $kitPy)) {
+        & $kitPy -c "from pathlib import Path; p=Path(r'''$guardPkg'''); b=p.read_bytes(); p.write_bytes(b[3:] if b.startswith(b'\xef\xbb\xbf') else b)"
+    }
+    Write-LaunchLog "copied Talon Guard"
+}
+
+$menuPatch = Join-Path $Root "learn\patch_vscodium_menus.py"
+if ((Test-Path $menuPatch) -and (Test-Path $kitPy)) {
+    & $kitPy $menuPatch
+    if ($LASTEXITCODE -eq 0) {
+        Write-LaunchLog "disabled Open Folder with y.false()"
+    } else {
+        Write-LaunchLog "WARN: Open Folder workbench patch failed"
+    }
+}
+foreach ($cacheName in @("CachedData", "Code Cache", "GPUCache", "DawnGraphiteCache", "DawnWebGPUCache")) {
+    $cacheDir = Join-Path $IdeData $cacheName
+    if (Test-Path $cacheDir) {
+        Remove-Item $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
 # Launch goes through Open-Talon.cmd so "Local AI" stays one path.
 # Do not pass USAGE.md as a launch file.
 $learnPy = Join-Path $Root "learn\talon_learn.py"
@@ -212,4 +253,10 @@ if (-not (Test-Path $sourcesFile)) {
 }
 Write-Host "Background learner is mapping data and lessons on this PC only."
 Write-Host "GitHub remotes and GitHub login are blocked in this window."
+Write-LaunchLog "opening Open-Talon.cmd"
 cmd.exe /c "`"$Root\Open-Talon.cmd`""
+if ($LASTEXITCODE -ne 0) {
+    Write-LaunchLog "Open-Talon.cmd exit $LASTEXITCODE"
+    throw "Open-Talon.cmd failed with exit $LASTEXITCODE. See $LaunchLog"
+}
+Write-LaunchLog "Open-Talon.cmd returned"

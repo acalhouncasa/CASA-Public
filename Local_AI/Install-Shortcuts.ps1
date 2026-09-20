@@ -9,7 +9,6 @@ $programs = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Talon"
 New-Item -ItemType Directory -Force -Path $programs | Out-Null
 $wscript = New-Object -ComObject WScript.Shell
 $ico = Join-Path $Root "branding\icon.ico"
-$vbs = Join-Path $Root "Launch-LocalCoder.vbs"
 
 function Write-Lnk([string]$Path, [string]$Target, [string]$Arguments, [string]$Description) {
     $lnk = $wscript.CreateShortcut($Path)
@@ -22,9 +21,11 @@ function Write-Lnk([string]$Path, [string]$Target, [string]$Arguments, [string]$
     $lnk.Save()
 }
 
-Write-Lnk (Join-Path $programs "Talon.lnk") "$env:SystemRoot\System32\wscript.exe" "`"$vbs`"" "Talon - Local AI (on-device Ollama)"
-Write-Lnk (Join-Path $programs "Talon Connect.lnk") "$env:SystemRoot\System32\cmd.exe" "/c `"$(Join-Path $Root 'Connect.cmd')`"" "Attach a local project or PHI folder"
-Write-Lnk (Join-Path $programs "Talon Backup Memory.lnk") "$env:SystemRoot\System32\cmd.exe" "/c `"$(Join-Path $Root 'Backup.cmd')`"" "Zip memory to a local folder"
+# Target the .cmd files directly. cmd /c "E:\...\Local AI\Start Talon.cmd"
+# splits at the space and never runs the script.
+Write-Lnk (Join-Path $programs "Talon.lnk") (Join-Path $Root "Start Talon.cmd") "" "Talon - Local AI (on-device Ollama)"
+Write-Lnk (Join-Path $programs "Talon Connect.lnk") (Join-Path $Root "Connect.cmd") "" "Attach a local project or PHI folder"
+Write-Lnk (Join-Path $programs "Talon Backup Memory.lnk") (Join-Path $Root "Backup.cmd") "" "Zip memory to a local folder"
 
 $desk = [Environment]::GetFolderPath("Desktop")
 Copy-Item (Join-Path $programs "Talon.lnk") (Join-Path $desk "Talon.lnk") -Force

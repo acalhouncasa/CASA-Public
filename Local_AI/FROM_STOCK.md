@@ -2,7 +2,7 @@
 
 **Stock** means VSCodium, Cline, and Ollama as those publishers ship them, opened the usual way (Start Menu VSCodium, Cline’s first-run wizard, Ollama on its default settings).
 
-Talon does **not** fork or patch those programs. `VSCodium.exe`, the Cline VSIX, and `ollama.exe` stay publisher-signed. This folder is a **wrapper**: an isolated profile, launch flags, and seeded settings.
+`VSCodium.exe`, the Cline VSIX, and `ollama.exe` stay publisher-signed. Talon is a **wrapper**: isolated profile, launch flags, and seeded settings. Launch also edits **File menu when-clauses** in `workbench.desktop.main.js` (not the EXE) so Open Folder is actually gone. A `.talon-bak` sits next to that file.
 
 Why each row exists: [HIPAA.md](HIPAA.md). Architecture: [HOW_IT_WORKS.md](HOW_IT_WORKS.md).
 
@@ -14,7 +14,8 @@ Why each row exists: [HIPAA.md](HIPAA.md). Architecture: [HOW_IT_WORKS.md](HOW_I
 
 | Item | Stock behavior stays |
 |------|----------------------|
-| `VSCodium.exe` | Not patched. Branding may copy unsigned SVG/ICO **resources** only. |
+| `VSCodium.exe` | Not patched. Authenticode stays. |
+| Workbench File menu | Launch sets Open Folder / Open Workspace `when` to `y.false()` in `workbench.desktop.main.js`. Branding may also copy SVG/ICO resources. |
 | Cline bits from Open VSX | Same extension. We seed its settings; we do not ship a fork. |
 | Ollama installer / weights | Same app. We set `OLLAMA_HOST=127.0.0.1:11434` for this user/process. |
 | Windows Defender / SmartScreen | Never turned off. |
@@ -36,7 +37,7 @@ Optional: [harden-firewall.ps1](harden-firewall.ps1) (admin) blocks this `VSCodi
 | Start Menu “VSCodium” | Start Menu / Desktop **Talon** → `run.ps1` → `Open-Talon.cmd` (quoted paths) |
 | Opens the last folder or an empty window | Opens `ide-data\Talon.code-workspace` (kit first) |
 | Restores previous windows and editor tabs | `window.restoreWindows=none`, `files.hotExit=off` |
-| Release Notes / Welcome on upgrade | Seeded so Release Notes do not take the first tab; Getting started is local HTML |
+| Release Notes / Welcome on upgrade | Seeded so Release Notes do not take the first tab; Getting started is a Guard webview |
 | Crash reporter default location | `--crash-reporter-directory ide-data\crashes` |
 
 ---
@@ -65,7 +66,7 @@ Optional: [harden-firewall.ps1](harden-firewall.ps1) (admin) blocks this `VSCodi
 | Built-in chat, inline chat, MCP access | Disabled (`chat.disableAIFeatures`, `chat.mcp.access=none`) |
 | Auto-update and extension auto-update | Off |
 | Natural-language settings search | Off |
-| File → Open Folder | Hidden (File menu and command palette) |
+| File → Open Folder / Open Workspace from File | Off the File menu (`y.false()` in the workbench). **Open File** stays. |
 | Ctrl+K Ctrl+O = Open Folder | Add Folder to Workspace |
 | Open Folder replaces the window | Guard keeps the kit and **adds** the folder |
 | Git / GitHub / Source Control | Git off; parent-folder prompt Never; `vscode.git` disabled; GitHub login off |

@@ -1,6 +1,6 @@
 # Getting started
 
-**Talon 1.4.5** · Local AI
+**Talon 1.4.6** · Local AI
 
 Talon is a coding agent that stays on this workstation. The file explorer is on the left. Cline is on the right and must remain on **Ollama**. Do not create a Cline account.
 
@@ -10,7 +10,7 @@ Talon is a coding agent that stays on this workstation. The file explorer is on 
 
 - The **Talon** kit is always the first Explorer root. It starts collapsed so project and PHI files stay in front.
 - Attach work with **Talon Connect** or **File → Add Folder to Workspace**. Those folders appear beside the kit.
-- **File → Open Folder** is not on the File menu. Use Add Folder to Workspace or Connect.
+- **File → Open Folder** and **Open Workspace from File** are not on the File menu. **Open File** stays. Use Add Folder to Workspace or Connect.
 - Python uses this kit’s `.venv`. SQLTools starts with `data\local.sqlite`.
 - Maps and lessons are written under `memory\` on this disk. Treat that folder as PHI.
 - Talon waits for Ollama before the editor is useful. If Cline is not on Ollama, Talon resets it and reloads. Do not paste a cloud API key.

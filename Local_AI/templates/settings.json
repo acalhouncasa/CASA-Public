@@ -9,6 +9,13 @@
   "files.hotExit": "off",
   "workbench.welcomePage.walkthroughs.openOnInstall": false,
   "explorer.autoReveal": false,
+  "files.exclude": {
+    "**/.venv": true,
+    "**/ide-data": true,
+    "**/ide-extensions": true,
+    "**/extensions/talon.talon-guard-*": true,
+    "**/__pycache__": true
+  },
   "window.openFoldersInNewWindow": "off",
   "workbench.editor.empty.hint": "hidden",
   "workbench.sideBar.location": "left",
@@ -18,6 +25,7 @@
   "workbench.cloudChanges.continueOn": "off",
   "window.title": "Talon — local — kit only — Ollama down — ${rootName}${separator}${activeEditorShort}",
   "window.titleBarStyle": "custom",
+  "window.menuStyle": "custom",
   "window.commandCenter": false,
   "chat.disableAIFeatures": true,
   "chat.commandCenter.enabled": false,

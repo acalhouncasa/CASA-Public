@@ -21,7 +21,7 @@ Cline can read a file outside the workspace if you give it a full local path. Pr
 
 Do not connect a consumer OneDrive, Desktop, or Downloads path if it will hold PHI.
 
-**File → Open Folder** is not on the File menu. Use **File → Add Folder to Workspace** or **Talon Connect**.
+**File → Open Folder** is not on the File menu. **Open File** stays. Use **File → Add Folder to Workspace** or **Talon Connect**.
 
 ---
 

@@ -406,6 +406,9 @@ def _cline_placeholder(ide_data: Path, existing: dict | None = None) -> dict:
 HIDDEN_OPEN_FOLDER_COMMANDS = (
     "workbench.action.files.openFolder",
     "workbench.action.files.openFolderViaWorkspace",
+    "workbench.action.files.openFileFolder",
+    "workbench.action.files.openFolderInNewWindow",
+    "workbench.action.openWorkspace",
 )
 
 HIDDEN_OPEN_FOLDER_MENUS = (

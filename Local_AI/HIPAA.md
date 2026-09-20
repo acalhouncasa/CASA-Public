@@ -125,7 +125,7 @@ This **does not** block git remotes in an ordinary Windows terminal outside Talo
 | Launch only through `Open-Talon.cmd` with quoted `--user-data-dir` | `run.ps1`, `Open-Talon.cmd` | A path with a space otherwise opens the wrong folders and drops the isolated profile |
 | `window.restoreWindows=none`, `files.hotExit=off` | `templates/settings.json` | Do not restore Release Notes or a previous unsafe layout |
 | `releaseNotes/lastVersion` = real VSCodium version | `seed_cline.py` | Fake versions made Release Notes open on every launch |
-| **File → Open Folder** hidden on the File menu and command palette | `seed_cline.py` `menu.hiddenCommands` | That command replaces the workspace and drops Guard / Cline isolation |
+| **File → Open Folder** and **Open Workspace from File** off the File menu | `learn/patch_vscodium_menus.py` sets those items’ `when` to `y.false()` in `workbench.desktop.main.js` (not the EXE). `menu.hiddenCommands` alone does not remove them on this VSCodium | Those commands replace the workspace and drop Guard / Cline isolation. **Open File** stays |
 | Ctrl+K Ctrl+O is Add Folder, not Open Folder | `templates/keybindings.json` | Same replacement risk on the default shortcut |
 | Talon Guard: Open Folder / Open Recent adds beside the kit | `extensions/talon.talon-guard-1.3.0` | If the menu item still runs, the kit stays the first root |
 | Kit root starts collapsed; Connect adds project/PHI folders | `learn/apply_sources.py`, `Connect-Talon.ps1` | Staff keep extracts out of the kit dump and out of File → Open Folder |
@@ -139,7 +139,7 @@ This **does not** block git remotes in an ordinary Windows terminal outside Talo
 |---------|--------|-----|
 | Share as **readable PowerShell + hashes**, not a packed unsigned EXE | `Pack-ShareKit.ps1`, [IT.md](IT.md) | Packers trip Defender and hide what IT should review |
 | Do not disable Defender / SmartScreen | docs + installer banner | “Fixing” SmartScreen by turning security off is how malware is shipped |
-| Do not patch `VSCodium.exe` | `setup.ps1` branding | Patching the binary breaks Authenticode |
+| Do not patch `VSCodium.exe` | `setup.ps1` branding; File menu edit is the workbench JS only | Patching the EXE breaks Authenticode |
 | Optional `harden-firewall.ps1` | admin script | Block `VSCodium.exe` from the public Internet; allow localhost |
 | Workspace Trust on | `templates/settings.json` | User must accept a folder before the agent runs there |
 | Crash dumps stay under `ide-data\crashes` | `run.ps1` | Avoid a default crash-reporter upload |

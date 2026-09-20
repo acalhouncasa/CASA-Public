@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "talon-guard",
   "displayName": "Talon Guard",
   "description": "Keeps the Talon kit workspace open and offers local Cline starters.",
@@ -6,7 +6,7 @@
   "publisher": "talon",
   "engines": { "vscode": "^1.80.0" },
   "categories": ["Other"],
-  "activationEvents": ["*"],
+  "activationEvents": ["onStartupFinished"],
   "main": "./extension.js",
   "contributes": {
     "commands": [

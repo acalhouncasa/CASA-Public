@@ -83,6 +83,15 @@ Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, n
 
 ---
 
+## 09/20/2026 — Talon — LEARN.md match
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/LEARN.md` | Same text as the working kit: what the watcher maps, what Cline is told to read/write, and what the learner does not do. |
+| `Local_AI/README.md` | LEARN.md table line updated to match. |
+
+---
+
 ## 09/20/2026 — Talon — Local AI 1.4.5
 
 | Public path | What |
@@ -123,3 +132,14 @@ Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, n
 | `Local_AI/learn/talon_learn.py` | Background learner: data maps + lessons, no cell values |
 | `Local_AI/LEARN.md` | How memory works |
 | `Local_AI/memory/README.txt` | Runtime memory is local-only; not committed |
+
+---
+
+## 09/20/2026 — Talon — Local AI 1.4.6 (working Open Folder)
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/` | **1.4.6.** Confirmed working: File → Open Folder is gone. Open File stays. |
+| `Local_AI/learn/patch_vscodium_menus.py` | Sets Open Folder / Open Workspace File-menu `when` to `y.false()` in the workbench JS (not the EXE). Boolean `when: false` shows the items. |
+| `Local_AI/run.ps1` | Seed, settings, and Guard copy run only after Talon has quit. PATH is concatenated (no PowerShell parse break). Shortcuts target `.cmd` files. |
+| `Local_AI/extensions/talon.talon-guard-1.3.0` | Getting started is a webview. `package.json` has no UTF-8 BOM (`onStartupFinished`). |

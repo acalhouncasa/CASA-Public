@@ -8,6 +8,12 @@
     "command": "-workbench.action.files.openFolderViaWorkspace"
   },
   {
+    "command": "-workbench.action.openWorkspace"
+  },
+  {
+    "command": "-workbench.action.files.openFolderInNewWindow"
+  },
+  {
     "key": "ctrl+k ctrl+o",
     "command": "workbench.action.addRootFolder"
   },

@@ -56,7 +56,11 @@ VSCodium without flags uses `%APPDATA%\VSCodium`. That would mix with any other 
 
 A Desktop shortcut that opens stock VSCodium is **not** Talon. Use `Launch-LocalCoder.vbs` → `run.ps1` → `Open-Talon.cmd`.
 
-Talon Guard 1.3.0 (`extensions\talon.talon-guard-1.3.0`, also shipped as a `.vsix`) stays in the isolated extensions dir. `seed_cline.py` writes `menu.hiddenCommands` so **File → Open Folder** (and the command-palette twin) is hidden. We do not flip `openFolderWorkspaceSupport`; that only swaps in another Open Folder command that still replaces the kit. File → Add Folder to Workspace and Talon Connect remain. If someone opens a folder another way (Open Recent), Guard restores the kit workspace and adds the chosen folder. It also queues the local Getting started page. `Install-Guard.cmd` reinstalls the VSIX into this profile only.
+Talon Guard 1.3.0 (`extensions\talon.talon-guard-1.3.0`) stays in the isolated extensions dir. Launch copies it only after Talon is closed (replacing it while VSCodium is running marks it invalid). `package.json` must have no UTF-8 BOM. Getting started is a Guard **webview**, not an HTML file tab (a file tab shows source and expands the Talon tree).
+
+**File → Open Folder** is removed by `learn/patch_vscodium_menus.py`: those File menu items use `when: y.false()` in `workbench.desktop.main.js`. A profile hide-list (`menu.hiddenCommands`) does not take them off this VSCodium’s File menu. Do not use `when: false` (boolean); this build treats that as “always show.” **Open File** stays. File → Add Folder to Workspace and Talon Connect remain. If someone opens a folder another way (Open Recent), Guard restores the kit workspace and adds the chosen folder. `Install-Guard.cmd` reinstalls the VSIX into this profile only.
+
+`run.ps1` writes settings, seeds Cline, and copies Guard **after** it quits any running Talon window. Seeding while VSCodium is still open lets shutdown overwrite the profile store.
 
 ## How Cline is locked to Ollama
 

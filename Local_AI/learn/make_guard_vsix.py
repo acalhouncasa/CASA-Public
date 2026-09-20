@@ -49,7 +49,10 @@ def main() -> int:
         zf.writestr("extension.vsixmanifest", MANIFEST)
         for name in ("package.json", "extension.js", "getting-started.html", "ollama-down.html"):
             path = EXT / name
-            zf.writestr(f"extension/{name}", path.read_bytes())
+            raw = path.read_bytes()
+            if name == "package.json" and raw.startswith(b"\xef\xbb\xbf"):
+                raw = raw[3:]
+            zf.writestr(f"extension/{name}", raw)
     print(f"wrote {OUT}")
     return 0
 

@@ -131,6 +131,15 @@ if (Test-Path $ico) { Pass "Talon icon branding\\icon.ico" } else { Warn "brandi
 
 $guard = Join-Path $Root "extensions\talon.talon-guard-1.3.0\extension.js"
 if (Test-Path $guard) { Pass "Talon Guard extension present" } else { Warn "Talon Guard missing. File → Open Folder is not locked off." }
+$guardPkg = Join-Path $Root "extensions\talon.talon-guard-1.3.0\package.json"
+if (Test-Path $guardPkg) {
+    $bytes = [System.IO.File]::ReadAllBytes($guardPkg)
+    if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+        Warn "Guard package.json has a UTF-8 BOM. VSCodium will mark Talon Guard invalid."
+    } else {
+        Pass "Guard package.json has no UTF-8 BOM"
+    }
+}
 $ollamaPage = Join-Path $Root "extensions\talon.talon-guard-1.3.0\ollama-down.html"
 $guardJs = Get-Content $guard -Raw -ErrorAction SilentlyContinue
 if ((Test-Path $ollamaPage) -and $guardJs -match "lockClineToOllama" -and $guardJs -match "enforceOllamaGate") {

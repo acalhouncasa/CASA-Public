@@ -92,7 +92,25 @@ def tree_handle(folder: Path) -> str:
     return f"{uri}::{uri}"
 
 
+def strip_utf8_bom(path: Path) -> None:
+    """VSCodium JSON.parse fails on a UTF-8 BOM and marks Guard invalid."""
+    if not path.is_file():
+        return
+    raw = path.read_bytes()
+    if raw.startswith(b"\xef\xbb\xbf"):
+        path.write_bytes(raw[3:])
+
+
+def strip_guard_bom(kit: Path) -> None:
+    for loc in (
+        kit / "extensions" / "talon.talon-guard-1.3.0" / "package.json",
+        kit / "ide-extensions" / "talon.talon-guard-1.3.0" / "package.json",
+    ):
+        strip_utf8_bom(loc)
+
+
 def register_guard_extension(kit: Path) -> None:
+    strip_guard_bom(kit)
     ext_dir = kit / "ide-extensions"
     rel = "talon.talon-guard-1.3.0"
     loc = ext_dir / rel
@@ -132,27 +150,11 @@ def register_guard_extension(kit: Path) -> None:
 
 
 def write_getting_started_editor(ide: Path, kit: Path) -> None:
-    """Open Getting started HTML on launch instead of Release Notes or a raw USAGE.md tab."""
-    html = kit / "extensions" / "talon.talon-guard-1.3.0" / "getting-started.html"
-    ws_root = ide / "User" / "workspaceStorage"
-    if not ws_root.is_dir() or not html.is_file():
-        return
-    resolved = html.resolve()
-    uri = resolved.as_uri()
-    posix = "/" + str(resolved).replace("\\", "/")
-    editor_value = json.dumps(
-        {
-            "resourceJSON": {
-                "$mid": 1,
-                "fsPath": str(resolved),
-                "external": uri,
-                "path": posix,
-                "scheme": "file",
-            },
-            "encoding": "utf8",
-        },
-        separators=(",", ":"),
-    )
+    """Clear restored file tabs. Guard shows Getting started as a webview.
+    Do not open getting-started.html as a text file — that shows source and
+    expands the Talon tree to the file.
+    """
+    del kit
     state = {
         "editorpart.state": {
             "serializedGrid": {
@@ -163,13 +165,8 @@ def write_getting_started_editor(ide: Path, kit: Path) -> None:
                             "type": "leaf",
                             "data": {
                                 "id": 0,
-                                "editors": [
-                                    {
-                                        "id": "workbench.editors.files.fileEditorInput",
-                                        "value": editor_value,
-                                    }
-                                ],
-                                "mru": [0],
+                                "editors": [],
+                                "mru": [],
                             },
                             "size": 1335,
                         }
@@ -185,6 +182,9 @@ def write_getting_started_editor(ide: Path, kit: Path) -> None:
         }
     }
     payload = json.dumps(state)
+    ws_root = ide / "User" / "workspaceStorage"
+    if not ws_root.is_dir():
+        return
     for db_path in ws_root.glob("*/state.vscdb"):
         con = sqlite3.connect(str(db_path))
         try:
