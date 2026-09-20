@@ -16,6 +16,14 @@ Cline is told to update the same files after each task. The watcher still runs i
 
 Treat `memory\` and `data\` as **PHI work folders**. BitLocker / agency disk rules apply. Do not commit them. Do not put them on OneDrive if that syncs off a managed store.
 
+Local backup (USB or agency disk, never OneDrive):
+
+```powershell
+.\Backup.cmd
+```
+
+Or Connect menu item 6. The zip is PHI. Do not email it.
+
 One-shot (no watch):
 
 ```powershell

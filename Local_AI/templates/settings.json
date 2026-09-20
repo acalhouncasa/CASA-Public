@@ -11,7 +11,7 @@
   "workbench.tips.enabled": false,
   "workbench.cloudChanges.autoResume": "off",
   "workbench.cloudChanges.continueOn": "off",
-  "window.title": "Talon — Local AI — ${rootName}${separator}${activeEditorShort}",
+  "window.title": "Talon — local — kit only — Ollama down — ${rootName}${separator}${activeEditorShort}",
   "window.titleBarStyle": "custom",
   "window.commandCenter": false,
   "chat.disableAIFeatures": true,

@@ -45,6 +45,9 @@ $copyFiles = @(
     "Start Local Coder.cmd",
     "Start Talon.cmd",
     "Connect.cmd",
+    "Backup.cmd",
+    "Backup-TalonMemory.ps1",
+    "Install-Shortcuts.ps1",
     "Uninstall-LocalCoder.ps1"
 )
 foreach ($name in $copyFiles) {
@@ -68,6 +71,22 @@ if (Test-Path (Join-Path $Root "examples")) {
 if (Test-Path (Join-Path $Root "learn")) {
     New-Item -ItemType Directory -Force -Path (Join-Path $Stage "learn") | Out-Null
     Copy-Item (Join-Path $Root "learn\*.py") (Join-Path $Stage "learn") -Force
+}
+if (Test-Path (Join-Path $Root "tools")) {
+    New-Item -ItemType Directory -Force -Path (Join-Path $Stage "tools") | Out-Null
+    Copy-Item (Join-Path $Root "tools\*") (Join-Path $Stage "tools") -Force
+}
+if (Test-Path (Join-Path $Root "extensions")) {
+    New-Item -ItemType Directory -Force -Path (Join-Path $Stage "extensions") | Out-Null
+    Copy-Item (Join-Path $Root "extensions\*") (Join-Path $Stage "extensions") -Recurse -Force
+}
+if (Test-Path (Join-Path $Root ".cline")) {
+    New-Item -ItemType Directory -Force -Path (Join-Path $Stage ".cline") | Out-Null
+    Copy-Item (Join-Path $Root ".cline\*") (Join-Path $Stage ".cline") -Recurse -Force
+}
+if (Test-Path (Join-Path $Root "starters")) {
+    New-Item -ItemType Directory -Force -Path (Join-Path $Stage "starters") | Out-Null
+    Copy-Item (Join-Path $Root "starters\*") (Join-Path $Stage "starters") -Recurse -Force
 }
 if (Test-Path (Join-Path $Root "memory\README.txt")) {
     New-Item -ItemType Directory -Force -Path (Join-Path $Stage "memory") | Out-Null

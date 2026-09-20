@@ -39,11 +39,15 @@ Right: Cline (provider = Ollama).
 Bottom status bar: Python should be `.venv\Scripts\python.exe`.  
 Database icon: SQLTools (Local SQLite plus anything you Connected).
 
-1. **Trust** each new folder when Windows / VSCodium asks.
+1. Connected local folders are trusted automatically. OneDrive / Desktop still prompts — do not Trust those for PHI.
 2. Left: open a file under **Project** or **PHI**.
 3. Right: tell Cline what to do. It can see every root in this workspace.
 4. Database icon (SQLTools): **Local SQLite** is the kit scratch DB. Connections you added in Connect show up here.
-5. First session: ask Cline to “read `memory/INDEX.md` then describe the connected PHI folder.”
+5. First session: Command Palette → **Talon: Starter — read memory index**, or ask Cline to map the connected folder.
+
+The title bar shows whether Ollama is up and how many extra folders are attached (`Talon — local — 2 folders — Ollama up`).
+
+If you File → Open Folder on PHI, Talon Guard asks to reopen the kit. Prefer **Talon Connect**. Ctrl+K Ctrl+O is remapped to that warning.
 
 ## Daily start
 
@@ -59,5 +63,7 @@ Database icon: SQLTools (Local SQLite plus anything you Connected).
 | “Create my Account” in Cline | Close Talon, run `.\run.ps1` (not a raw VSCodium icon) |
 | Python not the venv | Status bar interpreter → `.venv\Scripts\python.exe` |
 | SQLTools empty | Connect a SQLite file or SQL Server; or use `data\local.sqlite` |
+| First Cline reply is slow | Wait — launch warms the 30B in the background |
+| Need a local copy of lessons | **Talon Backup Memory** or `Backup.cmd` (not OneDrive) |
 
 More: [CONNECT.md](CONNECT.md) (attach data), [LEARN.md](LEARN.md) (background maps), [HIPAA.md](HIPAA.md) if you have the public pack.

@@ -125,9 +125,11 @@ def cline_payload(model: str) -> dict:
             "Do not call cloud APIs, ClinePass, or web fetch. Do not pip-install OpenAI "
             "or other hosted-LLM SDKs. Working with PHI on this PC is expected: read it, "
             "map it, and keep extracts in data\\ and memory\\ on this disk. Never send PHI "
-            "off the box. Without being asked: read memory/INDEX.md, WHAT_WORKED.md, "
-            "FAILED.md, and data-maps before repeating work; after each task write a data "
-            "map (columns, types, useful example values) and a short lesson."
+            "off the box. Starters live in .cline/workflows and the Command Palette "
+            "(map this folder, list SQL tables, read memory index). Without being asked: "
+            "read memory/INDEX.md, WHAT_WORKED.md, FAILED.md, and data-maps before "
+            "repeating work; after each task write a data map (columns, types, useful "
+            "example values) and a short lesson."
         ),
         "welcomeViewCompleted": True,
         "isNewUser": False,

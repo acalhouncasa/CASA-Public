@@ -29,6 +29,8 @@ Do not open a consumer OneDrive folder if it will hold PHI.
 
 Saved in `ide-data\sources.json` (this PC only, not git). Passwords: use Windows auth when you can. SQL logins stay in that local file.
 
+Connect **dedupes** paths, **warns** on OneDrive / Desktop / Downloads, and can **remove** a connection (menu item 5). Project vs PHI is only a label in Explorer.
+
 ## Commands
 
 ```powershell

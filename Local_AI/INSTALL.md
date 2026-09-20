@@ -289,6 +289,7 @@ The path is remembered in `ide-data\last-workspace.txt`.
 6. Auto-approve: Read, Edit, and Commands may be on. **Web Fetch and MCP stay off.**
 7. Left activity bar: Explorer is active. Source Control (git) icon is hidden.
 8. Read [USAGE.md](USAGE.md). Talon stays the main root. Attach project/PHI folders with Connect — do not File → Open Folder on PHI only.
+9. Title bar should say `Talon — local — … — Ollama up`. Command Palette starters map / SQL / memory are optional.
 8. Status bar / Python interpreter: `.\.venv\Scripts\python.exe`.
 9. SQLTools connection **Local SQLite** points at `data\local.sqlite`.
 10. Do not sign in to GitHub. GitHub login is disabled in this profile.

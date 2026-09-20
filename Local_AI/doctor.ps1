@@ -126,6 +126,26 @@ if (Test-Path $sources) {
 $overrides = Join-Path $ide "team-overrides.json"
 if (Test-Path $overrides) { Pass "team-overrides.json present (Strict or custom)" }
 
+$ico = Join-Path $Root "branding\icon.ico"
+if (Test-Path $ico) { Pass "Talon icon branding\\icon.ico" } else { Warn "branding\\icon.ico missing. Shortcuts will look like a script." }
+
+$guard = Join-Path $Root "extensions\talon.talon-guard-1.0.0\extension.js"
+if (Test-Path $guard) { Pass "Talon Guard extension present" } else { Warn "Talon Guard missing. File → Open Folder will drop the kit." }
+
+$backup = Join-Path $Root "Backup-TalonMemory.ps1"
+if (Test-Path $backup) { Pass "Memory backup script present" } else { Warn "Backup-TalonMemory.ps1 missing" }
+
+$starters = @(
+    (Join-Path $Root ".cline\workflows\map-this-folder.md"),
+    (Join-Path $Root ".cline\workflows\list-sql-tables.md"),
+    (Join-Path $Root ".cline\workflows\read-memory-index.md")
+)
+if ($starters | Where-Object { -not (Test-Path $_) }) {
+    Warn "One or more Cline starters missing under .cline\\workflows"
+} else {
+    Pass "Cline starters (map / SQL / memory)"
+}
+
 Write-Host ""
 if ($fail -gt 0) {
     Write-Host "Doctor: $fail fail, $warn warn" -ForegroundColor Red

@@ -10,4 +10,5 @@ Full UI walkthrough: [USAGE.md](USAGE.md).
 2. Open a file from Project or PHI on the left.
 3. Ask Cline on the right.
 4. SQLTools (database icon) is for connected SQLite / local SQL Server.
-5. `memory\` is local and may hold PHI. Do not copy it off this PC.
+5. `memory\` is local and may hold PHI. Back it up with `Backup.cmd`, not OneDrive.
+6. Command Palette: **Talon: Starter — map this folder** / **list SQL tables** / **read memory index**.

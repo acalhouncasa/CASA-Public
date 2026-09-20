@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import os
+import sqlite3
 import sys
 from pathlib import Path
 
@@ -29,6 +31,113 @@ def default_sources(kit: Path) -> dict:
             }
         ],
     }
+
+
+def ollama_up() -> bool:
+    try:
+        import urllib.request
+
+        with urllib.request.urlopen("http://127.0.0.1:11434/api/tags", timeout=2) as resp:
+            resp.read()
+        return True
+    except OSError:
+        return False
+
+
+def is_cloud_path(path: Path) -> bool:
+    try:
+        resolved = str(path.resolve()).lower()
+    except OSError:
+        resolved = str(path).lower()
+    if "\\onedrive\\" in resolved or "\\onedrive -" in resolved:
+        return True
+    for key in ("OneDrive", "OneDriveConsumer", "OneDriveCommercial"):
+        raw = os.environ.get(key)
+        if not raw:
+            continue
+        try:
+            root = str(Path(raw).resolve()).lower()
+        except OSError:
+            root = raw.lower()
+        if resolved == root or resolved.startswith(root + "\\"):
+            return True
+    home = Path.home()
+    for extra in ("Desktop", "Documents", "Downloads"):
+        candidate = home / extra
+        try:
+            root = str(candidate.resolve()).lower()
+        except OSError:
+            continue
+        if resolved == root or resolved.startswith(root + "\\"):
+            return True
+    return False
+
+
+def file_uri(path: Path) -> dict:
+    resolved = path.resolve()
+    as_posix = resolved.as_posix()
+    if not as_posix.startswith("/"):
+        as_posix = "/" + as_posix
+    return {
+        "$mid": 1,
+        "scheme": "file",
+        "path": as_posix,
+        "external": resolved.as_uri(),
+        "fsPath": str(resolved),
+    }
+
+
+def trust_folders(ide: Path, folders: list[Path]) -> None:
+    db = ide / "User" / "globalStorage" / "state.vscdb"
+    if not db.is_file():
+        return
+    con = sqlite3.connect(str(db))
+    try:
+        row = con.execute(
+            "SELECT value FROM ItemTable WHERE key = ?",
+            ("content.trust.model.key",),
+        ).fetchone()
+        model: dict = {"uriTrustInfo": []}
+        if row and row[0]:
+            try:
+                loaded = json.loads(row[0])
+                if isinstance(loaded, dict):
+                    model = loaded
+            except json.JSONDecodeError:
+                pass
+        info = model.get("uriTrustInfo")
+        if not isinstance(info, list):
+            info = []
+        have: set[str] = set()
+        for item in info:
+            if not isinstance(item, dict):
+                continue
+            uri = item.get("uri") or {}
+            if not isinstance(uri, dict):
+                continue
+            fs = str(uri.get("fsPath") or uri.get("path") or "").replace("/", "\\").lower()
+            if fs:
+                have.add(fs)
+        for folder in folders:
+            if is_cloud_path(folder):
+                continue
+            try:
+                resolved = folder.resolve()
+            except OSError:
+                continue
+            key = str(resolved).lower()
+            if key in have:
+                continue
+            info.append({"uri": file_uri(resolved), "trusted": True})
+            have.add(key)
+        model["uriTrustInfo"] = info
+        con.execute(
+            "INSERT OR REPLACE INTO ItemTable (key, value) VALUES (?, ?)",
+            ("content.trust.model.key", json.dumps(model)),
+        )
+        con.commit()
+    finally:
+        con.close()
 
 
 def sqltools_entry(db: dict) -> dict | None:
@@ -106,17 +215,23 @@ def main() -> int:
         seen.add(path.lower())
         folders.append({"name": str(item.get("name") or Path(path).name), "path": path.replace("\\", "/")})
 
+    extra_count = max(0, len(folders) - 1)
+    extra = "kit only" if extra_count == 0 else f"{extra_count} folder" + ("" if extra_count == 1 else "s")
+    ollama = "Ollama up" if ollama_up() else "Ollama down"
+    title = f"Talon — local — {extra} — {ollama} — ${{rootName}}${{separator}}${{activeEditorShort}}"
     workspace = {
         "folders": folders,
         "settings": {
-            "window.title": "Talon — Local AI — ${rootName}${separator}${activeEditorShort}"
+            "window.title": title
         },
     }
     ws_path = ide / "Talon.code-workspace"
     ws_path.write_text(json.dumps(workspace, indent=2), encoding="utf-8")
+    trust_folders(ide, [Path(item["path"]) for item in folders])
 
     settings_path = ide / "User" / "settings.json"
     settings = load_json(settings_path, {})
+    settings["window.title"] = title
     connections = []
     auto = []
     for db in sources.get("databases") or []:
@@ -130,8 +245,8 @@ def main() -> int:
     if connections:
         settings["sqltools.connections"] = connections
         settings["sqltools.autoConnectTo"] = auto[:2]
-        settings_path.parent.mkdir(parents=True, exist_ok=True)
-        settings_path.write_text(json.dumps(settings, indent=2), encoding="utf-8")
+    settings_path.parent.mkdir(parents=True, exist_ok=True)
+    settings_path.write_text(json.dumps(settings, indent=2), encoding="utf-8")
 
     print(f"workspace={ws_path}")
     print(f"folders={len(folders)}")

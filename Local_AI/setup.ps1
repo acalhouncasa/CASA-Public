@@ -259,34 +259,7 @@ if ($PullModel) {
 
 if (-not $NoShortcuts) {
     Write-Step "Shortcuts"
-    $programs = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Talon"
-    New-Item -ItemType Directory -Force -Path $programs | Out-Null
-    $wscript = New-Object -ComObject WScript.Shell
-    $lnk = $wscript.CreateShortcut((Join-Path $programs "Talon.lnk"))
-    $vbs = Join-Path $Root "Launch-LocalCoder.vbs"
-    $lnk.TargetPath = "$env:SystemRoot\System32\wscript.exe"
-    $lnk.Arguments = "`"$vbs`""
-    $lnk.WorkingDirectory = $Root
-    $lnk.WindowStyle = 1
-    $lnk.Description = "Talon - Local AI (on-device Ollama)"
-    $ico = Join-Path $Root "branding\icon.ico"
-    if (Test-Path $ico) {
-        $lnk.IconLocation = "$ico,0"
-    }
-    $lnk.Save()
-    $connect = $wscript.CreateShortcut((Join-Path $programs "Talon Connect.lnk"))
-    $connect.TargetPath = "$env:SystemRoot\System32\cmd.exe"
-    $connect.Arguments = "/c `"$(Join-Path $Root 'Connect.cmd')`""
-    $connect.WorkingDirectory = $Root
-    $connect.WindowStyle = 1
-    $connect.Description = "Attach a local PHI folder or database"
-    if (Test-Path $ico) { $connect.IconLocation = "$ico,0" }
-    $connect.Save()
-    $desk = [Environment]::GetFolderPath("Desktop")
-    Copy-Item (Join-Path $programs "Talon.lnk") (Join-Path $desk "Talon.lnk") -Force
-    Copy-Item (Join-Path $programs "Talon Connect.lnk") (Join-Path $desk "Talon Connect.lnk") -Force
-    Write-Host "Start Menu: $programs"
-    Write-Host "Desktop: $(Join-Path $desk 'Talon.lnk')"
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "Install-Shortcuts.ps1")
 }
 
 if ($Strict) {

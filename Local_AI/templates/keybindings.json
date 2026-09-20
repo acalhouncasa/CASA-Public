@@ -1,0 +1,18 @@
+[
+  {
+    "key": "ctrl+k ctrl+o",
+    "command": "-workbench.action.files.openFolder"
+  },
+  {
+    "key": "ctrl+k ctrl+o",
+    "command": "talon.warnOpenFolder"
+  },
+  {
+    "key": "ctrl+o",
+    "command": "-workbench.action.files.openFileFolder"
+  },
+  {
+    "key": "ctrl+alt+t",
+    "command": "talon.reopenWorkspace"
+  }
+]

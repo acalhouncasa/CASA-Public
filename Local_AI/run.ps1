@@ -97,8 +97,52 @@ $env:GITHUB_TOKEN = ""
 $env:GH_ENTERPRISE_TOKEN = ""
 $env:OLLAMA_HOST = "127.0.0.1:11434"
 $env:OLLAMA_ORIGINS = "http://127.0.0.1"
+$env:TALON_KIT = $Root
 # Cline's current bundle stores provider/onboarding in CLINE_DIR, not VS Code settings.
 $env:CLINE_DIR = Join-Path $IdeData "cline-home"
+
+$kbSrc = Join-Path $Root "templates\keybindings.json"
+$kbDest = Join-Path $IdeData "User\keybindings.json"
+if (Test-Path $kbSrc) {
+    Copy-Item $kbSrc $kbDest -Force
+}
+
+$guardSrc = Join-Path $Root "extensions\talon.talon-guard-1.0.0"
+$guardDst = Join-Path $IdeExt "talon.talon-guard-1.0.0"
+if (Test-Path $guardSrc) {
+    if (Test-Path $guardDst) { Remove-Item $guardDst -Recurse -Force }
+    Copy-Item $guardSrc $guardDst -Recurse -Force
+}
+
+$mediaRoot = Split-Path $codium
+$media = Join-Path $mediaRoot "resources\app\out\media"
+$dark = Join-Path $Root "branding\letterpress-dark.svg"
+if ((Test-Path $media) -and (Test-Path $dark)) {
+    try {
+        Copy-Item $dark (Join-Path $media "letterpress-dark.svg") -Force -ErrorAction Stop
+        Copy-Item $dark (Join-Path $media "letterpress-hcDark.svg") -Force -ErrorAction SilentlyContinue
+        $light = Join-Path $Root "branding\letterpress-light.svg"
+        if (Test-Path $light) {
+            Copy-Item $light (Join-Path $media "letterpress-light.svg") -Force -ErrorAction SilentlyContinue
+            Copy-Item $light (Join-Path $media "letterpress-hcLight.svg") -Force -ErrorAction SilentlyContinue
+        }
+        $codeIcon = Join-Path $Root "branding\code-icon.svg"
+        if (Test-Path $codeIcon) {
+            Copy-Item $codeIcon (Join-Path $media "code-icon.svg") -Force -ErrorAction SilentlyContinue
+            Copy-Item $codeIcon (Join-Path $media "vscode-icon.svg") -Force -ErrorAction SilentlyContinue
+        }
+    } catch {
+        Write-Host "Could not refresh VSCodium marks (editor may be open)."
+    }
+}
+
+$warmPy = Join-Path $Root "learn\warmup.py"
+$warmExe = Join-Path $Root ".venv\Scripts\pythonw.exe"
+if (-not (Test-Path $warmExe)) { $warmExe = Join-Path $Root ".venv\Scripts\python.exe" }
+if ((Test-Path $warmPy) -and (Test-Path $warmExe)) {
+    Start-Process -FilePath $warmExe -ArgumentList @("`"$warmPy`"") -WindowStyle Hidden
+    Write-Host "Warming the local model in the background..."
+}
 
 $wsFile = Join-Path $IdeData "Talon.code-workspace"
 $openTarget = $Workspace
