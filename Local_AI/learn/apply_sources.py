@@ -92,6 +92,111 @@ def tree_handle(folder: Path) -> str:
     return f"{uri}::{uri}"
 
 
+def register_guard_extension(kit: Path) -> None:
+    ext_dir = kit / "ide-extensions"
+    rel = "talon.talon-guard-1.3.0"
+    loc = ext_dir / rel
+    if not (loc / "package.json").is_file():
+        return
+    index = ext_dir / "extensions.json"
+    entries = load_json(index, [])
+    if not isinstance(entries, list):
+        entries = []
+    want = "talon.talon-guard"
+    entries = [
+        item
+        for item in entries
+        if not (isinstance(item, dict) and str((item.get("identifier") or {}).get("id", "")).lower() == want)
+    ]
+    posix = "/" + str(loc.resolve()).replace("\\", "/")
+    entries.append(
+        {
+            "identifier": {"id": want},
+            "version": "1.3.0",
+            "location": {
+                "$mid": 1,
+                "fsPath": str(loc.resolve()),
+                "external": loc.resolve().as_uri(),
+                "path": posix,
+                "scheme": "file",
+            },
+            "relativeLocation": rel,
+            "metadata": {
+                "installedTimestamp": 1,
+                "pinned": True,
+                "source": "vsix",
+            },
+        }
+    )
+    index.write_text(json.dumps(entries), encoding="utf-8")
+
+
+def write_getting_started_editor(ide: Path, kit: Path) -> None:
+    """Open Getting started HTML on launch instead of Release Notes or a raw USAGE.md tab."""
+    html = kit / "extensions" / "talon.talon-guard-1.3.0" / "getting-started.html"
+    ws_root = ide / "User" / "workspaceStorage"
+    if not ws_root.is_dir() or not html.is_file():
+        return
+    resolved = html.resolve()
+    uri = resolved.as_uri()
+    posix = "/" + str(resolved).replace("\\", "/")
+    editor_value = json.dumps(
+        {
+            "resourceJSON": {
+                "$mid": 1,
+                "fsPath": str(resolved),
+                "external": uri,
+                "path": posix,
+                "scheme": "file",
+            },
+            "encoding": "utf8",
+        },
+        separators=(",", ":"),
+    )
+    state = {
+        "editorpart.state": {
+            "serializedGrid": {
+                "root": {
+                    "type": "branch",
+                    "data": [
+                        {
+                            "type": "leaf",
+                            "data": {
+                                "id": 0,
+                                "editors": [
+                                    {
+                                        "id": "workbench.editors.files.fileEditorInput",
+                                        "value": editor_value,
+                                    }
+                                ],
+                                "mru": [0],
+                            },
+                            "size": 1335,
+                        }
+                    ],
+                    "size": 1585,
+                },
+                "orientation": 0,
+                "width": 1585,
+                "height": 1335,
+            },
+            "activeGroup": 0,
+            "mostRecentActiveGroups": [0],
+        }
+    }
+    payload = json.dumps(state)
+    for db_path in ws_root.glob("*/state.vscdb"):
+        con = sqlite3.connect(str(db_path))
+        try:
+            con.execute(
+                "INSERT OR REPLACE INTO ItemTable (key, value) VALUES (?, ?)",
+                ("memento/workbench.parts.editor", payload),
+            )
+            con.commit()
+        finally:
+            con.close()
+
+
 def collapse_kit_in_explorer(ide: Path, kit: Path, extra_folders: list[Path]) -> None:
     """Persist Explorer so the Talon root is collapsed before the window opens."""
     expanded = []
@@ -259,6 +364,11 @@ def main() -> int:
         "settings": {
             "window.title": title,
             "explorer.autoReveal": False,
+            "git.enabled": False,
+            "git.openRepositoryInParentFolders": "never",
+            "git.autoRepositoryDetection": False,
+            "git.repositoryScanMaxDepth": 0,
+            "github.gitAuthentication": False,
         },
     }
     ws_path = ide / "Talon.code-workspace"
@@ -267,12 +377,39 @@ def main() -> int:
     trust_folders(ide, folder_paths)
     extras = [p for p in folder_paths[1:] if p.exists()]
     collapse_kit_in_explorer(ide, kit, extras)
+    register_guard_extension(kit)
+    write_getting_started_editor(ide, kit)
 
     settings_path = ide / "User" / "settings.json"
-    settings = load_json(settings_path, {})
+    settings = load_json(kit / "templates" / "settings.json", {})
+    if not settings:
+        settings = load_json(settings_path, {})
+    venv = kit / ".venv" / "Scripts" / "python.exe"
+    sqlite = kit / "data" / "local.sqlite"
+
+    def subst(value):
+        if isinstance(value, str):
+            return (
+                value.replace("__LOCALCODER_PYTHON__", str(venv))
+                .replace("__LOCALCODER_VENV__", str(kit))
+                .replace("__LOCALCODER_SQLITE__", str(sqlite))
+            )
+        if isinstance(value, dict):
+            return {key: subst(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [subst(item) for item in value]
+        return value
+
+    settings = subst(settings)
     settings["window.title"] = title
+    settings["git.enabled"] = False
+    settings["git.openRepositoryInParentFolders"] = "never"
+    settings["git.autoRepositoryDetection"] = False
+    settings["git.repositoryScanMaxDepth"] = 0
+    settings["git.detectSubmodules"] = False
+    settings["git.scanRepositories"] = []
+    settings["github.gitAuthentication"] = False
     connections = []
-    auto = []
     for db in sources.get("databases") or []:
         if not isinstance(db, dict):
             continue
@@ -280,10 +417,18 @@ def main() -> int:
         if not entry:
             continue
         connections.append(entry)
-        auto.append(entry["name"])
     if connections:
         settings["sqltools.connections"] = connections
-        settings["sqltools.autoConnectTo"] = auto[:2]
+    settings["sqltools.autoConnectTo"] = []
+    settings["sqltools.disableNodeDetectNotifications"] = True
+    settings["sqltools.dependencyManager"] = {
+        "packageManager": "npm",
+        "installArgs": ["install"],
+        "runScriptArgs": ["run"],
+        "autoAccept": True,
+    }
+    settings["python.defaultInterpreterPath"] = str(venv)
+    settings["python.venvPath"] = str(kit)
     settings_path.parent.mkdir(parents=True, exist_ok=True)
     settings_path.write_text(json.dumps(settings, indent=2), encoding="utf-8")
 

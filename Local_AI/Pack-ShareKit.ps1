@@ -44,6 +44,8 @@ $copyFiles = @(
     "Launch-LocalCoder.vbs",
     "Start Local Coder.cmd",
     "Start Talon.cmd",
+    "Open-Talon.cmd",
+    "Install-Guard.cmd",
     "Connect.cmd",
     "Backup.cmd",
     "Backup-TalonMemory.ps1",

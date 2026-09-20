@@ -129,7 +129,7 @@ if (Test-Path $overrides) { Pass "team-overrides.json present (Strict or custom)
 $ico = Join-Path $Root "branding\icon.ico"
 if (Test-Path $ico) { Pass "Talon icon branding\\icon.ico" } else { Warn "branding\\icon.ico missing. Shortcuts will look like a script." }
 
-$guard = Join-Path $Root "extensions\talon.talon-guard-1.0.0\extension.js"
+$guard = Join-Path $Root "extensions\talon.talon-guard-1.3.0\extension.js"
 if (Test-Path $guard) { Pass "Talon Guard extension present" } else { Warn "Talon Guard missing. File → Open Folder will drop the kit." }
 
 $backup = Join-Path $Root "Backup-TalonMemory.ps1"

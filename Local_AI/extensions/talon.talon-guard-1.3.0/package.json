@@ -2,20 +2,20 @@
   "name": "talon-guard",
   "displayName": "Talon Guard",
   "description": "Keeps the Talon kit workspace open and offers local Cline starters.",
-  "version": "1.1.1",
+  "version": "1.3.0",
   "publisher": "talon",
   "engines": { "vscode": "^1.80.0" },
   "categories": ["Other"],
-  "activationEvents": ["onStartupFinished"],
+  "activationEvents": ["*"],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       { "command": "talon.reopenWorkspace", "title": "Talon: Reopen kit workspace" },
       { "command": "talon.addFolder", "title": "Talon: Add folder to workspace" },
       { "command": "talon.warnOpenFolder", "title": "Talon: Add folder to workspace" },
-      { "command": "talon.starterMapFolder", "title": "Talon: Starter — map this folder" },
-      { "command": "talon.starterListSql", "title": "Talon: Starter — list SQL tables" },
-      { "command": "talon.starterMemory", "title": "Talon: Starter — read memory index" }
+      { "command": "talon.starterMapFolder", "title": "Talon: Starter - map this folder" },
+      { "command": "talon.starterListSql", "title": "Talon: Starter - list SQL tables" },
+      { "command": "talon.starterMemory", "title": "Talon: Starter - read memory index" }
     ]
   }
 }

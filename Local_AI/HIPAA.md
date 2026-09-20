@@ -93,7 +93,7 @@ These controls are in the scripts. They are not a complete HIPAA program. They a
 | `GIT_CONFIG_COUNT` `url.*.insteadof` rewrites `https://github.com/`, `git@github.com:`, gist, and `http://github.com/` | `run.ps1` | `git push` / clone to GitHub fail **inside Talon only**. Your user `.gitconfig` is not edited |
 | `GH_TOKEN`, `GITHUB_TOKEN`, `GH_ENTERPRISE_TOKEN` cleared | `run.ps1` | `gh` cannot silently use a token from the environment |
 | Copilot, GitHub PRs, GitHub auth, Remote Repositories, Azure Repos disabled in the isolated profile | `seed_cline.py` `DISABLED_EXTENSIONS` | Those extensions exist to talk to Microsoft / GitHub |
-| Source Control view hidden; `git.autoRepositoryDetection=false`; `git.openRepositoryInParentFolders=never` | settings + seed layout | Stops the “parent repo is E:\github” toast and a git icon that invites remotes |
+| Source Control hidden; `git.enabled=false`; `git.openRepositoryInParentFolders=never`; `vscode.git` / `vscode.git-base` disabled | settings + `seed_cline.py` | Stops the parent-folder Git / GitHub connect prompt and a git icon that invites remotes |
 | `git.autofetch=false`, `git.terminalAuthentication=false` | `templates/settings.json` | No background fetch / askpass to a host |
 
 This **does not** block git remotes in an ordinary Windows terminal outside Talon.
@@ -147,7 +147,7 @@ Be explicit with your privacy officer. Residual paths we know about:
 3. **Other processes.** USB, RDP clipboards, screen share, print to PDF, email.
 4. **Cline provider switch.** Settings UI can still be pointed at OpenAI, Anthropic, OpenRouter, or ClinePass. Seed sets the default; it is not a hardware interlock.
 5. **Cline or VSCodium updates.** If someone turns updates back on, a new build can add cloud UI. Firewall + “update.mode=none” reduce this; they do not freeze bits forever.
-6. **Microsoft Python env helper.** Installing the Python extension may also pull `ms-python.vscode-python-envs`. Treat it as a possible telemetry surface; keep Python experiments/telemetry off.
+6. **Microsoft Python env helper.** Installing the Python extension may also drop `ms-python.vscode-python-envs` on disk. Seed disables that extension id. Keep Python experiments/telemetry off if it is ever re-enabled.
 7. **Agent terminal.** Auto-approved commands can `curl`, copy files, or open a browser. Web Fetch/MCP are off; raw PowerShell is not a sandbox.
 8. **Install-time internet.** First setup talks to winget, Open VSX, PyPI, and (if you pull a model) ollama.com. Do not put PHI in the folder until that is done — or use the offline payload path.
 9. **No audit log, no BAA, no access-control UI.** Windows login + BitLocker + your SIEM are still your program. This editor does not log “who prompted what” for six years.

@@ -183,39 +183,90 @@ async function reopenKit() {
   await vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(ws), false);
 }
 
-async function closeVendorNotes() {
-  for (const group of vscode.window.tabGroups.all) {
-    for (const tab of group.tabs) {
-      const label = String(tab.label || "");
-      if (/getting started/i.test(label)) {
-        continue;
-      }
-      if (/release notes|what.?s new|walkthrough|welcome/i.test(label)) {
-        try {
-          await vscode.window.tabGroups.close(tab, true);
-        } catch (_) {
-          /* tab already gone */
-        }
-      }
-    }
+function writeStatus(extra) {
+  if (!kit) {
+    return;
+  }
+  const payload = Object.assign(
+    {
+      activated: true,
+      kit,
+      time: new Date().toISOString(),
+    },
+    extra || {}
+  );
+  try {
+    const dest = path.join(kit, "ide-data", "guard-status.json");
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.writeFileSync(dest, JSON.stringify(payload, null, 2), "utf8");
+  } catch (_) {
+    /* status is diagnostics only */
   }
 }
 
+function isNotesTab(tab) {
+  const label = String(tab.label || "");
+  if (/getting started/i.test(label)) {
+    return false;
+  }
+  if (/release notes|what.?s new|walkthrough|welcome/i.test(label)) {
+    return true;
+  }
+  const input = tab.input;
+  if (!input) {
+    return false;
+  }
+  const uri = input.uri;
+  if (uri && /release|walkthrough|welcome/i.test(String(uri.scheme) + String(uri.path))) {
+    return true;
+  }
+  const viewType = input.viewType || "";
+  if (/release|walkthrough|welcome/i.test(String(viewType))) {
+    return true;
+  }
+  if (input instanceof vscode.TabInputText) {
+    const file = String(input.uri.fsPath || "").toLowerCase();
+    if (file.endsWith("usage.md")) {
+      return true;
+    }
+  }
+  return false;
+}
+
+async function closeVendorNotes() {
+  let closed = 0;
+  for (const group of vscode.window.tabGroups.all) {
+    for (const tab of group.tabs) {
+      if (!isNotesTab(tab)) {
+        continue;
+      }
+      try {
+        await vscode.window.tabGroups.close(tab, true);
+        closed += 1;
+      } catch (_) {
+        /* tab already gone */
+      }
+    }
+  }
+  return closed;
+}
+
 async function openGettingStarted() {
-  const usage = path.join(kit, "USAGE.md");
-  const flag = path.join(kit, "ide-data", "ui-guide-shown.txt");
-  if (!fs.existsSync(usage) || openedGuide || fs.existsSync(flag)) {
+  if (openedGuide) {
     return;
   }
   openedGuide = true;
-  const doc = await vscode.workspace.openTextDocument(usage);
-  await vscode.window.showTextDocument(doc, {
-    preview: false,
-    preserveFocus: true,
-    viewColumn: vscode.ViewColumn.One,
-  });
-  fs.mkdirSync(path.dirname(flag), { recursive: true });
-  fs.writeFileSync(flag, new Date().toISOString(), "utf8");
+  const htmlPath = path.join(__dirname, "getting-started.html");
+  const html = fs.existsSync(htmlPath)
+    ? fs.readFileSync(htmlPath, "utf8")
+    : "<h1>Getting started</h1><p>Talon Local AI</p>";
+  const panel = vscode.window.createWebviewPanel(
+    "talon.gettingStarted",
+    "Getting started",
+    vscode.ViewColumn.One,
+    { enableScripts: false, retainContextWhenHidden: true }
+  );
+  panel.webview.html = html;
 }
 
 async function collapseTalonRoot() {
@@ -304,6 +355,7 @@ async function openStarter(fileName) {
 
 function activate(context) {
   kit = resolveKit(context);
+  writeStatus({ phase: "activate" });
   context.subscriptions.push(
     vscode.commands.registerCommand("talon.reopenWorkspace", reopenKit),
     vscode.commands.registerCommand("talon.addFolder", addFolderToWorkspace),
@@ -316,14 +368,21 @@ function activate(context) {
     })
   );
   enforceKit();
-  const settle = async () => {
-    await closeVendorNotes();
+  const settle = async (phase) => {
+    const closed = await closeVendorNotes();
     await openGettingStarted();
     await collapseTalonRoot();
+    writeStatus({
+      phase,
+      closedNotes: closed,
+      openedGuide: "webview",
+      folderCount: (vscode.workspace.workspaceFolders || []).length,
+      workspaceFile: !!(vscode.workspace.workspaceFile && /talon\.code-workspace/i.test(vscode.workspace.workspaceFile.fsPath || "")),
+    });
   };
-  settle();
-  setTimeout(settle, 500);
-  setTimeout(settle, 1600);
+  settle("immediate");
+  setTimeout(() => settle("500ms"), 500);
+  setTimeout(() => settle("1600ms"), 1600);
   setTimeout(() => collapseTalonRoot(), 4000);
 }
 

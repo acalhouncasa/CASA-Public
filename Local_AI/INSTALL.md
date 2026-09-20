@@ -264,12 +264,12 @@ Or use **Start Menu → Talon** or `Start Talon.cmd`.
 `run.ps1` will:
 
 1. Start Ollama if `http://127.0.0.1:11434/api/tags` does not answer.
-2. Re-apply `templates\settings.json` (interpreter + SQLite paths).
+2. Rebuild settings from `templates\settings.json` (Windows interpreter path, SQLite path, git locked off).
 3. Re-run `seed_cline.py`.
 4. Put `.venv\Scripts` on PATH for that process (`PYTHONNOUSERSITE=1`).
 5. Block GitHub remotes **in this process only** (`GIT_CONFIG_COUNT` `insteadOf`). Clear `GH_TOKEN` / `GITHUB_TOKEN`.
 6. Set `CLINE_DIR` to `ide-data\cline-home` so Cline does not open a cloud free-model picker from `%USERPROFILE%\.cline`.
-7. Launch VSCodium with `--user-data-dir` and `--extensions-dir` pointed at this folder.
+7. Launch VSCodium through `Open-Talon.cmd` with quoted `--user-data-dir`, `--extensions-dir`, and the Talon workspace. Paths that contain spaces stay one argument.
 
 The first time, if no last workspace is stored, it opens this kit folder. To open a project:
 
@@ -282,15 +282,17 @@ The path is remembered in `ide-data\last-workspace.txt`.
 ### First-run checklist (do this once)
 
 1. Title bar says **Talon**.
-2. Getting started (`USAGE.md`) is the first editor tab. VSCodium Release Notes should not be in front.
+2. Getting started is the first editor tab. VSCodium Release Notes should not be in front.
 3. The **Talon** root in Explorer is collapsed.
 4. Right sidebar is **Cline**, already open, provider **Ollama** at `http://127.0.0.1:11434`.
 5. Model is `qwen3-coder:30b` (or the smaller model you pulled).
 6. You are not asked to create a Cline account. If you are, close Talon, run `python .\seed_cline.py .\ide-data`, then `.\run.ps1`.
 7. Auto-approve: Read, Edit, and Commands may be on. Web Fetch and MCP stay off.
-8. Source Control (git) is hidden. Do not sign in to GitHub.
-9. Python interpreter is `.\.venv\Scripts\python.exe`. SQLTools **Local SQLite** points at `data\local.sqlite`.
-10. Attach work with **Talon Connect** or File → Add Folder to Workspace. File → Open Folder only adds a folder.
+8. Source Control (git) is hidden. You are not asked to connect a parent Git repository or GitHub. That prompt is locked to **Never**.
+9. Python interpreter is `.\.venv\Scripts\python.exe`. There is no “interpreter could not be resolved” toast and no Python Environments prompt.
+10. SQLTools knows about **Local SQLite** (`data\local.sqlite`) but does not auto-connect or ask to npm-install `sqlite3` on launch. Connect when you need the database.
+11. Explorer roots are the Talon kit (and any folders you attached). Profile folders such as Cache or Backups are not workspace roots.
+12. Attach work with **Talon Connect** or File → Add Folder to Workspace. File → Open Folder only adds a folder.
 
 Type a simple prompt in Cline, for example: “Create `data\hello.py` that prints hello, run it with the venv python.” Confirm it uses `.venv\Scripts\python.exe`.
 
@@ -390,7 +392,10 @@ Habits:
 | Cline shows “Create my Account” / free cloud models | You launched without `CLINE_DIR`. Use `.\run.ps1` (not a raw VSCodium shortcut). Then `python .\seed_cline.py .\ide-data`. |
 | ClinePass banner | Re-run seed. Banner ids are dismissed in `seed_cline.py`. |
 | Agent stuck on “Proceed While Running” | Seed sets `vscodeTerminalExecutionMode=backgroundExec`. Re-run `.\run.ps1`. Avoid `&&` chains that never exit. |
-| Git parent-repo toast | Settings force `git.openRepositoryInParentFolders=never`. Open a project folder, not `E:\github` as the workspace. |
+| Git parent-repo / GitHub connect toast | Settings force `git.enabled=false` and `git.openRepositoryInParentFolders=never`. Seed also disables `vscode.git` and `vscode.git-base`. Restart Talon from `Start Talon.cmd` if an old window is still open. |
+| Explorer shows Cache, Backups, or `%LOCALAPPDATA%` as roots | A launch split a path that contains a space. Close that window. Start only from `Start Talon.cmd` / `Open-Talon.cmd`, not a raw `VSCodium.exe` command line. |
+| SQLTools asks to install `sqlite3@…` or announces Node | Expected only if you click Connect. Launch does not auto-connect. Node-detect notifications are off. |
+| Python “interpreter could not be resolved” | Confirm `.venv\Scripts\python.exe` exists (`.\setup-datasci.ps1`). Settings use a Windows path. The Python Environments extension is disabled. |
 | Desktop shortcut does nothing | Shortcut must call `wscript.exe` + `Launch-LocalCoder.vbs`. Re-run `.\setup.ps1` to recreate it. |
 | Title bar still looks like VSCodium | Cosmetic only. `setup.ps1` copies SVGs into `resources\app\out\media`. It will not patch `VSCodium.exe` (that would break Authenticode). |
 | winget blocked by policy | Use section 10 (`payload\`). |

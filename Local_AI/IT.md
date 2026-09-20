@@ -44,7 +44,7 @@ Quiet installs come from one of these, in order of preference:
 .\Pack-ShareKit.ps1
 ```
 
-That writes `dist\LocalCoder-1.1.0.zip` plus `dist\SHA256SUMS.txt`.
+That writes `dist\LocalCoder-1.4.3.zip` plus `dist\SHA256SUMS.txt`.
 
 On a PC that already has Talon, refresh scripts without wiping the
 profile:
@@ -64,9 +64,9 @@ Optional offline payload (vendor-signed files, still separate):
 ## Hash check after download
 
 ```powershell
-Get-FileHash .\LocalCoder-1.1.0.zip -Algorithm SHA256
+Get-FileHash .\LocalCoder-1.4.3.zip -Algorithm SHA256
 # compare to SHA256SUMS.txt from the same drop
-Unblock-File .\LocalCoder-1.1.0.zip   # only after the hash matches
+Unblock-File .\LocalCoder-1.4.3.zip   # only after the hash matches
 ```
 
 ## Sign (when the agency has a cert)

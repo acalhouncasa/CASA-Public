@@ -1,6 +1,6 @@
 # Getting started
 
-**Talon 1.4.2** · Local AI
+**Talon 1.4.3** · Local AI
 
 Talon is a coding agent that stays on this workstation. The file explorer is on the left. Cline is on the right and must remain on **Ollama**. Do not create a Cline account.
 

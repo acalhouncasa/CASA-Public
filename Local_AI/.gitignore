@@ -1,13 +1,17 @@
-# Runtime — never commit. These folders can hold PHI after first use.
 ide-data/
 ide-extensions/
+*.log
+__pycache__/
 .venv/
 dist/
 logs/
 data/*.sqlite
 data/*.csv
 data/*.xlsx
-data/*.parquet
-*.log
-__pycache__/
-.ipynb_checkpoints/
+memory/state.json
+memory/data-maps/
+memory/lessons/
+memory/WHAT_WORKED.md
+memory/FAILED.md
+memory/INDEX.md
+memory/*.sqlite

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import sys
 import urllib.error
@@ -172,9 +173,12 @@ DISABLED_EXTENSIONS = (
     "github.vscode-pull-request-github",
     "github.vscode-github-actions",
     "github.remotehub",
+    "vscode.git",
+    "vscode.git-base",
     "vscode.github",
     "vscode.github-authentication",
     "vscode.microsoft-authentication",
+    "ms-python.vscode-python-envs",
     "ms-vscode.remote-repositories",
     "ms-vscode.remote-server",
     "ms-vscode.remote-explorer",
@@ -399,6 +403,24 @@ def _cline_placeholder(ide_data: Path, existing: dict | None = None) -> dict:
     return item
 
 
+def vscodium_version() -> str:
+    candidates = [
+        Path(os.environ.get("LOCALAPPDATA", "")) / "Programs" / "VSCodium" / "resources" / "app" / "package.json",
+        Path(os.environ.get("ProgramFiles", "C:/Program Files")) / "VSCodium" / "resources" / "app" / "package.json",
+    ]
+    for path in candidates:
+        if not path.is_file():
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        version = data.get("version")
+        if version:
+            return str(version)
+    return "1.135.06055"
+
+
 def apply_agent_layout(ide_data: Path) -> None:
     """Put Cline on the right (auxiliary) bar and keep it open."""
     global_db = ide_data / "User" / "globalStorage" / "state.vscdb"
@@ -476,7 +498,9 @@ def apply_agent_layout(ide_data: Path) -> None:
                 ]
                 _put(con, "workbench.activity.placeholderViewlets", activity_ph)
 
-            _put(con, "releaseNotes/lastVersion", "99.99.99")
+            # Must equal the installed VSCodium version. A fake version
+            # (e.g. 99.99.99) makes Release Notes open on every launch.
+            _put(con, "releaseNotes/lastVersion", vscodium_version())
             _put(con, "workbench.startupEditor", "none")
             _put(con, "workbench.auxiliarybar.activepanelid", CLINE_CONTAINER)
             _put(con, "workbench.auxiliaryBar.empty", False)

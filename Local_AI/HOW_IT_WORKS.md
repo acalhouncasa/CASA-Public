@@ -54,7 +54,9 @@ VSCodium without flags uses `%APPDATA%\VSCodium`. That would mix with any other 
 - `--user-data-dir` → `ide-data\` (settings, window layout, Cline sqlite, last workspace)
 - `--extensions-dir` → `ide-extensions\` (Cline, Python, Ruff, SQLTools, Jupyter only)
 
-A Desktop shortcut that opens stock VSCodium is **not** Talon. Use `Launch-LocalCoder.vbs` / `.\run.ps1`.
+A Desktop shortcut that opens stock VSCodium is **not** Talon. Use `Launch-LocalCoder.vbs` → `run.ps1` → `Open-Talon.cmd`.
+
+Talon Guard 1.3.0 (`extensions\talon.talon-guard-1.3.0`, also shipped as a `.vsix`) stays in the isolated extensions dir. If someone uses File → Open Folder, Guard restores the kit workspace and adds the chosen folder. It also queues the local Getting started page. `Install-Guard.cmd` reinstalls the VSIX into this profile only.
 
 ## How Cline is locked to Ollama
 
@@ -71,7 +73,8 @@ It also:
 - Picks the first available model from a preferred list (`qwen3-coder:30b` first)
 - Dismisses ClinePass / welcome banners
 - Places Cline on the **right** auxiliary bar and hides Source Control
-- Disables Copilot / GitHub / remote-repo extension ids in that profile
+- Disables Copilot / GitHub / `vscode.git` / Python Environments / remote-repo extension ids in that profile
+- Records the installed VSCodium version as `releaseNotes/lastVersion` so Release Notes do not open on every launch
 
 `run.ps1` re-runs the seed every launch so a stray click is less sticky.
 
@@ -101,7 +104,7 @@ A second 30B “SQL model” would fight a 24 GB GPU for VRAM. Coding quality fo
 | SQLTools + SQLite driver | Browse `local.sqlite` |
 | Ruff | Format on save |
 
-`run.ps1` substitutes `__LOCALCODER_PYTHON__` and `__LOCALCODER_SQLITE__` into settings so paths work even when the folder is copied.
+`learn\apply_sources.py` rebuilds User settings from `templates\settings.json` on each launch (Windows interpreter path, SQLite path, git locked off). SQLTools is given the Local SQLite connection but does not auto-connect, so the first window does not ask to npm-install `sqlite3`. Node-detect notifications are off.
 
 ## Branding
 
@@ -112,9 +115,9 @@ A second 30B “SQL model” would fight a 24 GB GPU for VRAM. Coding quality fo
 1. Find `VSCodium.exe`.
 2. Probe Ollama; if down, start `ollama serve`.
 3. Remember / accept `-Workspace`.
-4. Refresh settings + seed.
+4. Copy Talon Guard 1.3.0, rebuild settings from the template, seed Cline.
 5. Export venv PATH, GitHub block, `CLINE_DIR`, `OLLAMA_HOST`.
-6. `Start-Process` VSCodium with quoted dirs (paths may contain spaces).
+6. Launch through `Open-Talon.cmd` so `--user-data-dir` and the workspace path stay quoted (names with spaces stay one argument).
 
 ## Trust boundaries (honest)
 

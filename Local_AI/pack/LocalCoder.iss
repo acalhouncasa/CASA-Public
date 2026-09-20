@@ -1,5 +1,5 @@
 ﻿#define MyAppName "Talon"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.4.3"
 #define MyAppPublisher "CASA-Trinity"
 #define SourceRoot ".."
 

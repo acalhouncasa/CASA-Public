@@ -57,6 +57,13 @@ if (-not (Test-Path $Workspace)) {
     throw "Workspace folder not found: $Workspace"
 }
 
+$guardSrc = Join-Path $Root "extensions\talon.talon-guard-1.3.0"
+$guardDst = Join-Path $IdeExt "talon.talon-guard-1.3.0"
+if (Test-Path $guardSrc) {
+    if (Test-Path $guardDst) { Remove-Item $guardDst -Recurse -Force }
+    Copy-Item $guardSrc $guardDst -Recurse -Force
+}
+
 $settingsDest = Join-Path $IdeData "User\settings.json"
 Copy-Item (Join-Path $Root "templates\settings.json") $settingsDest -Force
 $venvPy = Join-Path $Root ".venv\Scripts\python.exe"
@@ -107,13 +114,6 @@ if (Test-Path $kbSrc) {
     Copy-Item $kbSrc $kbDest -Force
 }
 
-$guardSrc = Join-Path $Root "extensions\talon.talon-guard-1.0.0"
-$guardDst = Join-Path $IdeExt "talon.talon-guard-1.0.0"
-if (Test-Path $guardSrc) {
-    if (Test-Path $guardDst) { Remove-Item $guardDst -Recurse -Force }
-    Copy-Item $guardSrc $guardDst -Recurse -Force
-}
-
 $mediaRoot = Split-Path $codium
 $media = Join-Path $mediaRoot "resources\app\out\media"
 $dark = Join-Path $Root "branding\letterpress-dark.svg"
@@ -148,16 +148,16 @@ $wsFile = Join-Path $IdeData "Talon.code-workspace"
 $openTarget = $Workspace
 if (Test-Path $wsFile) { $openTarget = $wsFile }
 
-# Quote paths so "Local AI" is not split into two argv tokens.
-$launchArgs = @(
-    "--user-data-dir=`"$IdeData`"",
-    "--extensions-dir=`"$IdeExt`"",
-    "--disable-telemetry",
-    "--crash-reporter-directory=`"$(Join-Path $IdeData 'crashes')`"",
-    "`"$openTarget`""
-)
-# Do not pass USAGE.md as a launch file. That expands the Talon root
-# and lets VSCodium Release Notes steal the editor tab.
+Get-CimInstance Win32_Process -Filter "Name = 'VSCodium.exe'" | ForEach-Object {
+    $cl = [string]$_.CommandLine
+    if ($cl -and ($cl.ToLower().Contains("local ai") -or $cl -match 'work\\Local')) {
+        Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
+    }
+}
+Start-Sleep -Seconds 2
+
+# Launch goes through Open-Talon.cmd so "Local AI" stays one path.
+# Do not pass USAGE.md as a launch file.
 $learnPy = Join-Path $Root "learn\talon_learn.py"
 $venvPy = Join-Path $Root ".venv\Scripts\pythonw.exe"
 if (-not (Test-Path $venvPy)) { $venvPy = Join-Path $Root ".venv\Scripts\python.exe" }
@@ -180,4 +180,4 @@ if (-not (Test-Path $sourcesFile)) {
 }
 Write-Host "Background learner is mapping data and lessons on this PC only."
 Write-Host "GitHub remotes and GitHub login are blocked in this window."
-Start-Process -FilePath $codium -ArgumentList $launchArgs
+cmd.exe /c "`"$Root\Open-Talon.cmd`""

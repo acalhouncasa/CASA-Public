@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #1a2128;
+      color: #e8f4f2;
+      font-family: "Segoe UI", Calibri, sans-serif;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 36px 28px 64px; }
+    .kicker { color: #2ec4b6; letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; }
+    h1 { font-weight: 600; font-size: 32px; margin: 8px 0 6px; }
+    .sub { color: #9bb0ac; margin: 0 0 28px; }
+    h2 { font-size: 20px; font-weight: 600; margin: 32px 0 10px; color: #f3f7f6; }
+    p, li { color: #d5e4e1; }
+    ul { padding-left: 1.2em; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 8px; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #2a343c; vertical-align: top; }
+    th { color: #2ec4b6; font-weight: 600; font-size: 13px; }
+    code { font-family: Consolas, "Courier New", monospace; color: #d4a017; }
+    pre {
+      background: #12181e;
+      border: 1px solid #2a343c;
+      padding: 12px 14px;
+      border-radius: 6px;
+      color: #cfe8e3;
+    }
+    hr { border: 0; border-top: 1px solid #2a343c; margin: 28px 0; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="kicker">Talon 1.4.3 · Local AI</div>
+    <h1>Getting started</h1>
+    <p class="sub">A coding agent that stays on this workstation. Explorer is on the left. Cline stays on Ollama on the right. Do not create a Cline account.</p>
+
+    <h2>Highlights</h2>
+    <ul>
+      <li>The <strong>Talon</strong> kit is the first Explorer root and starts collapsed.</li>
+      <li>Attach work with <strong>Talon Connect</strong> or <strong>File → Add Folder to Workspace</strong>.</li>
+      <li><strong>File → Open Folder</strong> adds a folder. It does not replace the kit.</li>
+      <li>Python uses this kit’s <code>.venv</code>. SQLTools starts with <code>data\local.sqlite</code>.</li>
+      <li><code>memory\</code> may hold PHI. Keep it on this disk.</li>
+    </ul>
+
+    <h2>Folders</h2>
+    <table>
+      <tr><th>Explorer root</th><th>Purpose</th></tr>
+      <tr><td><strong>Talon</strong></td><td>This kit: Python environment, memory, scripts.</td></tr>
+      <tr><td><strong>Project</strong></td><td>SQL, notebooks, and scripts for one job.</td></tr>
+      <tr><td><strong>PHI</strong></td><td>Local extracts and databases that may contain PHI.</td></tr>
+    </table>
+    <pre>C:\Talon\                 kit
+D:\TalonProjects\Ops\     project
+D:\TalonPHI\Extracts\     PHI</pre>
+    <p>If code and PHI already live in one agency folder, connect that folder once.</p>
+
+    <h2>The editor</h2>
+    <table>
+      <tr><th>Area</th><th>What you should see</th></tr>
+      <tr><td>Left</td><td>Explorer. Talon is collapsed. Open files from Project or PHI.</td></tr>
+      <tr><td>Center</td><td>This page on first launch, then the file you are editing.</td></tr>
+      <tr><td>Right</td><td>Cline. Provider is Ollama at <code>http://127.0.0.1:11434</code>.</td></tr>
+      <tr><td>Title bar</td><td><code>Talon — local — 2 folders — Ollama up</code></td></tr>
+    </table>
+
+    <h2>Daily use</h2>
+    <ul>
+      <li>Start <strong>Talon</strong> from the desktop or Start Menu. Do not open stock VSCodium.</li>
+      <li>If Explorer shows only the kit, run Talon Connect.</li>
+      <li>Keep Cline on the right. Do not open a cloud chat.</li>
+      <li>Back up memory with <code>Backup.cmd</code> to a local disk or USB, not OneDrive.</li>
+    </ul>
+    <hr />
+    <p>Command Palette: <strong>Talon: Starter — read memory index</strong>, <strong>map this folder</strong>, or <strong>list SQL tables</strong>.</p>
+  </main>
+</body>
+</html>

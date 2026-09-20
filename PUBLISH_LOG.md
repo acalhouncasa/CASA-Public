@@ -67,6 +67,18 @@ Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, n
 
 ---
 
+## 09/20/2026 — Talon — Local AI 1.4.3
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/` | **1.4.3.** Quoted launch (`Open-Talon.cmd`) so paths with spaces do not become extra Explorer roots. |
+| `Local_AI/seed_cline.py` | Disable `vscode.git`, `vscode.git-base`, and `ms-python.vscode-python-envs`. Record the real VSCodium version so Release Notes do not reopen. |
+| `Local_AI/templates/settings.json` + `learn/apply_sources.py` | Rebuild settings from the template. Git parent-folder prompt is Never. SQLTools does not auto-connect or toast Node/`sqlite3` on launch. Windows Python interpreter path. |
+| `Local_AI/extensions/talon.talon-guard-1.3.0` | Guard 1.3.0 (Open Folder adds; Getting started HTML). Replaces 1.0.0. |
+| `Local_AI/USAGE.md` | Getting started 1.4.3 |
+
+---
+
 ## 09/20/2026 — Talon — Local AI 1.2.0
 
 | Public path | What |
