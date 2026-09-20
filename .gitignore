@@ -41,3 +41,4 @@ Local_AI/memory/lessons/
 Local_AI/memory/WHAT_WORKED.md
 Local_AI/memory/FAILED.md
 Local_AI/memory/INDEX.md
+Local_AI/memory/*.sqlite

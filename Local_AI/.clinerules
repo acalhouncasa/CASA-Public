@@ -1,5 +1,11 @@
 Talon — Local AI. Inference is Ollama on 127.0.0.1 only. Never use cloud LLM APIs, ClinePass, OpenRouter, or web fetch.
 
+PHI
+- Working with PHI on this PC is expected. Read, query, and map local PHI files.
+- Store working extracts, maps, and lessons under `data\` and `memory\` on this disk.
+- Do not email, gist, git-push, or paste PHI into a browser or any cloud chat.
+- Treat `memory\` as a PHI folder. Do not copy it off this machine.
+
 Python
 - Interpreter: this kit's `.venv\Scripts\python.exe` (pandas, numpy, SQLAlchemy, scikit-learn, Jupyter, ruff).
 - Prefer that venv. Do not `pip install` OpenAI / Anthropic / Azure / Google cloud SDKs.
@@ -8,15 +14,14 @@ Python
 SQL
 - Default database: workspace `data\local.sqlite` (SQLite, on disk, no server).
 - Use `sqlite3` or SQLAlchemy `sqlite:///data/local.sqlite`.
-- Put reusable queries in `.sql` files. Do not send dumps to remote hosts.
+- Put reusable queries in `.sql` files. Keep dumps on this PC.
 - If the user has another local DB (SQL Server Express, Postgres on localhost), keep the connection string on 127.0.0.1 and never enable cloud sync.
 
 Memory (do this without asking)
-- Before repeating an approach, read `memory/INDEX.md`, `memory/WHAT_WORKED.md`, and `memory/FAILED.md` if they exist.
-- After every task, without waiting for the user, update a data map under `memory/data-maps/` for any tabular/SQL file you touched (column names and types only — never cell values, names, or chart IDs).
-- After every task, append one short lesson under `memory/lessons/` and a row on WHAT_WORKED or FAILED. Say what worked or what to never try again.
-- A background process also writes these files. Do not skip your write; merge if a file already exists.
-- PHI stays on this PC. Do not paste it into a browser or any cloud chat.
+- Before repeating an approach, read `memory/INDEX.md`, `memory/WHAT_WORKED.md`, `memory/FAILED.md`, and `memory/data-maps/`.
+- After every task, without waiting for the user, update a data map under `memory/data-maps/` for any file you touched (columns, types, useful example values, join keys).
+- After every task, append a lesson under `memory/lessons/` and a row on WHAT_WORKED or FAILED.
+- A background process also writes these files. Merge if a file already exists.
 
 Code
 - Write complete, runnable Python/SQL. Run it in the terminal and fix failures.

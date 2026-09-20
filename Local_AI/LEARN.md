@@ -1,22 +1,23 @@
 # Talon memory (background)
 
-Talon writes **data maps** and **lessons learned** on this PC without you asking.
+Talon is meant to **work with PHI on this PC**. Maps, example values, and lessons stay on the local disk. That is allowed. Sending them to a cloud chat, email, or git is not.
 
-`run.ps1` starts `learn\talon_learn.py` hidden. It watches the kit `data\` folder, `examples\`, and the workspace you opened. It also reads finished Cline sessions under `ide-data\cline-home\data\sessions`.
+`run.ps1` starts `learn\talon_learn.py` hidden. It watches `data\`, `examples\`, and the workspace you opened (including folders named PHI). It also reads finished Cline sessions.
 
-| Folder | What it stores | What it never stores |
-|--------|----------------|----------------------|
-| `memory/data-maps/` | File name, column/table names, types, row counts | Cell values, names, chart IDs |
-| `memory/lessons/` | Redacted ask + whether the session worked or failed | Full prompts, dumps, PHI |
-| `memory/WHAT_WORKED.md` | Short "reuse this" rows | Source data |
-| `memory/FAILED.md` | Short "do not retry this" rows | Source data |
+| Folder | What it stores locally |
+|--------|------------------------|
+| `memory/data-maps/` | Path, columns, types, example values, row counts |
+| `memory/talon-memory.sqlite` | Same facts in a queryable local DB for later questions |
+| `memory/lessons/` | What was asked and whether it worked or failed |
+| `memory/WHAT_WORKED.md` | Reuse this |
+| `memory/FAILED.md` | Do not retry this |
 
-Cline is also instructed (`.clinerules` + seed) to update the same files after each task. The watcher still runs if the model forgets.
+Cline is told to update the same files after each task. The watcher still runs if the model forgets.
 
-This is **not** a second cloud model and **not** HIPAA certified. Keep `memory\` off git and off OneDrive if the maps could describe real agency tables.
+Treat `memory\` and `data\` as **PHI work folders**. BitLocker / agency disk rules apply. Do not commit them. Do not put them on OneDrive if that syncs off a managed store.
 
 One-shot (no watch):
 
 ```powershell
-.\.venv\Scripts\python.exe .\learn\talon_learn.py --kit "$PWD"
+.\.venv\Scripts\python.exe .\learn\talon_learn.py --kit "$PWD" --workspace "$PWD"
 ```

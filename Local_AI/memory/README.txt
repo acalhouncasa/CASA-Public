@@ -1,11 +1,9 @@
-Talon memory (this PC only).
+Talon memory (this PC only). May contain PHI.
 
-The background learner (learn\talon_learn.py) writes:
-  data-maps\     column/table shape, no cell values
-  lessons\       one file per finished Cline session (prompts redacted)
-  WHAT_WORKED.md
-  FAILED.md
-  INDEX.md
+The background learner writes data maps, example values, lessons,
+WHAT_WORKED.md, FAILED.md, INDEX.md, and talon-memory.sqlite.
 
-Do not commit these files if they could describe real agency data.
+That local store is how Talon reuses joins, codes, and failed approaches.
+
+Do not commit this folder. Do not copy it to email or a cloud drive.
 Talon never sends this folder to a cloud API.

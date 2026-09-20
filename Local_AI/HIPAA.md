@@ -125,6 +125,19 @@ This **does not** block git remotes in an ordinary Windows terminal outside Talo
 
 ---
 
+## Local PHI is in scope
+
+Talon is meant to **open, query, and remember PHI on this workstation**. `data\`, `memory\`, and `ide-data\` may hold charts, maps, and lessons. That is the point of a local kit.
+
+The line is **off the box**, not “never touch PHI”:
+
+- Allowed: local SQLite, local CSVs, local memory maps, local Cline sessions
+- Not allowed: Cline cloud providers, browser chat, git push, gist, email, consumer OneDrive
+
+Treat those folders as a PHI share. Encrypt the disk. Do not commit them to [CASA-Public](https://github.com/acalhouncasa/CASA-Public).
+
+---
+
 ## What this does **not** cover (residual risk)
 
 Be explicit with your privacy officer. Residual paths we know about:
