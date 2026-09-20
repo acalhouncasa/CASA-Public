@@ -5,11 +5,15 @@
   },
   {
     "key": "ctrl+k ctrl+o",
-    "command": "talon.warnOpenFolder"
+    "command": "workbench.action.addRootFolder"
   },
   {
     "key": "ctrl+o",
     "command": "-workbench.action.files.openFileFolder"
+  },
+  {
+    "key": "ctrl+o",
+    "command": "workbench.action.files.openFile"
   },
   {
     "key": "ctrl+alt+t",

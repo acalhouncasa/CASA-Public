@@ -5,6 +5,8 @@
   "workbench.enableExperiments": false,
   "workbench.settings.enableNaturalLanguageSearch": false,
   "workbench.startupEditor": "none",
+  "explorer.autoReveal": false,
+  "window.openFoldersInNewWindow": "off",
   "workbench.editor.empty.hint": "hidden",
   "workbench.sideBar.location": "left",
   "workbench.secondarySideBar.defaultVisibility": "visible",

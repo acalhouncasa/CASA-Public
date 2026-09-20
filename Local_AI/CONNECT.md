@@ -19,6 +19,8 @@ Cline can also read a file outside the workspace if you give it a full local pat
 
 Do not open a consumer OneDrive folder if it will hold PHI.
 
+File → Open Folder does **not** replace the kit. Talon Guard adds that folder to the existing workspace and reopens Talon. File → Add Folder to Workspace is the intended UI.
+
 ## What Connect sets up
 
 | Source | What you pick | What Talon does |

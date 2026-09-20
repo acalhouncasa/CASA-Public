@@ -26,14 +26,14 @@ If code and PHI already live in one agency folder, Connect **that** folder once.
 
 ## What not to do in the UI
 
-- **File → Open Folder** on PHI only — you lose Talon, Python, and memory.
-- To add another tree later: **File → Add Folder to Workspace**, or run Connect again.
+- Do not use File → Open Folder to “switch projects.” Talon only **adds** folders beside the kit.
+- To attach another tree: **File → Add Folder to Workspace**, **Talon Connect**, or Ctrl+K Ctrl+O.
 - Do not Trust a OneDrive / consumer-sync path for PHI.
 - Do not switch Cline off Ollama.
 
 ## The screen
 
-Left: Explorer (Talon, then Project, then PHI).  
+Left: Explorer. The **Talon** kit root starts collapsed. Project and PHI folders are the ones you work in.  
 Center: the file you opened.  
 Right: Cline (provider = Ollama).  
 Bottom status bar: Python should be `.venv\Scripts\python.exe`.  
@@ -47,7 +47,7 @@ Database icon: SQLTools (Local SQLite plus anything you Connected).
 
 The title bar shows whether Ollama is up and how many extra folders are attached (`Talon — local — 2 folders — Ollama up`).
 
-If you File → Open Folder on PHI, Talon Guard asks to reopen the kit. Prefer **Talon Connect**. Ctrl+K Ctrl+O is remapped to that warning.
+If someone still uses File → Open Folder, Talon Guard puts the kit back immediately and **adds** that folder to the workspace. They cannot drop Python, memory, or Cline by switching folders.
 
 ## Daily start
 
@@ -59,7 +59,7 @@ If you File → Open Folder on PHI, Talon Guard asks to reopen the kit. Prefer *
 
 | You see | Do this |
 |---------|---------|
-| Only one folder, named Talon | Run **Talon Connect** |
+| Only one folder, named Talon | Run **Talon Connect** or File → Add Folder to Workspace |
 | “Create my Account” in Cline | Close Talon, run `.\run.ps1` (not a raw VSCodium icon) |
 | Python not the venv | Status bar interpreter → `.venv\Scripts\python.exe` |
 | SQLTools empty | Connect a SQLite file or SQL Server; or use `data\local.sqlite` |

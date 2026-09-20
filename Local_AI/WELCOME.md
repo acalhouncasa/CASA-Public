@@ -2,7 +2,7 @@
 
 On-device. Cline stays on **Ollama** (`127.0.0.1`). No cloud keys.
 
-**Folders:** Talon (this kit) stays the main root. Attach a **project** folder and/or a **PHI** folder with **Talon Connect**. Do not File → Open Folder on PHI or you drop the kit.
+**Folders:** Talon (this kit) stays the main root and starts collapsed. Attach a **project** folder and/or a **PHI** folder with **Talon Connect** or File → Add Folder to Workspace. File → Open Folder only adds; it cannot drop the kit.
 
 Full UI walkthrough: [USAGE.md](USAGE.md).
 

@@ -222,7 +222,8 @@ def main() -> int:
     workspace = {
         "folders": folders,
         "settings": {
-            "window.title": title
+            "window.title": title,
+            "explorer.autoReveal": False,
         },
     }
     ws_path = ide / "Talon.code-workspace"
