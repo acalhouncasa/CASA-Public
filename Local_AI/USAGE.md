@@ -1,6 +1,6 @@
 # Getting started
 
-**Talon 1.4.9** · Local AI
+**Talon 1.4.10** · Local AI
 
 Talon is a coding agent that stays on this workstation. The file explorer is on the left. Cline is on the right and must remain on **Ollama**. Do not create a Cline account.
 
@@ -10,7 +10,7 @@ Talon is a coding agent that stays on this workstation. The file explorer is on 
 
 - The **Talon** kit is always the first Explorer root. It starts collapsed so project and PHI files stay in front.
 - Attach work with **Talon Connect** or **File → Add Folder to Workspace**. Those folders appear beside the kit.
-- If you paste a local folder or file path in Cline, Talon connects it and maps CSV/Excel/SQLite into `memory\` for later chats. Do not expect it to ask what the folder is for.
+- If you paste a local folder or file path in Cline, Talon connects it and maps CSV/Excel/SQLite into `memory\` for later chats. First action is `learn\ingest_path.py` on the exact path. No menu of options. No invented filenames.
 - **File → Open Folder** and **Open Workspace from File** are not on the File menu. **Open File** stays. Use Add Folder to Workspace or Connect.
 - Python uses this kit’s `.venv`. SQLTools starts with `data\local.sqlite`.
 - Maps and lessons are written under `memory\` on this disk. Treat that folder as PHI.
@@ -78,7 +78,7 @@ The first reply after a cold start can take a minute while the local model loads
 | Symptom | Action |
 |---------|--------|
 | Only the Talon root is listed | Talon Connect, Add Folder to Workspace, or paste the folder path in Cline |
-| Cline asked what to do with a local folder you pasted | Close Talon and start it again so 1.4.9 instructions load. Paste the path once more. Cline should run `learn\ingest_path.py` without asking. |
+| Cline asked what to do with a local folder you pasted | Close Talon and start from `Start Talon.cmd` so 1.4.10 instructions load. Paste the exact path again (example `C:\Power BI`). First reply should run `learn\ingest_path.py`, not a menu of options. |
 | Cline asks to create an account | Close Talon. Run `.\run.ps1` from this kit. |
 | Python is not the venv / location picker | Close Talon. Run `.\setup-datasci.ps1` then `.\doctor.ps1`. Full steps: [INSTALL.md section 8](INSTALL.md#8-python-interpreter). |
 | SQLTools is empty | Connect a SQLite file or local SQL Server, or use `data\local.sqlite` |

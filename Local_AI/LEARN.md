@@ -146,3 +146,5 @@ If the learner has already seen a file, a later question can start from the map:
 If a file is new, wait one watch cycle (or paste the folder path so Cline runs `ingest_path.py`) so a map exists before asking Cline to analyze it. If you need join keys or “what we did last time,” use **map this folder** after the work, or add those lines yourself. The watcher will not invent them.
 
 **Lesson (2026-09-21):** A pasted local extract folder is a connect-and-map request. Cline must not ask what to do with it. `ingest_path.py` records the folder in `sources.json` so later sessions reuse `memory\INDEX.md`.
+
+**Lesson (2026-09-21, 1.4.10):** Small local models still offered a menu of options and invented `10e11_data.csv` when the user said `C:\Power BI`. Rules now put CRITICAL first: exact path only, first action is `ingest_path.py`, no invented filenames, folder of many CSVs is normal.

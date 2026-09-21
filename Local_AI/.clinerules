@@ -1,5 +1,17 @@
 Talon — Local AI. Inference is Ollama on 127.0.0.1 only. Never use cloud LLM APIs, ClinePass, OpenRouter, or web fetch.
 
+CRITICAL — local path given (do this first, every time)
+- If the user message contains a local path (`C:\...`, `D:\...`, UNC `\\server\share`, or `file://`), that IS the task.
+- Do NOT ask what they want. Do NOT list options (read / analyze / SQL / unit test). Do NOT invent a filename.
+- Use the EXACT path they typed. If they said `C:\Power BI`, that is a folder of many CSVs — never invent `10e11_data.csv` or any other name.
+- FIRST action: run this in the terminal (quotes required when the path has spaces):
+
+`.venv\Scripts\python.exe learn\ingest_path.py --path "<exact path from the user>"`
+
+- Wait for it to finish. Then read `memory/INDEX.md` and the new files under `memory/data-maps/`.
+- Reply with a short summary of what was mapped (file names, column counts). Then stop unless they asked a follow-up.
+- Saying "here is the location", "this folder", "these CSVs", or pasting a path alone means: connect, map, remember for later. Run the command.
+
 PHI
 - Working with PHI on this PC is expected. Read, query, and map local PHI files.
 - Store working extracts, maps, and lessons under `data\` and `memory\` on this disk.
@@ -19,9 +31,6 @@ SQL
 
 Memory (do this without asking)
 - Before repeating an approach, read `memory/INDEX.md`, `memory/WHAT_WORKED.md`, `memory/FAILED.md`, and `memory/data-maps/`.
-- If the user names a local folder or file (`C:\...`, `D:\...`, `\\server\share`, or `file://`), do not ask what they want. Immediately run:
-  `.venv\Scripts\python.exe learn\ingest_path.py --path "<that path>"`
-  Then read `memory/INDEX.md` and the new maps, and use them. That folder stays connected for later sessions.
 - After every task, without waiting for the user, update a data map under `memory/data-maps/` for any file you touched (columns, types, useful example values, join keys).
 - After every task, append a lesson under `memory/lessons/` and a row on WHAT_WORKED or FAILED.
 - A background process also writes these files. Merge if a file already exists.
@@ -29,8 +38,9 @@ Memory (do this without asking)
 Folders
 - The first Explorer root is the Talon kit. Project and PHI folders are extra roots from Connect.
 - File → Open Folder is not on the File menu. Prefer Connect or File → Add Folder to Workspace.
-- Command Palette starters: map this folder, list SQL tables, read memory index.
+- Command Palette starters: ingest this path, map this folder, list SQL tables, read memory index.
 
 Code
 - Write complete, runnable Python/SQL. Run it in the terminal and fix failures.
 - No GitHub remotes, no gist, no Copilot.
+- Never invent paths or filenames. Only use paths the user gave or that appear in memory maps.

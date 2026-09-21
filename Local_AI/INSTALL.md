@@ -467,7 +467,7 @@ Habits:
 | Python “interpreter could not be resolved” or a Python location picker | Follow [section 8](#8-python-interpreter). Run `.\setup-datasci.ps1`, then pick `C:\Talon\.venv\Scripts\python.exe` only if the picker is still there. |
 | Python packages fail | Confirm `py -3 --version`. Install Python 3.12 if missing (section 8). Re-run `.\setup-datasci.ps1`. |
 | File → Open Folder is still listed | Close Talon fully. Run `python .\learn\patch_vscodium_menus.py` then `.\doctor.ps1`. Start only from `Start Talon.cmd`. A VSCodium update can put the item back until that patch runs. Use Add Folder to Workspace or Connect. |
-| Cline asked what to do with a local folder or CSV path | Close Talon and start from `Start Talon.cmd` so 1.4.9 instructions load. Paste the path again. Cline should run `learn\ingest_path.py` without asking. Maps land in `memory\data-maps\`. |
+| Cline asked what to do with a local folder or CSV path | Close Talon and start from `Start Talon.cmd` so 1.4.10 instructions load. Paste the exact path again. First tool call must be `learn\ingest_path.py --path "..."`. Do not invent a filename. Maps land in `memory\data-maps\`. |
 | “Ollama is not running” page | Start Ollama from the Start Menu, or wait. Do not pick OpenAI / ClinePass or paste an API key. |
 | Cline shows a cloud provider or API key box | Close that prompt. Guard resets Cline to Ollama and reloads. If it returns, close Talon and run `Start Talon.cmd`. |
 | Desktop shortcut does nothing | Shortcut must call `wscript.exe` + `Launch-LocalCoder.vbs`. Re-run `.\setup.ps1` to recreate it. |

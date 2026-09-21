@@ -1,16 +1,16 @@
 ---
 description: Ingest a local folder or file the user named
 ---
-The user named a local folder or file. Do not ask what they want. Ingest it now.
+The user named a local folder or file. That IS the task. Do not ask. Do not list options. Do not invent filenames.
 
-1. Run this with the path they gave (quotes around the path):
+1. FIRST action — run in the terminal with the EXACT path they typed (quotes if spaces):
 
-`.venv\Scripts\python.exe learn\ingest_path.py --path "<the path>"`
+`.venv\Scripts\python.exe learn\ingest_path.py --path "<exact path>"`
 
-That connects the folder, maps CSV/Excel/SQLite/SQL/JSON/Parquet, and writes `memory/data-maps/` so later sessions can reuse columns and example values.
+Example: if they said `C:\Power BI`, run with `--path "C:\Power BI"`. That is a folder of many CSVs. Never invent a single file name.
 
-2. Read `memory/INDEX.md` and the new maps.
+2. Wait until the command finishes. Then read `memory/INDEX.md` and new files under `memory/data-maps/`.
 
-3. Summarize what was mapped (file names, columns if present). Then answer their question using those maps.
+3. Reply with a short summary: how many files mapped, a few names, that maps are ready for later sessions. Stop unless they asked something else.
 
-If they did not paste a path yet, ask once for the local folder, then run the same command. Stay on this PC. Do not email, gist, or call a cloud API.
+Stay on this PC. Do not email, gist, or call a cloud API.
