@@ -15,7 +15,7 @@ Why each row exists: [HIPAA.md](HIPAA.md). Architecture: [HOW_IT_WORKS.md](HOW_I
 | Item | Stock behavior stays |
 |------|----------------------|
 | `VSCodium.exe` | Not patched. Authenticode stays. |
-| Workbench File menu | Launch sets Open Folder / Open Workspace `when` to `y.false()` in `workbench.desktop.main.js`. Branding may also copy SVG/ICO resources. |
+| Workbench File menu | Launch sets Open Folder / Open Workspace `when` to `y.false()` in `workbench.desktop.main.js` and refreshes that file’s `product.json` checksum (raw bytes). Branding may also copy SVG/ICO resources. |
 | Cline bits from Open VSX | Same extension. We seed its settings; we do not ship a fork. |
 | Ollama installer / weights | Same app. We set `OLLAMA_HOST=127.0.0.1:11434` for this user/process. |
 | Windows Defender / SmartScreen | Never turned off. |

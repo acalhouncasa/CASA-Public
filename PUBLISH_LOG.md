@@ -143,3 +143,11 @@ Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, n
 | `Local_AI/learn/patch_vscodium_menus.py` | Sets Open Folder / Open Workspace File-menu `when` to `y.false()` in the workbench JS (not the EXE). Boolean `when: false` shows the items. |
 | `Local_AI/run.ps1` | Seed, settings, and Guard copy run only after Talon has quit. PATH is concatenated (no PowerShell parse break). Shortcuts target `.cmd` files. |
 | `Local_AI/extensions/talon.talon-guard-1.3.0` | Getting started is a webview. `package.json` has no UTF-8 BOM (`onStartupFinished`). |
+
+---
+
+## 09/20/2026 — Talon 1.4.6 checksum (no corrupt-install toast)
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/learn/patch_vscodium_menus.py` | After hiding Open Folder, write the raw-byte SHA-256 of `workbench.desktop.main.js` into `product.json`. A line-ending-normalized hash still made VSCodium say the install was corrupt. |
