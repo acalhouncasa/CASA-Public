@@ -11,20 +11,12 @@ $Venv = Join-Path $Root ".venv"
 $Req = Join-Path $Root "templates\requirements-datasci.txt"
 $DataDir = Join-Path $Root "data"
 
-function Resolve-PythonLauncher {
-    $py = Get-Command py -ErrorAction SilentlyContinue
-    if ($py) {
-        try {
-            $ver = & py -3 --version 2>&1 | Out-String
-            if ($ver -match "Python 3") { return @{ Exe = "py"; Prefix = @("-3") } }
-        } catch { }
-    }
-    $python = Get-Command python -ErrorAction SilentlyContinue
-    if ($python) { return @{ Exe = $python.Source; Prefix = @() } }
-    throw "Python 3 is missing. Run setup.ps1 first (it can install Python.Python.3.12)."
+. (Join-Path $Root "tools\EnsurePython.ps1")
+Install-TalonPythonIfMissing | Out-Null
+$launch = Get-TalonPythonLauncher
+if (-not $launch) {
+    throw "Python 3 is missing. See INSTALL.md section 8."
 }
-
-$launch = Resolve-PythonLauncher
 Write-Host "Python launcher: $($launch.Exe) $($launch.Prefix -join ' ')"
 New-Item -ItemType Directory -Force -Path $DataDir | Out-Null
 
@@ -54,4 +46,9 @@ if (Test-Path $demo) {
 }
 
 Write-Host "Data science venv ready: $venvPy"
+$apply = Join-Path $Root "learn\apply_sources.py"
+if (Test-Path $apply) {
+    Write-Host "Binding Talon to $venvPy"
+    & $venvPy $apply $Root
+}
 Write-Host "Use that interpreter in Talon. Do not pip-install cloud SDKs into it."

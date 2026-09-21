@@ -146,7 +146,30 @@ Runtime folders (`ide-data`, `.venv`, `data/*.sqlite`) are gitignored. No PHI, n
 
 ---
 
-## 09/20/2026 — Talon 1.4.6 checksum (no corrupt-install toast)
+## 09/21/2026 — Talon 1.4.8 (Open Folder on VSCodium 1.126)
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/` | **1.4.8.** File → Open Folder hide matches File-menu group `2_open` and command IDs. Exact minify names from 1.4.6 failed on VSCodium 1.126.04524. |
+| `Local_AI/learn/patch_vscodium_menus.py` | Regex + `C.false()` / `y.false()`. `--check` for doctor. |
+| `Local_AI/doctor.ps1` | FAIL if Open Folder is still in the File menu workbench. |
+
+---
+
+## 09/21/2026 — Talon 1.4.7 (Python interpreter)
+
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/` | **1.4.7.** First launch pins kit `.venv\Scripts\python.exe`. Setup installs Python 3.12 if missing. |
+| `Local_AI/tools/EnsurePython.ps1` | Find Python on PATH and in `%LOCALAPPDATA%\Programs\Python`; winget install if absent. |
+| `Local_AI/learn/apply_sources.py` | Write interpreter into User settings, `Talon.code-workspace`, and `.vscode\settings.json`. Turn off the Python Environments picker. |
+| `Local_AI/INSTALL.md` | Section 8: automatic bind, install Python, manual picker steps. |
+
+Runtime `.vscode\` is gitignored. Do not commit `ide-data` or `.venv`.
+
+---
+
 
 | Public path | What |
 |-------------|------|

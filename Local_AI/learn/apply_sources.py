@@ -327,6 +327,39 @@ def sqltools_entry(db: dict) -> dict | None:
     return None
 
 
+def python_pin_settings(kit: Path) -> dict:
+    """Force the kit venv so VSCodium does not ask for a Python location."""
+    venv = kit / ".venv" / "Scripts" / "python.exe"
+    return {
+        "python.defaultInterpreterPath": str(venv),
+        "python.venvPath": str(kit),
+        "python.venvFolders": [".venv"],
+        "python.terminal.activateEnvironment": True,
+        "python.languageServer": "Jedi",
+        "python.createEnvironment.trigger": "off",
+        "python.useEnvironmentsExtension": False,
+        "python.experiments.enabled": False,
+        "python.telemetry.enabled": False,
+        "jupyter.disableJupyterAutoStart": True,
+        "jupyter.widgetScriptSources": [],
+        "notebook.experimental.remoteNotebookDiscovery": False,
+    }
+
+
+def write_kit_vscode_python(kit: Path) -> None:
+    venv = kit / ".venv" / "Scripts" / "python.exe"
+    vscode = kit / ".vscode"
+    vscode.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "python.defaultInterpreterPath": str(venv),
+        "python.createEnvironment.trigger": "off",
+        "python.useEnvironmentsExtension": False,
+        "python.venvFolders": [".venv"],
+        "python.terminal.activateEnvironment": True,
+    }
+    (vscode / "settings.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
 def main() -> int:
     if len(sys.argv) < 2:
         print("usage: apply_sources.py <kit-root>")
@@ -359,17 +392,20 @@ def main() -> int:
     extra = "kit only" if extra_count == 0 else f"{extra_count} folder" + ("" if extra_count == 1 else "s")
     ollama = "Ollama up" if ollama_up() else "Ollama down"
     title = f"Talon — local — {extra} — {ollama} — ${{rootName}}${{separator}}${{activeEditorShort}}"
+    pin = python_pin_settings(kit)
+    workspace_settings = {
+        "window.title": title,
+        "explorer.autoReveal": False,
+        "git.enabled": False,
+        "git.openRepositoryInParentFolders": "never",
+        "git.autoRepositoryDetection": False,
+        "git.repositoryScanMaxDepth": 0,
+        "github.gitAuthentication": False,
+    }
+    workspace_settings.update(pin)
     workspace = {
         "folders": folders,
-        "settings": {
-            "window.title": title,
-            "explorer.autoReveal": False,
-            "git.enabled": False,
-            "git.openRepositoryInParentFolders": "never",
-            "git.autoRepositoryDetection": False,
-            "git.repositoryScanMaxDepth": 0,
-            "github.gitAuthentication": False,
-        },
+        "settings": workspace_settings,
     }
     ws_path = ide / "Talon.code-workspace"
     ws_path.write_text(json.dumps(workspace, indent=2), encoding="utf-8")
@@ -429,8 +465,10 @@ def main() -> int:
     }
     settings["python.defaultInterpreterPath"] = str(venv)
     settings["python.venvPath"] = str(kit)
+    settings.update(pin)
     settings_path.parent.mkdir(parents=True, exist_ok=True)
     settings_path.write_text(json.dumps(settings, indent=2), encoding="utf-8")
+    write_kit_vscode_python(kit)
 
     print(f"workspace={ws_path}")
     print(f"folders={len(folders)}")

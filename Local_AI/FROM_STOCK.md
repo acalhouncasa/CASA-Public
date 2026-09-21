@@ -15,7 +15,7 @@ Why each row exists: [HIPAA.md](HIPAA.md). Architecture: [HOW_IT_WORKS.md](HOW_I
 | Item | Stock behavior stays |
 |------|----------------------|
 | `VSCodium.exe` | Not patched. Authenticode stays. |
-| Workbench File menu | Launch sets Open Folder / Open Workspace `when` to `y.false()` in `workbench.desktop.main.js` and refreshes that file’s `product.json` checksum (raw bytes). Branding may also copy SVG/ICO resources. |
+| Workbench File menu | Launch sets Open Folder / Open Workspace `when` to `ContextKeyExpr.false()` in `workbench.desktop.main.js` and refreshes that file’s `product.json` checksum (raw bytes). Branding may also copy SVG/ICO resources. |
 | Cline bits from Open VSX | Same extension. We seed its settings; we do not ship a fork. |
 | Ollama installer / weights | Same app. We set `OLLAMA_HOST=127.0.0.1:11434` for this user/process. |
 | Windows Defender / SmartScreen | Never turned off. |
@@ -66,13 +66,13 @@ Optional: [harden-firewall.ps1](harden-firewall.ps1) (admin) blocks this `VSCodi
 | Built-in chat, inline chat, MCP access | Disabled (`chat.disableAIFeatures`, `chat.mcp.access=none`) |
 | Auto-update and extension auto-update | Off |
 | Natural-language settings search | Off |
-| File → Open Folder / Open Workspace from File | Off the File menu (`y.false()` in the workbench). **Open File** stays. |
+| File → Open Folder / Open Workspace from File | Off the File menu (`C.false()` / `y.false()` in the workbench). **Open File** stays. |
 | Ctrl+K Ctrl+O = Open Folder | Add Folder to Workspace |
 | Open Folder replaces the window | Guard keeps the kit and **adds** the folder |
 | Git / GitHub / Source Control | Git off; parent-folder prompt Never; `vscode.git` disabled; GitHub login off |
 | Copilot / GitHub / remote-repo extensions | Disabled in this profile |
 | Python: Pylance + Python Environments | Jedi; `ms-python.vscode-python-envs` disabled |
-| Interpreter: whatever the machine has | Kit `.venv\Scripts\python.exe` |
+| Interpreter: whatever the machine has | Kit `.venv\Scripts\python.exe` pinned in User, workspace, and `.vscode` settings. Python Environments picker off. |
 | SQLTools may auto-connect and ask to npm-install `sqlite3` | Connection listed; no auto-connect; Node-detect toasts off |
 | Title bar is the product name | `Talon — local — … — Ollama up/down` |
 | Workspace Trust default | On; startup prompt stays |

@@ -1,5 +1,6 @@
 ide-data/
 ide-extensions/
+.vscode/
 *.log
 __pycache__/
 .venv/

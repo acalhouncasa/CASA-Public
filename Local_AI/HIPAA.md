@@ -113,8 +113,9 @@ This **does not** block git remotes in an ordinary Windows terminal outside Talo
 | Default DB is `data\local.sqlite` (file, no server) | `setup-datasci.ps1`, SQLTools settings | SQL work can stay on disk |
 | Python language server = **Jedi**, not Pylance | `templates/settings.json` | Pylance / Microsoft language servers can send code for analysis |
 | `python.telemetry` / `python.experiments` off | `templates/settings.json` | Microsoft Python extension telemetry |
+| Windows path for `.venv\Scripts\python.exe` in User settings, `Talon.code-workspace`, and kit `.vscode\settings.json` | `learn/apply_sources.py` | Stops the first-launch Python location picker |
+| `python.useEnvironmentsExtension=false`, `python.createEnvironment.trigger=off` | `templates/settings.json` | The Python Environments helper still asks for a location even when `defaultInterpreterPath` is set |
 | `ms-python.vscode-python-envs` disabled | `seed_cline.py` | That helper toasts and can talk to Microsoft account / env services |
-| Windows path for `.venv\Scripts\python.exe` | `learn/apply_sources.py` | Stops “interpreter could not be resolved,” which trains people to pick another Python |
 | SQLTools does not auto-connect; Node-detect toasts off; driver install auto-accept if they click Connect | `templates/settings.json` | First launch must not npm-install `sqlite3` or announce Node |
 | Jupyter remote notebook discovery off; widget CDN sources empty | `templates/settings.json` | Jupyter can otherwise pull remote kernels / scripts |
 
@@ -125,7 +126,7 @@ This **does not** block git remotes in an ordinary Windows terminal outside Talo
 | Launch only through `Open-Talon.cmd` with quoted `--user-data-dir` | `run.ps1`, `Open-Talon.cmd` | A path with a space otherwise opens the wrong folders and drops the isolated profile |
 | `window.restoreWindows=none`, `files.hotExit=off` | `templates/settings.json` | Do not restore Release Notes or a previous unsafe layout |
 | `releaseNotes/lastVersion` = real VSCodium version | `seed_cline.py` | Fake versions made Release Notes open on every launch |
-| **File → Open Folder** and **Open Workspace from File** off the File menu | `learn/patch_vscodium_menus.py` sets those items’ `when` to `y.false()` in `workbench.desktop.main.js` (not the EXE), then updates `product.json` checksums with the raw file hash so the install is not flagged corrupt. `menu.hiddenCommands` alone does not remove them on this VSCodium | Those commands replace the workspace and drop Guard / Cline isolation. **Open File** stays |
+| **File → Open Folder** and **Open Workspace from File** off the File menu | `learn/patch_vscodium_menus.py` sets those items’ `when` to `ContextKeyExpr.false()` in `workbench.desktop.main.js` (not the EXE), matching File-menu group `2_open` rather than one VSCodium minify. Then it updates `product.json` checksums with the raw file hash so the install is not flagged corrupt. `menu.hiddenCommands` alone does not remove them on this VSCodium. `doctor.ps1` FAILs if the patch is missing. | Those commands replace the workspace and drop Guard / Cline isolation. **Open File** stays |
 | Ctrl+K Ctrl+O is Add Folder, not Open Folder | `templates/keybindings.json` | Same replacement risk on the default shortcut |
 | Talon Guard: Open Folder / Open Recent adds beside the kit | `extensions/talon.talon-guard-1.3.0` | If the menu item still runs, the kit stays the first root |
 | Kit root starts collapsed; Connect adds project/PHI folders | `learn/apply_sources.py`, `Connect-Talon.ps1` | Staff keep extracts out of the kit dump and out of File → Open Folder |

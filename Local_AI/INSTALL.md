@@ -26,7 +26,7 @@ If any of those are “no,” stop. Publish the folder as documentation only.
 | Install VSCodium and Ollama from **winget** or `payload\` | Pack those EXEs into one unsigned dropper |
 | Install Cline and Python/SQL extensions from **Open VSX** into an isolated profile | Touch your everyday VS Code profile |
 | Seed Cline to Ollama on `127.0.0.1:11434` | Create a Cline cloud account |
-| Create a local `.venv` and `data\local.sqlite` | Install cloud LLM SDKs |
+| Create a local `.venv`, install Python 3.12 if missing, and pin that interpreter | Install cloud LLM SDKs |
 | Create Start Menu / Desktop shortcuts | Turn off Defender, SmartScreen, or antivirus |
 | Set `OLLAMA_HOST=127.0.0.1:11434` for the Windows user | Change your global git config |
 
@@ -200,7 +200,7 @@ Shared PC (front desk / training room): add `-Strict` so the agent does not auto
 1. Starts a transcript in `logs\`.
 2. Installs **Ollama** (payload EXE if present, otherwise `winget install Ollama.Ollama`).
 3. Installs **VSCodium** (payload EXE if present, otherwise `winget install VSCodium.VSCodium`).
-4. Installs **Python 3.12** via winget only if `py` / `python` is missing.
+4. Installs **Python 3.12** via winget if `py` / `python` is missing (also searches `%LOCALAPPDATA%\Programs\Python`). Fails with INSTALL.md section 8 if Python is still missing.
 5. Sets user environment `OLLAMA_HOST=127.0.0.1:11434`.
 6. Creates `ide-data\` and `ide-extensions\`.
 7. Copies `templates\settings.json` and `templates\argv.json` into the isolated profile.
@@ -208,7 +208,7 @@ Shared PC (front desk / training room): add `-Strict` so the agent does not auto
 9. Installs **Cline** (`saoudrizwan.claude-dev`) into the isolated extensions dir.
 10. Runs `seed_cline.py` so Cline is Ollama-only, telemetry off, ClinePass banners dismissed, web/MCP off.
 11. Installs Open VSX extensions: Python, debugpy, Ruff, SQLTools, SQLTools SQLite, Jupyter.
-12. Runs `setup-datasci.ps1` (venv + pip + empty SQLite).
+12. Runs `setup-datasci.ps1` (venv + pip + empty SQLite) and pins `.venv\Scripts\python.exe` in workspace and User settings.
 13. Creates Start Menu and Desktop shortcuts that launch `Launch-LocalCoder.vbs` → `run.ps1`.
 
 Useful switches:
@@ -298,25 +298,94 @@ Type a simple prompt in Cline, for example: “Create `data\hello.py` that print
 
 ---
 
-## 8. Verify Python and SQL
+## 8. Python interpreter
+
+Talon should open with the kit venv already selected. You should not be asked where Python is.
+
+### What setup does
+
+1. If `py` or `python` is missing, `setup.ps1` installs **Python 3.12** with winget (`Python.Python.3.12`, user scope). It also looks in `%LOCALAPPDATA%\Programs\Python\`.
+2. `setup-datasci.ps1` creates `C:\Talon\.venv\Scripts\python.exe` and installs pandas, SQLAlchemy, Jupyter, and ruff into that venv only.
+3. Launch writes that path into:
+   - `ide-data\User\settings.json`
+   - `ide-data\Talon.code-workspace`
+   - `.vscode\settings.json` (local, not committed)
+4. Settings also turn off the Python Environments picker (`python.useEnvironmentsExtension=false`) and the “create environment” toast (`python.createEnvironment.trigger=off`).
+
+You can rebuild the venv and re-bind the editor at any time:
 
 ```powershell
-cd C:\\Talon
+cd C:\Talon
+.\setup-datasci.ps1
+.\doctor.ps1
+```
+
+Then close Talon if it is open, and start it from **Start Talon.cmd**.
+
+### If Python is not installed
+
+In PowerShell:
+
+```powershell
+winget install -e --id Python.Python.3.12 --scope user --accept-package-agreements --accept-source-agreements
+```
+
+Close that window. Open a **new** PowerShell (PATH refresh). Confirm:
+
+```powershell
+py -3 --version
+```
+
+You want `Python 3.12` or newer. Then:
+
+```powershell
+cd C:\Talon
+.\setup-datasci.ps1
+.\doctor.ps1
+```
+
+If winget is blocked, install Python 3.12 from [python.org/downloads/windows](https://www.python.org/downloads/windows/). On the first installer page, check **Add python.exe to PATH**. Do not use the Microsoft Store python stub. Then run `.\setup-datasci.ps1`.
+
+### If Talon still asks for a Python location
+
+Close Talon. In PowerShell:
+
+```powershell
+cd C:\Talon
+Test-Path .\.venv\Scripts\python.exe
+.\setup-datasci.ps1
+.\doctor.ps1
+```
+
+`Test-Path` must print `True`. Doctor must show `venv C:\Talon\.venv\Scripts\python.exe` and `Python interpreter pinned`. Start Talon only from **Start Menu → Talon** or `Start Talon.cmd`.
+
+If a picker still appears:
+
+1. Click the Python version in the **status bar** (bottom right).
+2. Choose **Enter interpreter path…** (or **Find…**).
+3. Browse to `C:\Talon\.venv\Scripts\python.exe`.
+4. Select that file. Do not pick a global `Python312\python.exe` and do not pick the Store stub.
+
+From the Command Palette (Ctrl+Shift+P):
+
+1. Type `Python: Select Interpreter`.
+2. Pick `.\.venv\Scripts\python.exe`, or Enter interpreter path as above.
+
+Jupyter “Select Kernel” is the same venv: pick **Python Environments** → `.venv`.
+
+### Verify Python and SQL
+
+```powershell
+cd C:\Talon
 .\.venv\Scripts\python.exe -c "import pandas, numpy, sklearn, sqlalchemy, matplotlib; print('ok', pandas.__version__)"
 .\.venv\Scripts\python.exe -c "import sqlite3; sqlite3.connect(r'data\local.sqlite').execute('create table if not exists smoke(id int)'); print('sqlite ok')"
 ```
 
 In the editor:
 
-- Open a `.py` file → Ruff should be the formatter.
+- Open a `.py` file. The status bar should show `.venv`. Ruff should be the formatter.
 - Open SQLTools → connect **Local SQLite**.
 - Do **not** `pip install openai`, `anthropic`, or Azure/Google LLM SDKs into this venv.
-
-To rebuild the venv later:
-
-```powershell
-.\setup-datasci.ps1
-```
 
 ---
 
@@ -395,15 +464,15 @@ Habits:
 | Git parent-repo / GitHub connect toast | Settings force `git.enabled=false` and `git.openRepositoryInParentFolders=never`. Seed also disables `vscode.git` and `vscode.git-base`. Restart Talon from `Start Talon.cmd` if an old window is still open. |
 | Explorer shows Cache, Backups, or `%LOCALAPPDATA%` as roots | A launch split a path that contains a space. Close that window. Start only from `Start Talon.cmd` / `Open-Talon.cmd`, not a raw `VSCodium.exe` command line. |
 | SQLTools asks to install `sqlite3@…` or announces Node | Expected only if you click Connect. Launch does not auto-connect. Node-detect notifications are off. |
-| Python “interpreter could not be resolved” | Confirm `.venv\Scripts\python.exe` exists (`.\setup-datasci.ps1`). Settings use a Windows path. The Python Environments extension is disabled. |
-| File → Open Folder is still listed | Close Talon fully and start from `Start Talon.cmd` so seed can write `menu.hiddenCommands`. Use Add Folder to Workspace or Connect. |
+| Python “interpreter could not be resolved” or a Python location picker | Follow [section 8](#8-python-interpreter). Run `.\setup-datasci.ps1`, then pick `C:\Talon\.venv\Scripts\python.exe` only if the picker is still there. |
+| Python packages fail | Confirm `py -3 --version`. Install Python 3.12 if missing (section 8). Re-run `.\setup-datasci.ps1`. |
+| File → Open Folder is still listed | Close Talon fully. Run `python .\learn\patch_vscodium_menus.py` then `.\doctor.ps1`. Start only from `Start Talon.cmd`. A VSCodium update can put the item back until that patch runs. Use Add Folder to Workspace or Connect. |
 | “Ollama is not running” page | Start Ollama from the Start Menu, or wait. Do not pick OpenAI / ClinePass or paste an API key. |
 | Cline shows a cloud provider or API key box | Close that prompt. Guard resets Cline to Ollama and reloads. If it returns, close Talon and run `Start Talon.cmd`. |
 | Desktop shortcut does nothing | Shortcut must call `wscript.exe` + `Launch-LocalCoder.vbs`. Re-run `.\setup.ps1` to recreate it. |
 | Title bar still looks like VSCodium | Cosmetic only. `setup.ps1` copies SVGs into `resources\app\out\media`. It will not patch `VSCodium.exe` (that would break Authenticode). |
 | winget blocked by policy | Use section 10 (`payload\`). |
 | SmartScreen on a custom Setup.exe | Expected if unsigned. Prefer the zip + `Install.cmd`. See [IT.md](IT.md). |
-| Python packages fail | Confirm `py -3 --version`. Re-run `.\setup-datasci.ps1`. |
 | Out of VRAM / model tiny-slow | Use a smaller model (section 6). Do not load two 30B models. |
 | Script is blocked | `Unblock-File` the scripts after you trust the hash/source. |
 | Not sure the box is still local | Run `.\doctor.ps1`. FAIL on Cline provider means someone left Ollama. |

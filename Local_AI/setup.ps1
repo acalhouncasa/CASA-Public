@@ -92,23 +92,10 @@ function Find-Ollama {
     return $null
 }
 
-function Find-Python {
-    foreach ($name in @("py", "python")) {
-        $cmd = Get-Command $name -ErrorAction SilentlyContinue
-        if (-not $cmd) { continue }
-        try {
-            $out = & $cmd --version 2>&1 | Out-String
-            if ($out -match "Python 3") { return $cmd.Source }
-        } catch {
-            continue
-        }
-    }
-    return $null
-}
+. (Join-Path $Root "tools\EnsurePython.ps1")
 
 function Refresh-Path {
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" +
-        [System.Environment]::GetEnvironmentVariable("Path", "User")
+    Refresh-TalonPath
 }
 
 function Install-WingetPackage([string]$Id) {
@@ -158,11 +145,10 @@ if (-not $SkipDeps) {
         Install-SilentPayload -Pattern "VSCodium*Setup*.exe" -WingetId "VSCodium.VSCodium"
     }
 
-    if (-not (Find-Python)) {
-        Write-Step "Python (needed to seed Cline settings)"
-        Install-WingetPackage "Python.Python.3.12"
-    }
 }
+
+Write-Step "Python 3 (needed for the kit venv)"
+Install-TalonPythonIfMissing | Out-Null
 
 [System.Environment]::SetEnvironmentVariable("OLLAMA_HOST", "127.0.0.1:11434", "User")
 $env:OLLAMA_HOST = "127.0.0.1:11434"
@@ -208,7 +194,7 @@ if ($clineAlready) {
     }
 }
 
-$py = Find-Python
+$py = Find-TalonPython
 if ($py) {
     Write-Step "Seed Cline for local Ollama"
     if ($py -like "*\py.exe") {
@@ -217,7 +203,7 @@ if ($py) {
         & $py (Join-Path $Root "seed_cline.py") $IdeData
     }
 } else {
-    Write-Warning "Python not found. Open Talon once, then pick Ollama in Cline settings."
+    throw "Python 3 is missing after the install step. See INSTALL.md section 8."
 }
 
 Write-Step "Python + SQL extensions (Open VSX, isolated profile)"
@@ -245,10 +231,14 @@ foreach ($ext in $localExt) {
     & $codium ($extArgs + @("--install-extension", $ext))
 }
 
-if ($py) {
-    Write-Step 'Local data-science venv (pandas, SQLAlchemy, Jupyter)'
-    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "setup-datasci.ps1")
+Write-Step 'Local data-science venv (pandas, SQLAlchemy, Jupyter)'
+& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "setup-datasci.ps1")
+$venvPy = Join-Path $Root ".venv\Scripts\python.exe"
+if (-not (Test-Path $venvPy)) {
+    throw "Kit venv was not created. See INSTALL.md section 8, then run .\setup-datasci.ps1"
 }
+Write-Step "Bind Talon to $venvPy"
+& $venvPy (Join-Path $Root "learn\apply_sources.py") $Root
 
 if ($PullModel) {
     Write-Step "Pull model $Model (large download)"
@@ -266,7 +256,7 @@ if ($Strict) {
     Write-Step "Strict team mode (commands not auto-approved)"
     $override = Join-Path $IdeData "team-overrides.json"
     '{"autoApproveCommands": false}' | Set-Content -Path $override -Encoding utf8
-    $pyStrict = Find-Python
+    $pyStrict = Find-TalonPython
     if ($pyStrict) {
         if ($pyStrict -like "*\py.exe") {
             & $pyStrict -3 (Join-Path $Root "seed_cline.py") $IdeData

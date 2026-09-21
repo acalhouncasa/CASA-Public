@@ -58,7 +58,7 @@ A Desktop shortcut that opens stock VSCodium is **not** Talon. Use `Launch-Local
 
 Talon Guard 1.3.0 (`extensions\talon.talon-guard-1.3.0`) stays in the isolated extensions dir. Launch copies it only after Talon is closed (replacing it while VSCodium is running marks it invalid). `package.json` must have no UTF-8 BOM. Getting started is a Guard **webview**, not an HTML file tab (a file tab shows source and expands the Talon tree).
 
-**File → Open Folder** is removed by `learn/patch_vscodium_menus.py`: those File menu items use `when: y.false()` in `workbench.desktop.main.js`. A profile hide-list (`menu.hiddenCommands`) does not take them off this VSCodium’s File menu. Do not use `when: false` (boolean); this build treats that as “always show.” After the edit, the script writes the **raw-byte** SHA-256 of that file into `product.json` `checksums` so VSCodium does not toast “installation appears to be corrupt.” **Open File** stays. File → Add Folder to Workspace and Talon Connect remain. If someone opens a folder another way (Open Recent), Guard restores the kit workspace and adds the chosen folder. `Install-Guard.cmd` reinstalls the VSIX into this profile only.
+**File → Open Folder** is removed by `learn\patch_vscodium_menus.py`: those File menu items use `ContextKeyExpr.false()` (`C.false()` or `y.false()`) in `workbench.desktop.main.js`. The patcher matches File-menu group `2_open` and the Open Folder command IDs, so a VSCodium update that only renames minified identifiers still works. A profile hide-list (`menu.hiddenCommands`) does not take them off this VSCodium’s File menu. Do not use `when: false` (boolean); this build treats that as “always show.” After the edit, the script writes the **raw-byte** SHA-256 of that file into `product.json` `checksums` so VSCodium does not toast “installation appears to be corrupt.” **Open File** stays. File → Add Folder to Workspace and Talon Connect remain. If someone opens a folder another way (Open Recent), Guard restores the kit workspace and adds the chosen folder. `Install-Guard.cmd` reinstalls the VSIX into this profile only.
 
 `run.ps1` writes settings, seeds Cline, and copies Guard **after** it quits any running Talon window. Seeding while VSCodium is still open lets shutdown overwrite the profile store.
 
@@ -112,7 +112,7 @@ A second 30B “SQL model” would fight a 24 GB GPU for VRAM. Coding quality fo
 | SQLTools + SQLite driver | Browse `local.sqlite` |
 | Ruff | Format on save |
 
-`learn\apply_sources.py` rebuilds User settings from `templates\settings.json` on each launch (Windows interpreter path, SQLite path, git locked off). SQLTools is given the Local SQLite connection but does not auto-connect, so the first window does not ask to npm-install `sqlite3`. Node-detect notifications are off.
+`learn\apply_sources.py` rebuilds User and workspace settings from `templates\settings.json` on each launch (Windows interpreter path, SQLite path, git locked off). It also writes kit `.vscode\settings.json` so the Python extension does not ask for a location. `python.useEnvironmentsExtension` is false and `python.createEnvironment.trigger` is off. SQLTools is given the Local SQLite connection but does not auto-connect, so the first window does not ask to npm-install `sqlite3`. Node-detect notifications are off.
 
 ## Branding
 

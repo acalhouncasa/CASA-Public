@@ -217,7 +217,7 @@ $menuPatch = Join-Path $Root "learn\patch_vscodium_menus.py"
 if ((Test-Path $menuPatch) -and (Test-Path $kitPy)) {
     & $kitPy $menuPatch
     if ($LASTEXITCODE -eq 0) {
-        Write-LaunchLog "disabled Open Folder with y.false()"
+        Write-LaunchLog "disabled Open Folder in workbench"
     } else {
         Write-LaunchLog "WARN: Open Folder workbench patch failed"
     }

@@ -18,7 +18,7 @@ Prompts stay on the workstation (`127.0.0.1:11434`). Talon is its own kit.
 
 **Use at your own risk.** This kit is not HIPAA certified. Local PHI in `data\` and `memory\` is expected. Do not put PHI in a hosted chat or in this GitHub repository.
 
-Current kit: **1.4.6**. Launch waits for Ollama on `127.0.0.1:11434`. If it is down, Talon opens a local wait page instead of Cline’s cloud picker. If someone switches Cline off Ollama, Guard resets it and reloads. Launch goes through `Open-Talon.cmd` so folder names with spaces stay one path. Git and GitHub stay off. **File → Open Folder** is not on the File menu. **Open File** stays.
+Current kit: **1.4.8**. Launch waits for Ollama on `127.0.0.1:11434`. If it is down, Talon opens a local wait page instead of Cline’s cloud picker. If someone switches Cline off Ollama, Guard resets it and reloads. Launch goes through `Open-Talon.cmd` so folder names with spaces stay one path. Git and GitHub stay off. **File → Open Folder** is not on the File menu. **Open File** stays. Setup installs Python if missing and pins the kit `.venv` so the editor should not ask for a Python location.
 
 ## Folders
 

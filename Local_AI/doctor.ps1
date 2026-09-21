@@ -94,7 +94,29 @@ if (Test-Path $venvPy) {
     if ($LASTEXITCODE -eq 0) { Pass "Python data-science imports" }
     else { Fail "venv missing pandas/sklearn/sqlalchemy. Run setup-datasci.ps1." }
 } else {
-    Fail "venv missing. Run setup-datasci.ps1."
+    Fail "venv missing. Run setup-datasci.ps1. If py -3 --version fails, see INSTALL.md section 8 to install Python."
+}
+
+$settingsPath = Join-Path $ide "User\settings.json"
+$wsPath = Join-Path $ide "Talon.code-workspace"
+$interpOk = $false
+foreach ($cfgPath in @($settingsPath, $wsPath)) {
+    if (-not (Test-Path $cfgPath)) { continue }
+    $raw = Get-Content $cfgPath -Raw -ErrorAction SilentlyContinue
+    if ($raw -and $raw -like "*__LOCALCODER_PYTHON__*") {
+        Fail "Python path placeholder still in $(Split-Path $cfgPath -Leaf). Run setup-datasci.ps1."
+        continue
+    }
+    if ($raw -and ($raw -like "*python.defaultInterpreterPath*") -and ($raw -like "*.venv*python.exe*")) {
+        $interpOk = $true
+    }
+}
+if ($interpOk) { Pass "Python interpreter pinned to kit .venv" }
+else { Fail "Python interpreter is not pinned. Run setup-datasci.ps1 (INSTALL.md section 8)." }
+if (Test-Path $settingsPath) {
+    $sraw = Get-Content $settingsPath -Raw
+    if ($sraw -match '"python.useEnvironmentsExtension"\s*:\s*false') { Pass "Python Environments picker is off" }
+    else { Warn "python.useEnvironmentsExtension is not false. Re-run setup-datasci.ps1." }
 }
 
 $sqlite = Join-Path $Root "data\local.sqlite"
@@ -129,6 +151,12 @@ if (Test-Path $overrides) { Pass "team-overrides.json present (Strict or custom)
 $ico = Join-Path $Root "branding\icon.ico"
 if (Test-Path $ico) { Pass "Talon icon branding\\icon.ico" } else { Warn "branding\\icon.ico missing. Shortcuts will look like a script." }
 
+$menuPatch = Join-Path $Root "learn\patch_vscodium_menus.py"
+if ((Test-Path $menuPatch) -and (Test-Path $venvPy)) {
+    & $venvPy $menuPatch --check
+    if ($LASTEXITCODE -eq 0) { Pass "File menu Open Folder is patched off" }
+    else { Fail "File menu still has Open Folder. Close Talon and run: python learn\patch_vscodium_menus.py" }
+}
 $guard = Join-Path $Root "extensions\talon.talon-guard-1.3.0\extension.js"
 if (Test-Path $guard) { Pass "Talon Guard extension present" } else { Warn "Talon Guard missing. File → Open Folder is not locked off." }
 $guardPkg = Join-Path $Root "extensions\talon.talon-guard-1.3.0\package.json"

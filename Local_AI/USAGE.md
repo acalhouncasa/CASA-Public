@@ -1,6 +1,6 @@
 # Getting started
 
-**Talon 1.4.6** · Local AI
+**Talon 1.4.8** · Local AI
 
 Talon is a coding agent that stays on this workstation. The file explorer is on the left. Cline is on the right and must remain on **Ollama**. Do not create a Cline account.
 
@@ -77,7 +77,7 @@ The first reply after a cold start can take a minute while the local model loads
 |---------|--------|
 | Only the Talon root is listed | Talon Connect, or File → Add Folder to Workspace |
 | Cline asks to create an account | Close Talon. Run `.\run.ps1` from this kit. |
-| Python is not the venv | Status bar interpreter → `.venv\Scripts\python.exe` |
+| Python is not the venv / location picker | Close Talon. Run `.\setup-datasci.ps1` then `.\doctor.ps1`. Full steps: [INSTALL.md section 8](INSTALL.md#8-python-interpreter). |
 | SQLTools is empty | Connect a SQLite file or local SQL Server, or use `data\local.sqlite` |
 | First Cline reply is slow | Wait. Launch warms `qwen3-coder:30b` in the background. |
 | “Ollama is not running” page | Start Ollama from the Start Menu, or wait. Do not pick a cloud provider. |
