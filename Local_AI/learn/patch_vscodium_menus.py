@@ -73,8 +73,8 @@ def already_patched(text: str) -> bool:
 
 
 def workbench_checksum(path: Path) -> str:
-    raw = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"")
-    digest = hashlib.sha256(raw).digest()
+    """Same hash VSCodium uses at runtime: SHA-256 of the file bytes, no LF rewrite."""
+    digest = hashlib.sha256(path.read_bytes()).digest()
     return base64.b64encode(digest).decode("ascii").rstrip("=")
 
 
@@ -99,7 +99,7 @@ def update_product_checksum(workbench: Path) -> None:
     if not old or f'"{old}"' not in text:
         print("could not find existing workbench checksum in product.json")
         return
-    product.write_text(text.replace(f'"{old}"', f'"{new}"', 1), encoding="utf-8")
+    product.write_bytes(text.replace(f'"{old}"', f'"{new}"', 1).encode("utf-8"))
     print(f"updated {key} checksum")
 
 
@@ -118,7 +118,7 @@ def main() -> int:
         return 1
     backup = path.with_suffix(".js.talon-bak")
     if not backup.is_file():
-        backup.write_text(text, encoding="utf-8")
+        backup.write_bytes(path.read_bytes())
     updated = text
     missing = []
     for old, new in REPLACEMENTS:
@@ -131,7 +131,7 @@ def main() -> int:
         for item in missing:
             print(" ", item)
         return 1
-    path.write_text(updated, encoding="utf-8")
+    path.write_bytes(updated.encode("utf-8"))
     update_product_checksum(path)
     print(f"disabled Open Folder in {path}")
     return 0
