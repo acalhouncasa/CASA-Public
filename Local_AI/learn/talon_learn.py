@@ -412,6 +412,7 @@ def scan_files(roots: list[Path], memory: Path, state: dict) -> int:
             upsert_file(con, path, payload)
             state["files"][key] = digest
             changed += 1
+            print(f"mapped {path.name}", flush=True)
     finally:
         con.close()
     return changed
@@ -461,7 +462,56 @@ def scan_sessions(cline_home: Path, memory: Path, state: dict) -> int:
     return changed
 
 
-def cycle(roots: list[Path], memory: Path, cline_home: Path, state_path: Path) -> None:
+def load_connected_folders(kit: Path) -> list[Path]:
+    src = kit / "ide-data" / "sources.json"
+    if not src.is_file():
+        return []
+    try:
+        data = json.loads(src.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return []
+    found: list[Path] = []
+    for item in data.get("folders") or []:
+        if not isinstance(item, dict):
+            continue
+        raw = str(item.get("path") or "")
+        if not raw:
+            continue
+        path = Path(raw)
+        if path.is_dir():
+            found.append(path)
+    return found
+
+
+def assemble_roots(kit: Path, extra: list[Path]) -> list[Path]:
+    roots: list[Path] = []
+    seen: set[str] = set()
+
+    def add(path: Path) -> None:
+        try:
+            resolved = path.resolve()
+        except OSError:
+            resolved = path
+        key = str(resolved).lower()
+        if key in seen:
+            return
+        if not resolved.is_dir():
+            return
+        seen.add(key)
+        roots.append(resolved)
+
+    add(kit / "data")
+    add(kit / "examples")
+    for item in extra:
+        add(item)
+    for item in load_connected_folders(kit):
+        add(item)
+    if len(roots) <= 2:
+        add(kit)
+    return roots
+
+
+def cycle(roots: list[Path], memory: Path, cline_home: Path, state_path: Path) -> tuple[int, int]:
     ensure_memory_dirs(memory)
     state = load_state(state_path)
     n_files = scan_files(roots, memory, state)
@@ -470,6 +520,7 @@ def cycle(roots: list[Path], memory: Path, cline_home: Path, state_path: Path) -
         write_index(memory)
         save_state(state_path, state)
         print(f"{utc_now()} maps+{n_files} lessons+{n_sess}", flush=True)
+    return n_files, n_sess
 
 
 def already_running(pid_path: Path) -> bool:
@@ -497,29 +548,25 @@ def main() -> int:
     args = parser.parse_args()
 
     kit = Path(args.kit).resolve()
-    workspaces = [Path(item).resolve() for item in (args.workspace or []) if item]
+    extra = [Path(item).resolve() for item in (args.workspace or []) if item]
     memory = kit / "memory"
     cline_home = kit / "ide-data" / "cline-home"
     state_path = memory / "state.json"
     pid_path = kit / "logs" / "talon-learn.pid"
     pid_path.parent.mkdir(parents=True, exist_ok=True)
 
-    roots = [kit / "data", kit / "examples"]
-    roots.extend(workspaces)
-    if not workspaces:
-        roots.append(kit)
     if args.watch and already_running(pid_path):
         print("talon-learn already running", flush=True)
         return 0
 
     pid_path.write_text(str(os.getpid()), encoding="utf-8")
     try:
-        cycle(roots, memory, cline_home, state_path)
+        cycle(assemble_roots(kit, extra), memory, cline_home, state_path)
         if not args.watch:
             return 0
         while True:
             time.sleep(max(5, args.interval))
-            cycle(roots, memory, cline_home, state_path)
+            cycle(assemble_roots(kit, extra), memory, cline_home, state_path)
     finally:
         try:
             if pid_path.is_file() and pid_path.read_text(encoding="utf-8").strip() == str(os.getpid()):

@@ -114,6 +114,19 @@ A second 30B “SQL model” would fight a 24 GB GPU for VRAM. Coding quality fo
 
 `learn\apply_sources.py` rebuilds User and workspace settings from `templates\settings.json` on each launch (Windows interpreter path, SQLite path, git locked off). It also writes kit `.vscode\settings.json` so the Python extension does not ask for a location. `python.useEnvironmentsExtension` is false and `python.createEnvironment.trigger` is off. SQLTools is given the Local SQLite connection but does not auto-connect, so the first window does not ask to npm-install `sqlite3`. Node-detect notifications are off.
 
+## Path ingest (pasted folders)
+
+If the user names a local folder or file, Talon is supposed to **connect it and map it**, not ask what the path is for.
+
+| Piece | Role |
+|-------|------|
+| `learn\ingest_path.py` | Add the folder to `ide-data\sources.json`, scan CSV/Excel/SQLite/SQL/JSON/Parquet, write `memory\data-maps\` |
+| Cline `.clinerules` + `customInstructions` | Run that script when a `C:\` / UNC / `file://` path appears in chat |
+| Talon Guard | Add Folder to Workspace also spawns ingest; a `sources.json` change adds the folder in Explorer |
+| `talon_learn.py --watch` | Re-reads `sources.json` every cycle so a folder added after launch stays watched |
+
+Maps stay on this disk. Do not copy `memory\` off the PC.
+
 ## Branding
 
 `setup.ps1` may copy SVG watermarks and the title-bar icon into VSCodium’s `resources\app\out\media`. Those are unsigned **resource files**. The signed `VSCodium.exe` is not rewritten.

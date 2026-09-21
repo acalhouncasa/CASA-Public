@@ -18,6 +18,7 @@ $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $Root "tools\LocalPaths.ps1")
 $IdeData = Join-Path $Root "ide-data"
 $SourcesPath = Join-Path $IdeData "sources.json"
+$script:JustAdded = New-Object System.Collections.Generic.List[string]
 New-Item -ItemType Directory -Force -Path $IdeData | Out-Null
 
 function Read-Sources {
@@ -87,6 +88,9 @@ function Add-ConnectedFolder($sources, [string]$Path, [string]$FolderRole) {
     if (-not $Path) { return $false }
     if (-not (Confirm-TalonLocalPath $Path "connect")) { return $false }
     $full = [IO.Path]::GetFullPath($Path)
+    if (-not ($script:JustAdded -contains $full)) {
+        [void]$script:JustAdded.Add($full)
+    }
     if (Folder-Exists $sources $full) {
         Write-Host "Already connected: $full"
         return $true
@@ -290,6 +294,15 @@ Write-Host "Saved $SourcesPath"
 $py = Join-Path $Root ".venv\Scripts\python.exe"
 if (-not (Test-Path $py)) { $py = "python" }
 & $py (Join-Path $Root "learn\apply_sources.py") $Root
+
+$ingest = Join-Path $Root "learn\ingest_path.py"
+if ((Test-Path $ingest) -and $script:JustAdded.Count -gt 0) {
+    $unique = $script:JustAdded | ForEach-Object { [IO.Path]::GetFullPath($_) } | Select-Object -Unique
+    foreach ($p in $unique) {
+        Write-Host "Mapping $p ..."
+        & $py $ingest --kit $Root --path $p --skip-apply
+    }
+}
 
 if ($launched -and -not $NoLaunch) {
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "run.ps1")

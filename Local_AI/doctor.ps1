@@ -132,6 +132,8 @@ if ($smi) {
 
 $learn = Join-Path $Root "learn\talon_learn.py"
 if (Test-Path $learn) { Pass "Background learner learn\\talon_learn.py" } else { Warn "talon_learn.py missing" }
+$ingest = Join-Path $Root "learn\ingest_path.py"
+if (Test-Path $ingest) { Pass "Path ingest learn\\ingest_path.py" } else { Warn "ingest_path.py missing" }
 $mem = Join-Path $Root "memory\INDEX.md"
 if (Test-Path $mem) { Pass "memory\\INDEX.md present" } else { Warn "memory not built yet (starts with run.ps1)" }
 
@@ -170,16 +172,17 @@ if (Test-Path $guardPkg) {
 }
 $ollamaPage = Join-Path $Root "extensions\talon.talon-guard-1.3.0\ollama-down.html"
 $guardJs = Get-Content $guard -Raw -ErrorAction SilentlyContinue
-if ((Test-Path $ollamaPage) -and $guardJs -match "lockClineToOllama" -and $guardJs -match "enforceOllamaGate") {
-    Pass "Ollama wait page and Cline provider lock"
+if ((Test-Path $ollamaPage) -and $guardJs -match "lockClineToOllama" -and $guardJs -match "enforceOllamaGate" -and $guardJs -match "spawnIngest") {
+    Pass "Ollama wait page, Cline provider lock, and path ingest"
 } else {
-    Warn "Ollama wait page or Cline provider lock missing from Guard"
+    Warn "Ollama wait page, Cline provider lock, or path ingest missing from Guard"
 }
 
 $backup = Join-Path $Root "Backup-TalonMemory.ps1"
 if (Test-Path $backup) { Pass "Memory backup script present" } else { Warn "Backup-TalonMemory.ps1 missing" }
 
 $starters = @(
+    (Join-Path $Root ".cline\workflows\ingest-this-path.md"),
     (Join-Path $Root ".cline\workflows\map-this-folder.md"),
     (Join-Path $Root ".cline\workflows\list-sql-tables.md"),
     (Join-Path $Root ".cline\workflows\read-memory-index.md")
@@ -187,7 +190,7 @@ $starters = @(
 if ($starters | Where-Object { -not (Test-Path $_) }) {
     Warn "One or more Cline starters missing under .cline\\workflows"
 } else {
-    Pass "Cline starters (map / SQL / memory)"
+    Pass "Cline starters (ingest / map / SQL / memory)"
 }
 
 Write-Host ""

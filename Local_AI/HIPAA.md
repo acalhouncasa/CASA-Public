@@ -61,7 +61,7 @@ Stock vs this wrapper (same facts, comparison layout): [FROM_STOCK.md](FROM_STOC
 | Wait for Ollama before the editor is useful; local wait page if it stays down | `run.ps1`, Guard `ollama-down.html` | Cline’s cloud picker is what novices click when the local model is not up |
 | Mid-session provider watchdog: reset to Ollama and reload | Guard `lockClineToOllama` | Seed only helps on the next launch; this catches a switch while the window is open |
 | No cloud API keys written by seed | `seed_cline.py` | Seed never stores vendor tokens |
-| `.clinerules` + Cline `customInstructions` | kit root | Tell the agent: Ollama only; no ClinePass; no web fetch |
+| `.clinerules` + Cline `customInstructions` | kit root | Tell the agent: Ollama only; no ClinePass; no web fetch; ingest a pasted local path |
 | Title bar shows **Ollama up** or **Ollama down** | `learn/apply_sources.py` | Novice can see whether the local model is answering before they type |
 
 ### Cline cloud surfaces turned off

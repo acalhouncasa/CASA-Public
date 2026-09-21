@@ -8,10 +8,11 @@ This page is what the learner **actually does**. It does not train a model and i
 
 ## Purpose
 
-Two writers keep `memory\`:
+Three writers keep `memory\`:
 
-1. **Background learner** (`learn\talon_learn.py`) — started by `run.ps1`. It scans files and finished Cline sessions on a timer.
-2. **Cline** — instructed to read those notes before repeating work, and to write a richer map and a short lesson after a task.
+1. **Background learner** (`learn\talon_learn.py`) — started by `run.ps1`. It scans files and finished Cline sessions on a timer. Each watch cycle re-reads `ide-data\sources.json`, so a folder added after launch still gets mapped.
+2. **Cline** — instructed to ingest a local path the user names (no “what should I do with this folder?”), read those notes before repeating work, and write a richer map and a short lesson after a task.
+3. **`learn\ingest_path.py`** — connect + one-shot map. Cline, Connect, and Add Folder to Workspace all call this.
 
 The next task is supposed to open `memory\INDEX.md` first, then `WHAT_WORKED.md`, `FAILED.md`, and the data maps that match the files in play. That is how Talon prepares: it reuses columns, types, example values, and known good/bad approaches. It does not load the SQLite memory into the model automatically.
 
@@ -19,7 +20,15 @@ The next task is supposed to open `memory\INDEX.md` first, then `WHAT_WORKED.md`
 
 ## What the background learner does
 
-`run.ps1` starts `learn\talon_learn.py --watch` against the kit plus every folder in `ide-data\sources.json` (Connect). Default interval is **20 seconds**. A second copy will not start if one is already running.
+`run.ps1` starts `learn\talon_learn.py --watch` against the kit plus every folder in `ide-data\sources.json` (Connect). Default interval is **20 seconds**. A second copy will not start if one is already running. Folders added later are picked up on the next cycle from `sources.json`.
+
+If the user pastes a local path in Cline, Cline runs:
+
+```powershell
+.\.venv\Scripts\python.exe .\learn\ingest_path.py --path "<that path>"
+```
+
+That writes `sources.json`, maps the files immediately, and leaves the folder on the watch list. Do not treat a pasted extract folder as a one-off.
 
 Each cycle it:
 
@@ -66,6 +75,7 @@ The watcher **does not** copy the chat, the SQL that ran, or the steps that fixe
 
 On launch, Cline’s custom instructions say:
 
+- If the user names a local folder or file, run `learn\ingest_path.py` immediately. Do not ask what the path is for.
 - Before repeating work, read `memory\INDEX.md`, `WHAT_WORKED.md`, `FAILED.md`, and `data-maps\`.
 - After a task, write a data map (columns, types, useful example values) and a short lesson.
 
@@ -73,6 +83,7 @@ Command Palette starters:
 
 | Command | What it asks Cline to do |
 |---------|--------------------------|
+| **Talon: Starter — ingest this path** | Run `ingest_path.py` on the path the user named, then use the maps. |
 | **Talon: Starter — read memory index** | Read the index and the ledgers before answering. |
 | **Talon: Starter — map this folder** | Walk connected folders and write maps (path, columns, types, example values, likely join keys, row count) plus a lesson. |
 | **Talon: Starter — list SQL tables** | List tables, then update maps for anything new. |
@@ -110,10 +121,11 @@ The map-this-folder starter asks for **join keys**. The Python watcher does not 
 ## One-shot scan (no watch)
 
 ```powershell
+.\.venv\Scripts\python.exe .\learn\ingest_path.py --path "D:\Extracts"
 .\.venv\Scripts\python.exe .\learn\talon_learn.py --kit "$PWD" --workspace "$PWD"
 ```
 
-Add more `--workspace` paths for connected project or PHI folders.
+`ingest_path.py` is the usual command when someone just named a folder. Add more `--workspace` paths on `talon_learn.py` only when you want a scan without updating `sources.json`.
 
 ---
 
@@ -131,4 +143,6 @@ Or Connect menu item 6. Choose a USB drive or agency disk. The zip is PHI. Do no
 
 If the learner has already seen a file, a later question can start from the map: column names, rough types, and example values. If a similar Cline session already failed or worked, that title is on `FAILED.md` or `WHAT_WORKED.md`.
 
-If a file is new, wait one watch cycle (or run the one-shot command) so a map exists before asking Cline to analyze it. If you need join keys or “what we did last time,” use **map this folder** after the work, or add those lines yourself. The watcher will not invent them.
+If a file is new, wait one watch cycle (or paste the folder path so Cline runs `ingest_path.py`) so a map exists before asking Cline to analyze it. If you need join keys or “what we did last time,” use **map this folder** after the work, or add those lines yourself. The watcher will not invent them.
+
+**Lesson (2026-09-21):** A pasted local extract folder is a connect-and-map request. Cline must not ask what to do with it. `ingest_path.py` records the folder in `sources.json` so later sessions reuse `memory\INDEX.md`.

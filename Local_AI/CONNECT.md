@@ -15,9 +15,11 @@ After Connect, Explorer shows:
 1. **Talon** — this kit (Python environment, memory, scripts), collapsed on launch
 2. **Each connected folder** — project scripts and/or PHI extracts
 
-The background learner watches every connected folder.
+The background learner watches every connected folder. If you add a folder while Talon is already open, the watcher re-reads `sources.json` on the next cycle. Cline ingest maps immediately without waiting.
 
-Cline can read a file outside the workspace if you give it a full local path. Prefer Connect so the files appear in Explorer.
+Cline can read a file outside the workspace if you give it a full local path. **Prefer that path in chat.** Cline should run `learn\ingest_path.py` immediately: connect the folder, map CSV/Excel/SQLite/SQL/JSON/Parquet into `memory\data-maps\`, and keep watching it. Do not treat a pasted path as a one-off.
+
+Connect and **File → Add Folder to Workspace** do the same mapping in the background.
 
 Do not connect a consumer OneDrive, Desktop, or Downloads path if it will hold PHI.
 
@@ -47,6 +49,7 @@ Connect refuses duplicate paths, warns on OneDrive / Desktop / Downloads, and ca
 .\Connect-Talon.ps1 -Sqlite "D:\PHI\extract.sqlite"
 .\Connect-Talon.ps1 -SqlServer "127.0.0.1" -SqlDatabase "ScratchReporting"
 .\run.ps1
+.\.venv\Scripts\python.exe .\learn\ingest_path.py --path "D:\PHI"
 ```
 
 In SQLTools, open the database icon and select the connection name you added.

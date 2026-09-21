@@ -1,10 +1,12 @@
 const vscode = require("vscode");
 const path = require("path");
 const fs = require("fs");
+const { spawn } = require("child_process");
 
 let kit = "";
 let busy = false;
 let openedGuide = false;
+let sourcesWatchTimer = null;
 
 function resolveKit(context) {
   const fromEnv = process.env.TALON_KIT;
@@ -121,16 +123,90 @@ function rewriteWorkspace(sources) {
       path: String(raw).replace(/\\/g, "/"),
     });
   }
-  const extra = Math.max(0, folders.length - 1);
+    const extra = Math.max(0, folders.length - 1);
   const extraText = extra === 0 ? "kit only" : extra === 1 ? "1 folder" : `${extra} folders`;
+  let priorSettings = {};
+  try {
+    const prior = JSON.parse(fs.readFileSync(workspaceFile(), "utf8"));
+    if (prior && prior.settings && typeof prior.settings === "object") {
+      priorSettings = prior.settings;
+    }
+  } catch (_) {
+    /* first write */
+  }
   const workspace = {
     folders,
-    settings: {
+    settings: Object.assign({}, priorSettings, {
       "window.title": "Talon — local — " + extraText + " — ${rootName}${separator}${activeEditorShort}",
       "explorer.autoReveal": false,
-    },
+    }),
   };
   fs.writeFileSync(workspaceFile(), JSON.stringify(workspace, null, 2), "utf8");
+}
+
+function spawnIngest(folderPath) {
+  if (!kit || !folderPath) {
+    return;
+  }
+  const script = path.join(kit, "learn", "ingest_path.py");
+  if (!fs.existsSync(script)) {
+    return;
+  }
+  const venvPy = path.join(kit, ".venv", "Scripts", "python.exe");
+  const exe = fs.existsSync(venvPy) ? venvPy : "python";
+  const logs = path.join(kit, "logs");
+  try {
+    fs.mkdirSync(logs, { recursive: true });
+  } catch (_) {
+    /* continue */
+  }
+  const log = path.join(logs, "ingest.log");
+  let stdio = "ignore";
+  try {
+    const out = fs.openSync(log, "a");
+    stdio = ["ignore", out, out];
+  } catch (_) {
+    /* no log */
+  }
+  try {
+    const child = spawn(exe, [script, "--kit", kit, "--path", folderPath, "--skip-apply"], {
+      detached: true,
+      windowsHide: true,
+      stdio,
+      cwd: kit,
+    });
+    child.unref();
+  } catch (_) {
+    /* ingest is best-effort */
+  }
+}
+
+function applyOpenFoldersFromSources() {
+  if (!kit || busy) {
+    return;
+  }
+  const sources = loadSources();
+  const open = vscode.workspace.workspaceFolders || [];
+  const openKeys = new Set(open.map((folder) => norm(folder.uri.fsPath)));
+  const kitN = norm(kit);
+  const toAdd = [];
+  for (const item of sources.folders || []) {
+    const folderPath = item && item.path;
+    if (!folderPath || !fs.existsSync(folderPath)) {
+      continue;
+    }
+    if (norm(folderPath) === kitN || openKeys.has(norm(folderPath))) {
+      continue;
+    }
+    toAdd.push({
+      uri: vscode.Uri.file(folderPath),
+      name: item.name || path.basename(folderPath),
+    });
+  }
+  if (!toAdd.length) {
+    return;
+  }
+  vscode.workspace.updateWorkspaceFolders(open.length, null, ...toAdd);
 }
 
 function syncFromOpenFolders() {
@@ -171,6 +247,9 @@ function syncFromOpenFolders() {
   sources.folders = next;
   saveSources(sources);
   rewriteWorkspace(sources);
+  for (const folderPath of added) {
+    spawnIngest(folderPath);
+  }
   return added;
 }
 
@@ -580,6 +659,30 @@ async function enforceClineLock(reason) {
   await vscode.commands.executeCommand("workbench.action.reloadWindow");
 }
 
+function watchSourcesFile(context) {
+  if (!kit) {
+    return;
+  }
+  const dir = path.join(kit, "ide-data");
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+  try {
+    const watcher = fs.watch(dir, (_event, name) => {
+      if (!name || String(name).toLowerCase() !== "sources.json") {
+        return;
+      }
+      clearTimeout(sourcesWatchTimer);
+      sourcesWatchTimer = setTimeout(() => {
+        applyOpenFoldersFromSources();
+      }, 400);
+    });
+    context.subscriptions.push({ dispose: () => watcher.close() });
+  } catch (_) {
+    /* first launch may not have the folder yet */
+  }
+}
+
 function watchClineHome(context) {
   const dir = path.join(clineHome(), "data", "settings");
   if (!fs.existsSync(dir)) {
@@ -602,6 +705,7 @@ function activate(context) {
     vscode.commands.registerCommand("talon.reopenWorkspace", reopenKit),
     vscode.commands.registerCommand("talon.addFolder", addFolderToWorkspace),
     vscode.commands.registerCommand("talon.warnOpenFolder", addFolderToWorkspace),
+    vscode.commands.registerCommand("talon.starterIngestPath", () => openStarter("ingest-this-path.md")),
     vscode.commands.registerCommand("talon.starterMapFolder", () => openStarter("map-this-folder.md")),
     vscode.commands.registerCommand("talon.starterListSql", () => openStarter("list-sql-tables.md")),
     vscode.commands.registerCommand("talon.starterMemory", () => openStarter("read-memory-index.md")),
@@ -610,6 +714,7 @@ function activate(context) {
     })
   );
   watchClineHome(context);
+  watchSourcesFile(context);
   const lockTimer = setInterval(() => {
     enforceClineLock("poll");
     enforceOllamaGate();
