@@ -7,6 +7,9 @@ ContextKeyExpr already used in this file.
 
 from __future__ import annotations
 
+import base64
+import hashlib
+import json
 import os
 from pathlib import Path
 
@@ -69,6 +72,37 @@ def already_patched(text: str) -> bool:
     return all(new in text for _, new in REPLACEMENTS)
 
 
+def workbench_checksum(path: Path) -> str:
+    raw = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"")
+    digest = hashlib.sha256(raw).digest()
+    return base64.b64encode(digest).decode("ascii").rstrip("=")
+
+
+def update_product_checksum(workbench: Path) -> None:
+    """Keep VSCodium from toasting 'installation appears to be corrupt'."""
+    product = workbench.parents[3] / "product.json"
+    if not product.is_file():
+        print("product.json not found; checksum not updated")
+        return
+    text = product.read_text(encoding="utf-8")
+    data = json.loads(text)
+    checksums = data.get("checksums")
+    if not isinstance(checksums, dict):
+        print("product.json has no checksums")
+        return
+    key = "vs/workbench/workbench.desktop.main.js"
+    old = checksums.get(key)
+    new = workbench_checksum(workbench)
+    if old == new:
+        print("product.json checksum already matches")
+        return
+    if not old or f'"{old}"' not in text:
+        print("could not find existing workbench checksum in product.json")
+        return
+    product.write_text(text.replace(f'"{old}"', f'"{new}"', 1), encoding="utf-8")
+    print(f"updated {key} checksum")
+
+
 def main() -> int:
     path = workbench_path()
     if path is None:
@@ -76,6 +110,7 @@ def main() -> int:
         return 1
     text = path.read_text(encoding="utf-8")
     if already_patched(text):
+        update_product_checksum(path)
         print("open-folder menus already disabled")
         return 0
     if "when:!1}" in text and "id:mZ.ID" in text:
@@ -97,6 +132,7 @@ def main() -> int:
             print(" ", item)
         return 1
     path.write_text(updated, encoding="utf-8")
+    update_product_checksum(path)
     print(f"disabled Open Folder in {path}")
     return 0
 
