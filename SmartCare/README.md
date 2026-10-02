@@ -20,6 +20,7 @@ Optional packages and patterns for **Streamline SmartCare**. Not Streamline Help
 | [Consent_Wiring/](Consent_Wiring/) | Consent DocumentCode wiring (method) |
 | [Discovery_Readonly/](Discovery_Readonly/) | Read-only discovery habits + sample SELECTs |
 | [Change_Impact_Scan/](Change_Impact_Scan/) | Scan consumers before hide/relocate |
+| [Paper_Forms_Blank_Packet/](Paper_Forms_Blank_Packet/) | Blank print PDF from live FormItems metadata |
 
 ## Conventions
 

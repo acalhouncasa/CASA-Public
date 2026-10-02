@@ -174,3 +174,15 @@ Runtime `.vscode\` is gitignored. Do not commit `ide-data` or `.venv`.
 | Public path | What |
 |-------------|------|
 | `Local_AI/learn/patch_vscodium_menus.py` | After hiding Open Folder, write the raw-byte SHA-256 of `workbench.desktop.main.js` into `product.json`. A line-ending-normalized hash still made VSCodium say the install was corrupt. |
+
+---
+
+## 10/02/2026 — Blank paper from FormItems
+
+| Public path | What |
+|-------------|------|
+| `SmartCare/Paper_Forms_Blank_Packet/` | Portable process: live FormItems → blank print HTML/PDF |
+| `SmartCare/Paper_Forms_Blank_Packet/sql/` | Discovery SELECTs (DocumentCode tabs + FormItems dump) |
+| `SmartCare/Paper_Forms_Blank_Packet/starter/` | Env-based pyodbc builder (no agency hosts, DocumentCodes, or credential files) |
+
+Agency DocumentCode catalogs, logos with PHI, Core Assessment builders, and Rx screenshot packs stay private. Pattern only.
