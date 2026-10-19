@@ -16,6 +16,7 @@ Optional packages and patterns for **Streamline SmartCare**. Not Streamline Help
 | [Ad_Hoc_Reporting/](Ad_Hoc_Reporting/) | Custom SQL via Adhoc views + CatalogReports |
 | [CIWA_Live_Scoring/](CIWA_Live_Scoring/) | Portable CIWA-Ar live total pattern |
 | [Client_Tracking/](Client_Tracking/) | Flags + Tracking Protocols (method) |
+| [Client_Chart_Flags_Report/](Client_Chart_Flags_Report/) | Client chart flags report (SQL + RDL). Non-production only |
 | [DFA_Initialization/](DFA_Initialization/) | Initialization Editor (UI how-to) |
 | [Consent_Wiring/](Consent_Wiring/) | Consent DocumentCode wiring (method) |
 | [Discovery_Readonly/](Discovery_Readonly/) | Read-only discovery habits + sample SELECTs |

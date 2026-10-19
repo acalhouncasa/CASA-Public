@@ -186,3 +186,13 @@ Runtime `.vscode\` is gitignored. Do not commit `ide-data` or `.venv`.
 | `SmartCare/Paper_Forms_Blank_Packet/starter/` | Env-based pyodbc builder (no agency hosts, DocumentCodes, or credential files) |
 
 Agency DocumentCode catalogs, logos with PHI, Core Assessment builders, and Rx screenshot packs stay private. Pattern only.
+
+---
+
+## 10/19/2026 — Client chart flags report
+
+| Public path | What |
+|-------------|------|
+| `SmartCare/Client_Chart_Flags_Report/` | Portable SmartCare report: client chart flags, checkbox filters, RDL. Apply script refuses database names that contain Prod. |
+
+Site report folders, role grants, and connection strings stay private. Do not test in Prod.

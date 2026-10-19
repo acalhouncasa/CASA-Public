@@ -16,3 +16,5 @@ Streamline’s documented way to make a form due on a repeating interval is **Fl
 Site-specific form due catalogs, DocumentCode maps, and seed SQL for one agency’s programs. Rebuild those locally.
 
 Use vendor Help Center articles for UI field-by-field steps.
+
+A list of flags already on client charts is a separate package: [Client chart flags report](../Client_Chart_Flags_Report/README.md). Do not test that report in Prod.

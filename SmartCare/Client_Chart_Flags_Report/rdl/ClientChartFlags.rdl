@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="SmartCare">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString>Data Source=YOUR_NON_PRODUCTION_SQL_SERVER;Initial Catalog=YOUR_NON_PRODUCTION_DATABASE</ConnectString>
+        <Prompt>Non-production SmartCare credentials</Prompt>
+      </ConnectionProperties>
+      <rd:SecurityType>DataBase</rd:SecurityType>
+      <rd:DataSourceID>8f4c2a61-6b17-4d0e-9a33-71c5e0b84d22</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="Header">
+      <Query>
+        <DataSourceName>SmartCare</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@DateFrom">
+            <Value>=Parameters!DateFrom.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@DateTo">
+            <Value>=Parameters!DateTo.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ClientIdx">
+            <Value>=Parameters!ClientIdx.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@FlagStatus">
+            <Value>=Join(Parameters!FlagStatus.Value, ",")</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ChartStatus">
+            <Value>=Join(Parameters!ChartStatus.Value, ",")</Value>
+          </QueryParameter>
+          <QueryParameter Name="@FlagTypeId">
+            <Value>=Join(Parameters!FlagTypeId.Value, ",")</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ProgramId">
+            <Value>=Join(Parameters!ProgramId.Value, ",")</Value>
+          </QueryParameter>
+          <QueryParameter Name="@StaffId">
+            <Value>=Join(Parameters!StaffId.Value, ",")</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>ssp_SCClientChartFlagsHeader</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="RunDateText">
+          <DataField>RunDateText</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DateFromText">
+          <DataField>DateFromText</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DateToText">
+          <DataField>DateToText</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FlagCount">
+          <DataField>FlagCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ClientCount">
+          <DataField>ClientCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ActiveCount">
+          <DataField>ActiveCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="EndedCount">
+          <DataField>EndedCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FlagStatusLabel">
+          <DataField>FlagStatusLabel</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ChartStatusLabel">
+          <DataField>ChartStatusLabel</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FlagTypeLabel">
+          <DataField>FlagTypeLabel</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProgramLabel">
+          <DataField>ProgramLabel</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="StaffLabel">
+          <DataField>StaffLabel</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ClientLabel">
+          <DataField>ClientLabel</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="Detail">
+      <Query>
+        <DataSourceName>SmartCare</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@DateFrom">
+            <Value>=Parameters!DateFrom.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@DateTo">
+            <Value>=Parameters!DateTo.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ClientIdx">
+            <Value>=Parameters!ClientIdx.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@FlagStatus">
+            <Value>=Join(Parameters!FlagStatus.Value, ",")</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ChartStatus">
+            <Value>=Join(Parameters!ChartStatus.Value, ",")</Value>
+          </QueryParameter>
+          <QueryParameter Name="@FlagTypeId">
+            <Value>=Join(Parameters!FlagTypeId.Value, ",")</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ProgramId">
+            <Value>=Join(Parameters!ProgramId.Value, ",")</Value>
+          </QueryParameter>
+          <QueryParameter Name="@StaffId">
+            <Value>=Join(Parameters!StaffId.Value, ",")</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>ssp_SCClientChartFlagsDetail</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ObjectFlagId">
+          <DataField>ObjectFlagId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ClientId">
+          <DataField>ClientId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ClientName">
+          <DataField>ClientName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ChartStatus">
+          <DataField>ChartStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FlagType">
+          <DataField>FlagType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FlagStatus">
+          <DataField>FlagStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="StartDate">
+          <DataField>StartDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="StartDateText">
+          <DataField>StartDateText</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="EndDateText">
+          <DataField>EndDateText</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Programs">
+          <DataField>Programs</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PrimaryClinician">
+          <DataField>PrimaryClinician</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NoteText">
+          <DataField>NoteText</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SortRank">
+          <DataField>SortRank</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="FlagTypeList">
+      <Query>
+        <DataSourceName>SmartCare</DataSourceName>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>ssp_SCClientChartFlagsFlagTypes</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="FlagTypeId">
+          <DataField>FlagTypeId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FlagTypeName">
+          <DataField>FlagTypeName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ProgramList">
+      <Query>
+        <DataSourceName>SmartCare</DataSourceName>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>ssp_SCClientChartFlagsPrograms</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ProgramId">
+          <DataField>ProgramId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ProgramName">
+          <DataField>ProgramName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="StaffList">
+      <Query>
+        <DataSourceName>SmartCare</DataSourceName>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>ssp_SCClientChartFlagsStaff</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="StaffId">
+          <DataField>StaffId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="StaffName">
+          <DataField>StaffName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+        <Body>
+          <ReportItems>
+          <Tablix Name="tblHeader">
+            <TablixBody>
+              <TablixColumns><TablixColumn><Width>10.2in</Width></TablixColumn></TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>1.05in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Rectangle Name="rectCoverInner">
+                          <ReportItems>
+                            <Textbox Name="txtTitle">
+                              <Paragraphs><Paragraph><TextRuns><TextRun>
+                                <Value>Client Chart Flags</Value>
+                                <Style><FontFamily>Calibri</FontFamily><FontSize>16pt</FontSize><FontWeight>Bold</FontWeight><Color>#0A2540</Color></Style>
+                              </TextRun></TextRuns></Paragraph></Paragraphs>
+                              <Top>0in</Top><Left>0in</Left><Height>0.28in</Height><Width>10.2in</Width>
+                            </Textbox>
+                            <Textbox Name="txtMeta">
+                              <Paragraphs><Paragraph><TextRuns><TextRun>
+                                <Value>="From " &amp; Fields!DateFromText.Value &amp; " through " &amp; Fields!DateToText.Value &amp; "    Flag " &amp; Fields!FlagStatusLabel.Value &amp; "    Chart " &amp; Fields!ChartStatusLabel.Value &amp; "    Flag type " &amp; Fields!FlagTypeLabel.Value &amp; "    Program " &amp; Fields!ProgramLabel.Value &amp; "    Clinician " &amp; Fields!StaffLabel.Value &amp; "    Client " &amp; Fields!ClientLabel.Value &amp; "    Run " &amp; Fields!RunDateText.Value</Value>
+                                <Style><FontFamily>Calibri</FontFamily><FontSize>8pt</FontSize><Color>#0A2540</Color></Style>
+                              </TextRun></TextRuns></Paragraph></Paragraphs>
+                              <Top>0.30in</Top><Left>0in</Left><Height>0.22in</Height><Width>10.2in</Width>
+                            </Textbox>
+                            <Textbox Name="txtCounts">
+                              <Paragraphs><Paragraph><TextRuns><TextRun>
+                                <Value>="Flags " &amp; CStr(Fields!FlagCount.Value) &amp; "    Clients " &amp; CStr(Fields!ClientCount.Value) &amp; "    Active " &amp; CStr(Fields!ActiveCount.Value) &amp; "    Ended " &amp; CStr(Fields!EndedCount.Value)</Value>
+                                <Style><FontFamily>Calibri</FontFamily><FontSize>9pt</FontSize><FontWeight>Bold</FontWeight><Color>#0A2540</Color></Style>
+                              </TextRun></TextRuns></Paragraph></Paragraphs>
+                              <Top>0.52in</Top><Left>0in</Left><Height>0.22in</Height><Width>10.2in</Width>
+                            </Textbox>
+                            <Textbox Name="txtNote">
+                              <Paragraphs><Paragraph><TextRuns><TextRun>
+                                <Value>One row per client chart flag. A flag is included when its dates overlap the From and To dates. Active means the flag is still open on the To date. Programs are Requested or Enrolled enrollments. The Note column is the flag note on the chart.</Value>
+                                <Style><FontFamily>Calibri</FontFamily><FontSize>8pt</FontSize><Color>#1E5A8C</Color></Style>
+                              </TextRun></TextRuns></Paragraph></Paragraphs>
+                              <Top>0.76in</Top><Left>0in</Left><Height>0.24in</Height><Width>10.2in</Width>
+                            </Textbox>
+                          </ReportItems>
+                          <KeepTogether>true</KeepTogether>
+                        </Rectangle>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy><TablixMembers><TablixMember /></TablixMembers></TablixColumnHierarchy>
+            <TablixRowHierarchy><TablixMembers><TablixMember><Group Name="tblHeader_Details" /></TablixMember></TablixMembers></TablixRowHierarchy>
+            <DataSetName>Header</DataSetName>
+            <Top>0in</Top><Left>0in</Left><Height>1.05in</Height><Width>10.2in</Width>
+          </Tablix>
+          <Tablix Name="tblDetail">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn><Width>1.40in</Width></TablixColumn>
+                <TablixColumn><Width>0.58in</Width></TablixColumn>
+                <TablixColumn><Width>0.58in</Width></TablixColumn>
+                <TablixColumn><Width>1.35in</Width></TablixColumn>
+                <TablixColumn><Width>0.62in</Width></TablixColumn>
+                <TablixColumn><Width>0.68in</Width></TablixColumn>
+                <TablixColumn><Width>0.68in</Width></TablixColumn>
+                <TablixColumn><Width>1.55in</Width></TablixColumn>
+                <TablixColumn><Width>1.20in</Width></TablixColumn>
+                <TablixColumn><Width>1.56in</Width></TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.32in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h0">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>Client</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h1">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>Client ID</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h2">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>Chart</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h3">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>Flag Type</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h4">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>Flag</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h5">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>Start</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h6">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>End</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h7">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>Programs</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h8">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>Primary Clinician</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_h9">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>Note</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontWeight>Bold</FontWeight><Color>#FFFFFF</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#0A2540</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.28in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d0">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!ClientName.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d1">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!ClientId.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d2">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!ChartStatus.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d3">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!FlagType.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d4">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!FlagStatus.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d5">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!StartDateText.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d6">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!EndDateText.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d7">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!Programs.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d8">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!PrimaryClinician.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="tblDetail_d9">
+                          <CanGrow>true</CanGrow>
+                          <Paragraphs><Paragraph><TextRuns><TextRun>
+                            <Value>=Fields!NoteText.Value</Value>
+                            <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><Color>#0A2540</Color></Style>
+                          </TextRun></TextRuns></Paragraph></Paragraphs>
+                          <Style>
+                            <Border><Color>#B8BFC7</Color><Style>Solid</Style><Width>0.5pt</Width></Border>
+                            <BackgroundColor>#FFFFFF</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft><PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>1pt</PaddingTop><PaddingBottom>1pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy><TablixMembers><TablixMember /><TablixMember /><TablixMember /><TablixMember /><TablixMember /><TablixMember /><TablixMember /><TablixMember /><TablixMember /><TablixMember /></TablixMembers></TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember><KeepWithGroup>After</KeepWithGroup><RepeatOnNewPage>true</RepeatOnNewPage></TablixMember>
+                <TablixMember>
+                  <Group Name="tblDetail_Details" />
+                  <SortExpressions>
+                    <SortExpression><Value>=Fields!SortRank.Value</Value></SortExpression>
+                    <SortExpression><Value>=Fields!ClientName.Value</Value></SortExpression>
+                    <SortExpression><Value>=Fields!FlagType.Value</Value></SortExpression>
+                    <SortExpression><Value>=Fields!StartDate.Value</Value><Direction>Descending</Direction></SortExpression>
+                  </SortExpressions>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>Detail</DataSetName>
+            <Top>1.15in</Top>
+            <Left>0in</Left>
+            <Height>0.60in</Height>
+            <Width>10.2in</Width>
+          </Tablix>
+          </ReportItems>
+          <Height>2.4in</Height>
+          <Style />
+        </Body>
+      <Width>10.2in</Width>
+      <Page>
+        <PageHeader>
+          <Height>0.32in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems>
+            <Textbox Name="phLeft">
+              <Paragraphs><Paragraph><TextRuns><TextRun>
+                <Value>Client Chart Flags</Value>
+                <Style><FontFamily>Calibri</FontFamily><FontSize>8pt</FontSize><Color>#1E5A8C</Color></Style>
+              </TextRun></TextRuns></Paragraph></Paragraphs>
+              <Top>0.04in</Top><Left>0in</Left><Height>0.22in</Height><Width>7.2in</Width>
+            </Textbox>
+            <Textbox Name="phRight">
+              <Paragraphs><Paragraph><TextRuns><TextRun>
+                <Value>="Page " &amp; Globals!PageNumber.ToString() &amp; " of " &amp; Globals!TotalPages.ToString()</Value>
+                <Style><FontFamily>Calibri</FontFamily><FontSize>8pt</FontSize><Color>#6B7280</Color></Style>
+              </TextRun></TextRuns></Paragraph></Paragraphs>
+              <Top>0.04in</Top><Left>7.2in</Left><Height>0.22in</Height><Width>3.0in</Width>
+            </Textbox>
+          </ReportItems>
+        </PageHeader>
+        <PageFooter>
+          <Height>0.28in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems>
+            <Textbox Name="pfNote">
+              <Paragraphs><Paragraph><TextRuns><TextRun>
+                <Value>Confidential. One row per client chart flag. Programs are Requested or Enrolled enrollments.</Value>
+                <Style><FontFamily>Calibri</FontFamily><FontSize>7pt</FontSize><FontStyle>Italic</FontStyle><Color>#6B7280</Color></Style>
+              </TextRun></TextRuns></Paragraph></Paragraphs>
+              <Top>0.02in</Top><Left>0in</Left><Height>0.22in</Height><Width>10.2in</Width>
+            </Textbox>
+          </ReportItems>
+        </PageFooter>
+        <PageHeight>8.5in</PageHeight>
+        <PageWidth>11in</PageWidth>
+        <LeftMargin>0.4in</LeftMargin>
+        <RightMargin>0.4in</RightMargin>
+        <TopMargin>0.35in</TopMargin>
+        <BottomMargin>0.35in</BottomMargin>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="DateFrom">
+      <DataType>DateTime</DataType>
+      <DefaultValue><Values><Value>=DateAdd("d", -365, Today())</Value></Values></DefaultValue>
+      <Prompt>From date</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DateTo">
+      <DataType>DateTime</DataType>
+      <DefaultValue><Values><Value>=Today()</Value></Values></DefaultValue>
+      <Prompt>To date</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FlagStatus">
+      <DataType>String</DataType>
+      <DefaultValue><Values><Value>Active</Value></Values></DefaultValue>
+      <Prompt>Flag status</Prompt>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue><Value>Active</Value><Label>Active</Label></ParameterValue>
+          <ParameterValue><Value>Ended</Value><Label>Ended</Label></ParameterValue>
+          <ParameterValue><Value>All</Value><Label>All</Label></ParameterValue>
+        </ParameterValues>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="ChartStatus">
+      <DataType>String</DataType>
+      <DefaultValue><Values><Value>Active</Value></Values></DefaultValue>
+      <Prompt>Chart status</Prompt>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue><Value>Active</Value><Label>Active</Label></ParameterValue>
+          <ParameterValue><Value>Inactive</Value><Label>Inactive</Label></ParameterValue>
+          <ParameterValue><Value>All</Value><Label>All</Label></ParameterValue>
+        </ParameterValues>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="FlagTypeId">
+      <DataType>Integer</DataType>
+      <DefaultValue><Values><Value>-1</Value></Values></DefaultValue>
+      <Prompt>Flag type</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>FlagTypeList</DataSetName>
+          <ValueField>FlagTypeId</ValueField>
+          <LabelField>FlagTypeName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="ProgramId">
+      <DataType>Integer</DataType>
+      <DefaultValue><Values><Value>-1</Value></Values></DefaultValue>
+      <Prompt>Program</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ProgramList</DataSetName>
+          <ValueField>ProgramId</ValueField>
+          <LabelField>ProgramName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="StaffId">
+      <DataType>Integer</DataType>
+      <DefaultValue><Values><Value>-1</Value></Values></DefaultValue>
+      <Prompt>Primary clinician</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>StaffList</DataSetName>
+          <ValueField>StaffId</ValueField>
+          <LabelField>StaffName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="ClientIdx">
+      <DataType>Integer</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue><Values><Value>-1</Value></Values></DefaultValue>
+      <Prompt>Client ID (-1 = all)</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition><ColumnIndex>0</ColumnIndex><RowIndex>0</RowIndex><ParameterName>DateFrom</ParameterName></CellDefinition>
+        <CellDefinition><ColumnIndex>1</ColumnIndex><RowIndex>0</RowIndex><ParameterName>DateTo</ParameterName></CellDefinition>
+        <CellDefinition><ColumnIndex>2</ColumnIndex><RowIndex>0</RowIndex><ParameterName>FlagStatus</ParameterName></CellDefinition>
+        <CellDefinition><ColumnIndex>3</ColumnIndex><RowIndex>0</RowIndex><ParameterName>ChartStatus</ParameterName></CellDefinition>
+        <CellDefinition><ColumnIndex>0</ColumnIndex><RowIndex>1</RowIndex><ParameterName>FlagTypeId</ParameterName></CellDefinition>
+        <CellDefinition><ColumnIndex>1</ColumnIndex><RowIndex>1</RowIndex><ParameterName>ProgramId</ParameterName></CellDefinition>
+        <CellDefinition><ColumnIndex>2</ColumnIndex><RowIndex>1</RowIndex><ParameterName>StaffId</ParameterName></CellDefinition>
+        <CellDefinition><ColumnIndex>3</ColumnIndex><RowIndex>1</RowIndex><ParameterName>ClientIdx</ParameterName></CellDefinition>
+      </CellDefinitions>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>c3a91e74-5d28-4b6f-8e10-2f7a6c9d4b55</rd:ReportID>
+</Report>
