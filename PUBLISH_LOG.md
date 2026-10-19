@@ -193,6 +193,6 @@ Agency DocumentCode catalogs, logos with PHI, Core Assessment builders, and Rx s
 
 | Public path | What |
 |-------------|------|
-| `SmartCare/Client_Chart_Flags_Report/` | Portable SmartCare report: client chart flags, checkbox filters, RDL. Apply script refuses database names that contain Prod. |
+| `SmartCare/Client_Chart_Flags_Report/` | Portable SmartCare report: client chart flags, checkbox filters, RDL. No environment-name guard. |
 
-Site report folders, role grants, and connection strings stay private. Do not test in Prod.
+Site report folders, role grants, and connection strings stay private.

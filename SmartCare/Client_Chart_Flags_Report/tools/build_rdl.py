@@ -7,7 +7,7 @@ Last Modified: 2026-10-19
 
 Description:
     Write rdl/ClientChartFlags.rdl for any SmartCare site.
-    The connection string contains placeholders. Do not put a production server in it.
+    The connection string contains placeholders. Replace them with the SmartCare server and database.
 
 Usage:
     python tools/build_rdl.py
@@ -406,8 +406,8 @@ def build() -> str:
     <DataSource Name="SmartCare">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=YOUR_NON_PRODUCTION_SQL_SERVER;Initial Catalog=YOUR_NON_PRODUCTION_DATABASE</ConnectString>
-        <Prompt>Non-production SmartCare credentials</Prompt>
+        <ConnectString>Data Source=YOUR_SQL_SERVER;Initial Catalog=YOUR_DATABASE</ConnectString>
+        <Prompt>SmartCare credentials</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>8f4c2a61-6b17-4d0e-9a33-71c5e0b84d22</rd:DataSourceID>

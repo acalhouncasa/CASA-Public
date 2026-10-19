@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    Create the client chart flags procedures on a non-production SmartCare database.
+    Create the client chart flags procedures on a SmartCare database.
 
 .DESCRIPTION
-    Refuses database names that contain Prod or Production.
+    Runs the read-only check, then creates the procedures.
     Does not register My Reports and does not upload the RDL.
-    Do not test in Prod.
+    There is no environment-name check. Pass the database you want.
 
 .NOTES
     Author: Alan Calhoun, Senior Data Analyst, CASA-Trinity
@@ -14,7 +14,7 @@
     License: MIT
 
 .EXAMPLE
-    .\Apply_NonProd.ps1 -Server 'your-sql-host' -Database 'YourSmartCareTrain'
+    .\Apply.ps1 -Server 'your-sql-host' -Database 'YourSmartCareDatabase'
 #>
 [CmdletBinding()]
 param(
@@ -28,11 +28,6 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-if ($Database -match '(?i)prod') {
-    Write-Error "Stop. Do not test in Prod. Database '$Database' contains Prod. Pass a Train, QA, or Test database name."
-    exit 1
-}
-
 $sqlcmd = Get-Command sqlcmd -ErrorAction SilentlyContinue
 if (-not $sqlcmd) {
     $fallback = 'C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD.EXE'
@@ -40,7 +35,7 @@ if (-not $sqlcmd) {
         $sqlcmdPath = $fallback
     }
     else {
-        Write-Error 'sqlcmd was not found. Install SQL Server command-line tools, or run the sql files in SSMS on a non-production database.'
+        Write-Error 'sqlcmd was not found. Install SQL Server command-line tools, or run the sql files in SSMS.'
         exit 1
     }
 }
@@ -49,7 +44,6 @@ else {
 }
 
 $root = $PSScriptRoot
-
 $check = Join-Path $root 'sql\01_readonly_check.sql'
 $apply = Join-Path $root 'sql\02_create_procedures.sql'
 
@@ -69,8 +63,8 @@ function Invoke-ScSql {
     }
 }
 
-Write-Host "Non-production database: $Database on $Server"
+Write-Host "Database: $Database on $Server"
 Write-Host 'Running read-only check, then creating procedures.'
 Invoke-ScSql -File $check
 Invoke-ScSql -File $apply
-Write-Host 'Procedures created. Edit rdl/ClientChartFlags.rdl and upload it to the non-production report server only. Do not test in Prod.'
+Write-Host 'Procedures created. Edit rdl/ClientChartFlags.rdl, then upload it to the report server.'

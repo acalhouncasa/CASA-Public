@@ -6,12 +6,8 @@ Last Modified: 2026-10-19
 
 Purpose:
   Create a portable client chart flags report for Streamline SmartCare.
-  Select a non-production database in SSMS. There is no USE statement.
-
-  Do not test in Prod.
-  Each procedure stops when the database name contains Prod or Production.
-  If your production database uses a different name, do not run this file there.
-  Prefer Apply_NonProd.ps1. It refuses those database names before sqlcmd starts.
+  Select the SmartCare database in SSMS. There is no USE statement.
+  Apply.ps1 runs this file after the read-only check.
 
   Grain: one dbo.ObjectFlags row where TableNameOfObject = Clients.
   Date window is overlap. StartDate is blank or before the day after To.
@@ -69,9 +65,6 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    IF DB_NAME() LIKE N'%Prod%' OR DB_NAME() LIKE N'%Production%'
-        THROW 50001, N'Stop. Do not test in Prod.', 1;
-
     SELECT
         FlagTypeId = CAST(-1 AS int),
         FlagTypeName = CAST('All' AS varchar(200)),
@@ -96,9 +89,6 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    IF DB_NAME() LIKE N'%Prod%' OR DB_NAME() LIKE N'%Production%'
-        THROW 50001, N'Stop. Do not test in Prod.', 1;
-
     SELECT ProgramId = CAST(-1 AS int), ProgramName = CAST(N'All' AS varchar(200)), SortKey = 0
     UNION ALL
     SELECT
@@ -116,9 +106,6 @@ CREATE OR ALTER PROCEDURE dbo.ssp_SCClientChartFlagsStaff
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    IF DB_NAME() LIKE N'%Prod%' OR DB_NAME() LIKE N'%Production%'
-        THROW 50001, N'Stop. Do not test in Prod.', 1;
 
     SELECT StaffId = CAST(-1 AS int), StaffName = CAST(N'All' AS varchar(200)), SortKey = 0
     UNION ALL
@@ -145,9 +132,6 @@ CREATE OR ALTER PROCEDURE dbo.ssp_SCClientChartFlagsHeader
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    IF DB_NAME() LIKE N'%Prod%' OR DB_NAME() LIKE N'%Production%'
-        THROW 50001, N'Stop. Do not test in Prod.', 1;
 
     IF @DateFrom IS NULL
     BEGIN
@@ -331,9 +315,6 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    IF DB_NAME() LIKE N'%Prod%' OR DB_NAME() LIKE N'%Production%'
-        THROW 50001, N'Stop. Do not test in Prod.', 1;
-
     IF @DateFrom IS NULL
     BEGIN
         SELECT
@@ -503,9 +484,6 @@ BEGIN
     ORDER BY f.ClientName, f.FlagType, f.StartDate DESC, f.ObjectFlagId;
 END;
 GO
-
-IF DB_NAME() LIKE N'%Prod%' OR DB_NAME() LIKE N'%Production%'
-    THROW 50001, N'Stop. Do not test in Prod.', 1;
 
 GRANT SELECT ON dbo.ssf_SCReportIdList TO public;
 GRANT SELECT ON dbo.ssf_SCReportTextList TO public;

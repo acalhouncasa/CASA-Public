@@ -5,8 +5,8 @@
     <DataSource Name="SmartCare">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=YOUR_NON_PRODUCTION_SQL_SERVER;Initial Catalog=YOUR_NON_PRODUCTION_DATABASE</ConnectString>
-        <Prompt>Non-production SmartCare credentials</Prompt>
+        <ConnectString>Data Source=YOUR_SQL_SERVER;Initial Catalog=YOUR_DATABASE</ConnectString>
+        <Prompt>SmartCare credentials</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>8f4c2a61-6b17-4d0e-9a33-71c5e0b84d22</rd:DataSourceID>

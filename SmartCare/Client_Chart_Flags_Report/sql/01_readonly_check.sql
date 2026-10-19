@@ -6,23 +6,16 @@ Last Modified: 2026-10-19
 
 Purpose:
   Read-only check before creating the client chart flags report.
-  Select a non-production SmartCare database in SSMS. There is no USE statement.
-
-  Do not test in Prod.
-  This file stops when the database name contains Prod or Production.
-  If your production database uses a different name, do not run this file there.
+  Select the SmartCare database in SSMS. There is no USE statement.
 
 License: MIT
 */
 
 SET NOCOUNT ON;
 
-IF DB_NAME() LIKE N'%Prod%' OR DB_NAME() LIKE N'%Production%'
-    THROW 50001, N'Stop. Do not test in Prod. Connect SSMS to a non-production SmartCare database (Train, QA, or Test).', 1;
-
 SELECT
     DatabaseName = DB_NAME(),
-    NextStep = N'Confirm this is not Production. Then run 02_create_procedures.sql on this same database.',
+    NextStep = N'Run 02_create_procedures.sql on this same database.',
     ClientFlagRows = (
         SELECT COUNT(*)
         FROM dbo.ObjectFlags AS ofl

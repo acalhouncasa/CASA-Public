@@ -5,30 +5,22 @@ Created: 2026-10-19
 Last Modified: 2026-10-19
 
 Purpose:
-  Optional. Register the report in SmartCare My Reports on a non-production database.
-  Upload the RDL to the non-production report server first.
+  Optional. Register the report in SmartCare My Reports.
+  Upload the RDL first.
   Edit @ReportServerPath below so it matches that upload path.
-  Do not point the path at a production report folder.
 
-  Do not test in Prod.
   AssociatedWith stays NULL so this is a My Reports item, not a chart-level report.
-  This file does not grant role permissions. Do that in Role Definition on the same non-production database.
+  This file does not grant role permissions. Do that in Role Definition on the same database.
 
 License: MIT
 */
 
 SET NOCOUNT ON;
 
-IF DB_NAME() LIKE N'%Prod%' OR DB_NAME() LIKE N'%Production%'
-    THROW 50001, N'Stop. Do not test in Prod. Connect SSMS to a non-production SmartCare database.', 1;
-
-DECLARE @ReportServerPath varchar(500) = N'/ReplaceWithYourNonProdReportFolder/Client Chart Flags';
+DECLARE @ReportServerPath varchar(500) = N'/ReplaceWithYourReportFolder/Client Chart Flags';
 
 IF @ReportServerPath LIKE N'%ReplaceWith%'
-    THROW 50002, N'Edit @ReportServerPath to your non-production report server path before you run this file.', 1;
-
-IF @ReportServerPath LIKE N'%Prod%' OR @ReportServerPath LIKE N'%Production%'
-    THROW 50003, N'Stop. @ReportServerPath looks like a production folder. Use the non-production report folder.', 1;
+    THROW 50002, N'Edit @ReportServerPath to the report server path before you run this file.', 1;
 
 DECLARE @ReportServerId int;
 SELECT TOP (1)

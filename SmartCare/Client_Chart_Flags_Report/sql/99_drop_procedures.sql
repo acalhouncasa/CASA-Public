@@ -8,15 +8,10 @@ Purpose:
   Drop only the objects this package creates.
   Does not delete dbo.Reports rows. Remove a My Reports entry in the application if you added one.
 
-  Do not test in Prod.
-
 License: MIT
 */
 
 SET NOCOUNT ON;
-
-IF DB_NAME() LIKE N'%Prod%' OR DB_NAME() LIKE N'%Production%'
-    THROW 50001, N'Stop. Do not test in Prod. Connect SSMS to a non-production SmartCare database.', 1;
 
 DROP PROCEDURE IF EXISTS dbo.ssp_SCClientChartFlagsDetail;
 DROP PROCEDURE IF EXISTS dbo.ssp_SCClientChartFlagsHeader;
