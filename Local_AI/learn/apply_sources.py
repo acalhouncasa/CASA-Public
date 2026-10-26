@@ -1,4 +1,4 @@
-"""Build Talon workspace + SQLTools connections from ide-data/sources.json."""
+"""Build Orion workspace + SQLTools connections from ide-data/sources.json."""
 
 from __future__ import annotations
 
@@ -103,8 +103,8 @@ def strip_utf8_bom(path: Path) -> None:
 
 def strip_guard_bom(kit: Path) -> None:
     for loc in (
-        kit / "extensions" / "talon.talon-guard-1.3.0" / "package.json",
-        kit / "ide-extensions" / "talon.talon-guard-1.3.0" / "package.json",
+        kit / "extensions" / "orion.orion-guard-1.3.0" / "package.json",
+        kit / "ide-extensions" / "orion.orion-guard-1.3.0" / "package.json",
     ):
         strip_utf8_bom(loc)
 
@@ -112,7 +112,7 @@ def strip_guard_bom(kit: Path) -> None:
 def register_guard_extension(kit: Path) -> None:
     strip_guard_bom(kit)
     ext_dir = kit / "ide-extensions"
-    rel = "talon.talon-guard-1.3.0"
+    rel = "orion.orion-guard-1.3.0"
     loc = ext_dir / rel
     if not (loc / "package.json").is_file():
         return
@@ -120,7 +120,7 @@ def register_guard_extension(kit: Path) -> None:
     entries = load_json(index, [])
     if not isinstance(entries, list):
         entries = []
-    want = "talon.talon-guard"
+    want = "orion.orion-guard"
     entries = [
         item
         for item in entries
@@ -152,7 +152,7 @@ def register_guard_extension(kit: Path) -> None:
 def write_getting_started_editor(ide: Path, kit: Path) -> None:
     """Clear restored file tabs. Guard shows Getting started as a webview.
     Do not open getting-started.html as a text file — that shows source and
-    expands the Talon tree to the file.
+    expands the Orion tree to the file.
     """
     del kit
     state = {
@@ -198,7 +198,7 @@ def write_getting_started_editor(ide: Path, kit: Path) -> None:
 
 
 def collapse_kit_in_explorer(ide: Path, kit: Path, extra_folders: list[Path]) -> None:
-    """Persist Explorer so the Talon root is collapsed before the window opens."""
+    """Persist Explorer so the Orion root is collapsed before the window opens."""
     expanded = []
     for folder in extra_folders:
         try:
@@ -306,7 +306,7 @@ def sqltools_entry(db: dict) -> dict | None:
             "database": database,
             "connectionTimeout": 15,
             "mssqlOptions": {
-                "appName": "Talon",
+                "appName": "Orion",
                 "encrypt": True,
                 "trustServerCertificate": True,
             },
@@ -315,7 +315,7 @@ def sqltools_entry(db: dict) -> dict | None:
             entry["connectionMethod"] = "Connection String"
             entry["connectString"] = (
                 f"Server={server};Database={database};Trusted_Connection=True;"
-                "TrustServerCertificate=True;Application Name=Talon;"
+                "TrustServerCertificate=True;Application Name=Orion;"
             )
         else:
             entry["username"] = str(db.get("username") or "")
@@ -374,7 +374,7 @@ def main() -> int:
         sources_path.write_text(json.dumps(sources, indent=2), encoding="utf-8")
 
     folders = []
-    folders.append({"name": "Talon", "path": str(kit).replace("\\", "/")})
+    folders.append({"name": "Orion", "path": str(kit).replace("\\", "/")})
     seen = {str(kit).lower()}
     for item in sources.get("folders") or []:
         if not isinstance(item, dict):
@@ -391,7 +391,7 @@ def main() -> int:
     extra_count = max(0, len(folders) - 1)
     extra = "kit only" if extra_count == 0 else f"{extra_count} folder" + ("" if extra_count == 1 else "s")
     ollama = "Ollama up" if ollama_up() else "Ollama down"
-    title = f"Talon — local — {extra} — {ollama} — ${{rootName}}${{separator}}${{activeEditorShort}}"
+    title = f"Orion — local — {extra} — {ollama} — ${{rootName}}${{separator}}${{activeEditorShort}}"
     pin = python_pin_settings(kit)
     workspace_settings = {
         "window.title": title,
@@ -407,7 +407,7 @@ def main() -> int:
         "folders": folders,
         "settings": workspace_settings,
     }
-    ws_path = ide / "Talon.code-workspace"
+    ws_path = ide / "Orion.code-workspace"
     ws_path.write_text(json.dumps(workspace, indent=2), encoding="utf-8")
     folder_paths = [Path(item["path"]) for item in folders]
     trust_folders(ide, folder_paths)
@@ -426,9 +426,9 @@ def main() -> int:
     def subst(value):
         if isinstance(value, str):
             return (
-                value.replace("__LOCALCODER_PYTHON__", str(venv))
-                .replace("__LOCALCODER_VENV__", str(kit))
-                .replace("__LOCALCODER_SQLITE__", str(sqlite))
+                value.replace("__ORION_PYTHON__", str(venv))
+                .replace("__ORION_VENV__", str(kit))
+                .replace("__ORION_SQLITE__", str(sqlite))
             )
         if isinstance(value, dict):
             return {key: subst(item) for key, item in value.items()}

@@ -5,7 +5,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
-foreach ($name in @("Local Coder", "Talon")) {
+foreach ($name in @("Local Coder", "Orion")) {
     $programs = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\$name"
     if (Test-Path $programs) {
         Remove-Item $programs -Recurse -Force
@@ -13,7 +13,7 @@ foreach ($name in @("Local Coder", "Talon")) {
     }
 }
 
-$kitDefault = Join-Path $env:LOCALAPPDATA "Programs\LocalCoder"
+$kitDefault = Join-Path $env:LOCALAPPDATA "Programs\Orion"
 if ((Test-Path $kitDefault) -and ($Root -eq $kitDefault)) {
     Write-Host "This copy lives in $kitDefault. After uninstall, delete that folder in Explorer."
 }
@@ -26,4 +26,4 @@ if ($RemoveDeps) {
     Write-Host "Left VSCodium and Ollama installed. Pass -RemoveDeps to uninstall those too."
 }
 
-Write-Host "Firewall: Get-NetFirewallRule | Where-Object DisplayName -like 'LocalCoder *' | Remove-NetFirewallRule"
+Write-Host "Firewall: Get-NetFirewallRule | Where-Object DisplayName -like 'Orion *' | Remove-NetFirewallRule"

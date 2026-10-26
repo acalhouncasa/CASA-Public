@@ -8,8 +8,8 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Version = (Get-Content (Join-Path $Root "VERSION") -Raw).Trim()
 $Dist = Join-Path $Root "dist"
-$Stage = Join-Path $Dist "LocalCoder-$Version"
-$Zip = Join-Path $Dist "LocalCoder-$Version.zip"
+$Stage = Join-Path $Dist "Orion-$Version"
+$Zip = Join-Path $Dist "Orion-$Version.zip"
 
 if (Test-Path $Stage) { Remove-Item $Stage -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $Stage | Out-Null
@@ -32,29 +32,29 @@ $copyFiles = @(
     "INSTALL.md",
     "IT.md",
     "WELCOME.md",
-    "Connect-Talon.ps1",
+    "Connect-Orion.ps1",
     "setup.ps1",
     "run.ps1",
     "seed_cline.py",
     "setup-datasci.ps1",
     "doctor.ps1",
-    "Update-LocalCoder.ps1",
+    "Update-Orion.ps1",
     ".clinerules",
     "ruff.toml",
     "harden-firewall.ps1",
-    "Sign-LocalCoder.ps1",
+    "Sign-Orion.ps1",
     "Install.cmd",
     "Check.cmd",
-    "Launch-LocalCoder.vbs",
-    "Start Local Coder.cmd",
-    "Start Talon.cmd",
-    "Open-Talon.cmd",
+    "Launch-Orion.vbs",
+    "Start Orion.cmd",
+    "Start Orion.cmd",
+    "Open-Orion.cmd",
     "Install-Guard.cmd",
     "Connect.cmd",
     "Backup.cmd",
-    "Backup-TalonMemory.ps1",
+    "Backup-OrionMemory.ps1",
     "Install-Shortcuts.ps1",
-    "Uninstall-LocalCoder.ps1"
+    "Uninstall-Orion.ps1"
 )
 foreach ($name in $copyFiles) {
     Copy-Item (Join-Path $Root $name) (Join-Path $Stage $name) -Force
@@ -98,7 +98,7 @@ if (Test-Path (Join-Path $Root "memory\README.txt")) {
     New-Item -ItemType Directory -Force -Path (Join-Path $Stage "memory") | Out-Null
     Copy-Item (Join-Path $Root "memory\README.txt") (Join-Path $Stage "memory\README.txt") -Force
 }
-Copy-Item (Join-Path $Root "pack\LocalCoder.iss") (Join-Path $Stage "LocalCoder.iss") -ErrorAction SilentlyContinue
+Copy-Item (Join-Path $Root "pack\Orion.iss") (Join-Path $Stage "Orion.iss") -ErrorAction SilentlyContinue
 Copy-Item (Join-Path $Root "Pack-ShareKit.ps1") (Join-Path $Stage "Pack-ShareKit.ps1") -Force
 
 if ($DownloadPayload) {
@@ -123,7 +123,7 @@ Compress-Archive -Path $Stage -DestinationPath $Zip -CompressionLevel Optimal
 
 $zipHash = (Get-FileHash $Zip -Algorithm SHA256).Hash.ToLower()
 @(
-    "LocalCoder $Version share kit",
+    "Orion $Version share kit",
     "zip  $zipHash  $(Split-Path $Zip -Leaf)",
     "Verify: Get-FileHash .\$((Split-Path $Zip -Leaf)) -Algorithm SHA256",
     "Then: Unblock-File .\$((Split-Path $Zip -Leaf))  (only if the hash matches)",
@@ -140,7 +140,7 @@ if ($BuildInno) {
     if (-not $iscc) {
         Write-Warning "ISCC.exe not found. Zip kit is the supported share format. Unsigned EXE would also trigger SmartScreen until you Authenticode-sign it."
     } else {
-        $iss = Join-Path $Root "pack\LocalCoder.iss"
+        $iss = Join-Path $Root "pack\Orion.iss"
         & $iscc $iss
     }
 }

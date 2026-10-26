@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Find Python 3, or install it with winget, for the Talon kit.
+    Find Python 3, or install it with winget, for the Orion kit.
 
 .DESCRIPTION
     Shared by setup.ps1 and setup-datasci.ps1. Looks on PATH, then in the
@@ -11,11 +11,11 @@
     Author:      Alan Calhoun, Senior Data Analyst, CASA-Trinity
     Created:     2026-09-21
     Last Modified: 2026-09-21
-    AI Assistant: Talon
+    AI Assistant: Orion
     License:     UNLICENSED
 #>
 
-function Refresh-TalonPath {
+function Refresh-OrionPath {
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" +
         [System.Environment]::GetEnvironmentVariable("Path", "User")
     $apps = Join-Path $env:LOCALAPPDATA "Microsoft\WindowsApps"
@@ -24,7 +24,7 @@ function Refresh-TalonPath {
     }
 }
 
-function Get-TalonPythonCandidates {
+function Get-OrionPythonCandidates {
     $hits = New-Object System.Collections.Generic.List[string]
     foreach ($name in @("py", "python")) {
         $cmd = Get-Command $name -ErrorAction SilentlyContinue
@@ -44,7 +44,7 @@ function Get-TalonPythonCandidates {
     return @($hits | Select-Object -Unique)
 }
 
-function Test-TalonPython3([string]$Exe) {
+function Test-OrionPython3([string]$Exe) {
     if (-not $Exe -or -not (Test-Path $Exe)) { return $false }
     try {
         if ($Exe -like "*\py.exe") {
@@ -58,16 +58,16 @@ function Test-TalonPython3([string]$Exe) {
     }
 }
 
-function Find-TalonPython {
-    Refresh-TalonPath
-    foreach ($exe in Get-TalonPythonCandidates) {
-        if (Test-TalonPython3 $exe) { return $exe }
+function Find-OrionPython {
+    Refresh-OrionPath
+    foreach ($exe in Get-OrionPythonCandidates) {
+        if (Test-OrionPython3 $exe) { return $exe }
     }
     return $null
 }
 
-function Get-TalonPythonLauncher {
-    $exe = Find-TalonPython
+function Get-OrionPythonLauncher {
+    $exe = Find-OrionPython
     if (-not $exe) { return $null }
     if ($exe -like "*\py.exe") {
         return @{ Exe = $exe; Prefix = @("-3") }
@@ -75,8 +75,8 @@ function Get-TalonPythonLauncher {
     return @{ Exe = $exe; Prefix = @() }
 }
 
-function Install-TalonPythonIfMissing {
-    $existing = Find-TalonPython
+function Install-OrionPythonIfMissing {
+    $existing = Find-OrionPython
     if ($existing) {
         Write-Host "Python already present: $existing"
         return $existing
@@ -96,9 +96,9 @@ Or see INSTALL.md section 8.
 "@
     }
     & $winget install -e --id Python.Python.3.12 --scope user --accept-package-agreements --accept-source-agreements
-    Refresh-TalonPath
+    Refresh-OrionPath
     Start-Sleep -Seconds 2
-    $again = Find-TalonPython
+    $again = Find-OrionPython
     if ($again) {
         Write-Host "Python installed: $again"
         return $again

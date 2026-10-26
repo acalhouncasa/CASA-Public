@@ -12,7 +12,7 @@
   "files.exclude": {
     "**/ide-data": true,
     "**/ide-extensions": true,
-    "**/extensions/talon.talon-guard-*": true,
+    "**/extensions/orion.orion-guard-*": true,
     "**/__pycache__": true
   },
   "window.openFoldersInNewWindow": "off",
@@ -22,7 +22,7 @@
   "workbench.tips.enabled": false,
   "workbench.cloudChanges.autoResume": "off",
   "workbench.cloudChanges.continueOn": "off",
-  "window.title": "Talon — local — kit only — Ollama down — ${rootName}${separator}${activeEditorShort}",
+  "window.title": "Orion — local — kit only — Ollama down — ${rootName}${separator}${activeEditorShort}",
   "window.titleBarStyle": "custom",
   "window.menuStyle": "custom",
   "window.commandCenter": false,
@@ -66,8 +66,8 @@
   "terminal.integrated.environmentChangesIndicator": "off",
   "security.workspace.trust.enabled": true,
   "security.workspace.trust.startupPrompt": "always",
-  "python.defaultInterpreterPath": "__LOCALCODER_PYTHON__",
-  "python.venvPath": "__LOCALCODER_VENV__",
+  "python.defaultInterpreterPath": "__ORION_PYTHON__",
+  "python.venvPath": "__ORION_VENV__",
   "python.venvFolders": [".venv"],
   "python.terminal.activateEnvironment": true,
   "python.languageServer": "Jedi",
@@ -93,7 +93,7 @@
       "name": "Local SQLite",
       "driver": "SQLite",
       "previewLimit": 100,
-      "database": "__LOCALCODER_SQLITE__"
+      "database": "__ORION_SQLITE__"
     }
   ],
   "[python]": {

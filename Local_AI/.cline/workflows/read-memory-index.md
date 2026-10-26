@@ -1,5 +1,5 @@
 ---
-description: Read Talon memory first
+description: Read Orion memory first
 ---
 Read `memory/INDEX.md`, then `memory/WHAT_WORKED.md`, `memory/FAILED.md`, and every file under `memory/data-maps/`.
 

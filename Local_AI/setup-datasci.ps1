@@ -12,8 +12,8 @@ $Req = Join-Path $Root "templates\requirements-datasci.txt"
 $DataDir = Join-Path $Root "data"
 
 . (Join-Path $Root "tools\EnsurePython.ps1")
-Install-TalonPythonIfMissing | Out-Null
-$launch = Get-TalonPythonLauncher
+Install-OrionPythonIfMissing | Out-Null
+$launch = Get-OrionPythonLauncher
 if (-not $launch) {
     throw "Python 3 is missing. See INSTALL.md section 8."
 }
@@ -48,7 +48,7 @@ if (Test-Path $demo) {
 Write-Host "Data science venv ready: $venvPy"
 $apply = Join-Path $Root "learn\apply_sources.py"
 if (Test-Path $apply) {
-    Write-Host "Binding Talon to $venvPy"
+    Write-Host "Binding Orion to $venvPy"
     & $venvPy $apply $Root
 }
-Write-Host "Use that interpreter in Talon. Do not pip-install cloud SDKs into it."
+Write-Host "Use that interpreter in Orion. Do not pip-install cloud SDKs into it."

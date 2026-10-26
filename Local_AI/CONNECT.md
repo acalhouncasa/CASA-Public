@@ -1,6 +1,6 @@
 # Connect
 
-Attach a local project folder, PHI folder, or database. The Talon kit remains the first Explorer root.
+Attach a local project folder, PHI folder, or database. The Orion kit remains the first Explorer root.
 
 UI reference: [Getting started](USAGE.md).
 
@@ -12,10 +12,10 @@ Explorer and Cline only list folders in the current workspace. Connect adds fold
 
 After Connect, Explorer shows:
 
-1. **Talon** — this kit (Python environment, memory, scripts), collapsed on launch
+1. **Orion** — this kit (Python environment, memory, scripts), collapsed on launch
 2. **Each connected folder** — project scripts and/or PHI extracts
 
-The background learner watches every connected folder. If you add a folder while Talon is already open, the watcher re-reads `sources.json` on the next cycle. Cline ingest maps immediately without waiting.
+The background learner watches every connected folder. If you add a folder while Orion is already open, the watcher re-reads `sources.json` on the next cycle. Cline ingest maps immediately without waiting.
 
 Cline can read a file outside the workspace if you give it a full local path. **Prefer that path in chat.** Cline should run `learn\ingest_path.py` immediately: connect the folder, map CSV/Excel/SQLite/SQL/JSON/Parquet into `memory\data-maps\`, and keep watching it. Do not treat a pasted path as a one-off.
 
@@ -23,7 +23,7 @@ Connect and **File → Add Folder to Workspace** do the same mapping in the back
 
 Do not connect a consumer OneDrive, Desktop, or Downloads path if it will hold PHI.
 
-**File → Open Folder** is not on the File menu. **Open File** stays. Use **File → Add Folder to Workspace** or **Talon Connect**.
+**File → Open Folder** is not on the File menu. **Open File** stays. Use **File → Add Folder to Workspace** or **Orion Connect**.
 
 ---
 
@@ -44,10 +44,10 @@ Connect refuses duplicate paths, warns on OneDrive / Desktop / Downloads, and ca
 ## Commands
 
 ```powershell
-.\Connect-Talon.ps1
-.\Connect-Talon.ps1 -Folder "D:\PHI"
-.\Connect-Talon.ps1 -Sqlite "D:\PHI\extract.sqlite"
-.\Connect-Talon.ps1 -SqlServer "127.0.0.1" -SqlDatabase "ScratchReporting"
+.\Connect-Orion.ps1
+.\Connect-Orion.ps1 -Folder "D:\PHI"
+.\Connect-Orion.ps1 -Sqlite "D:\PHI\extract.sqlite"
+.\Connect-Orion.ps1 -SqlServer "127.0.0.1" -SqlDatabase "ScratchReporting"
 .\run.ps1
 .\.venv\Scripts\python.exe .\learn\ingest_path.py --path "D:\PHI"
 ```

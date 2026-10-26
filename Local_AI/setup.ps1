@@ -1,7 +1,7 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Install Talon - Local AI (VSCodium + Cline + local Ollama).
+  Install Orion - Local AI (VSCodium + Cline + local Ollama).
 .DESCRIPTION
   Pulls publisher-signed apps from winget or from payload\. Does not pack
   other installers into a self-extracting EXE.
@@ -76,7 +76,7 @@ function Apply-Letterpress {
             if (Test-Path $dest) { Copy-Item $codeIcon $dest -Force }
         }
     }
-    Write-Host "VSCodium marks set to Talon."
+    Write-Host "VSCodium marks set to Orion."
 }
 
 function Find-Ollama {
@@ -95,7 +95,7 @@ function Find-Ollama {
 . (Join-Path $Root "tools\EnsurePython.ps1")
 
 function Refresh-Path {
-    Refresh-TalonPath
+    Refresh-OrionPath
 }
 
 function Install-WingetPackage([string]$Id) {
@@ -124,7 +124,7 @@ function Install-SilentPayload([string]$Pattern, [string]$WingetId) {
     Install-WingetPackage $WingetId
 }
 
-Write-Step "Talon - Local AI setup"
+Write-Step "Orion - Local AI setup"
 Write-Host "Kit:    $Root"
 Write-Host "Log:    $Transcript"
 Write-Host "This installer uses official VSCodium, Ollama, and Cline packages."
@@ -148,7 +148,7 @@ if (-not $SkipDeps) {
 }
 
 Write-Step "Python 3 (needed for the kit venv)"
-Install-TalonPythonIfMissing | Out-Null
+Install-OrionPythonIfMissing | Out-Null
 
 [System.Environment]::SetEnvironmentVariable("OLLAMA_HOST", "127.0.0.1:11434", "User")
 $env:OLLAMA_HOST = "127.0.0.1:11434"
@@ -194,7 +194,7 @@ if ($clineAlready) {
     }
 }
 
-$py = Find-TalonPython
+$py = Find-OrionPython
 if ($py) {
     Write-Step "Seed Cline for local Ollama"
     if ($py -like "*\py.exe") {
@@ -237,7 +237,7 @@ $venvPy = Join-Path $Root ".venv\Scripts\python.exe"
 if (-not (Test-Path $venvPy)) {
     throw "Kit venv was not created. See INSTALL.md section 8, then run .\setup-datasci.ps1"
 }
-Write-Step "Bind Talon to $venvPy"
+Write-Step "Bind Orion to $venvPy"
 & $venvPy (Join-Path $Root "learn\apply_sources.py") $Root
 
 if ($PullModel) {
@@ -256,7 +256,7 @@ if ($Strict) {
     Write-Step "Strict team mode (commands not auto-approved)"
     $override = Join-Path $IdeData "team-overrides.json"
     '{"autoApproveCommands": false}' | Set-Content -Path $override -Encoding utf8
-    $pyStrict = Find-TalonPython
+    $pyStrict = Find-OrionPython
     if ($pyStrict) {
         if ($pyStrict -like "*\py.exe") {
             & $pyStrict -3 (Join-Path $Root "seed_cline.py") $IdeData
@@ -268,7 +268,7 @@ if ($Strict) {
 
 Write-Host ""
 Write-Host "Setup finished." -ForegroundColor Green
-Write-Host "  Start Menu: Talon"
+Write-Host "  Start Menu: Orion"
 Write-Host "  Or: .\run.ps1"
 Write-Host "  Verify: .\doctor.ps1"
 Write-Host "  Optional admin lock: .\harden-firewall.ps1"

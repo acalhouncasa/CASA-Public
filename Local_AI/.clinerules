@@ -1,4 +1,4 @@
-Talon — Local AI. Inference is Ollama on 127.0.0.1 only. Never use cloud LLM APIs, ClinePass, OpenRouter, or web fetch.
+Orion — Local AI. Inference is Ollama on 127.0.0.1 only. Never use cloud LLM APIs, ClinePass, OpenRouter, or web fetch.
 
 CRITICAL — local path given (do this first, every time)
 - If the user message contains a local path (`C:\...`, `D:\...`, UNC `\\server\share`, or `file://`), that IS the task.
@@ -36,7 +36,7 @@ Memory (do this without asking)
 - A background process also writes these files. Merge if a file already exists.
 
 Folders
-- The first Explorer root is the Talon kit. Project and PHI folders are extra roots from Connect.
+- The first Explorer root is the Orion kit. Project and PHI folders are extra roots from Connect.
 - File → Open Folder is not on the File menu. Prefer Connect or File → Add Folder to Workspace.
 - Command Palette starters: ingest this path, map this folder, list SQL tables, read memory index.
 

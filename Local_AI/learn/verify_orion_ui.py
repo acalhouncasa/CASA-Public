@@ -1,4 +1,4 @@
-"""Read Talon profile state after launch. Used for Check 1 / Check 2."""
+"""Read Orion profile state after launch. Used for Check 1 / Check 2."""
 
 from __future__ import annotations
 
@@ -45,14 +45,14 @@ def main() -> int:
     try:
         entries = json.loads(ext_index.read_text(encoding="utf-8"))
         report["guard_registered"] = any(
-            str((item.get("identifier") or {}).get("id", "")).lower() == "talon.talon-guard"
+            str((item.get("identifier") or {}).get("id", "")).lower() == "orion.orion-guard"
             for item in entries
             if isinstance(item, dict)
         )
     except (OSError, json.JSONDecodeError):
         report["fail"].append("extensions.json missing or invalid")
     if not report["guard_registered"]:
-        report["fail"].append("talon.talon-guard is not registered")
+        report["fail"].append("orion.orion-guard is not registered")
 
     ws_json = None
     for folder in (ide / "User" / "workspaceStorage").glob("*/workspace.json"):
@@ -60,7 +60,7 @@ def main() -> int:
             data = json.loads(folder.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
-        if "workspace" in data and "Talon.code-workspace" in str(data.get("workspace")):
+        if "workspace" in data and "Orion.code-workspace" in str(data.get("workspace")):
             ws_json = folder
             report["workspace_is_code_workspace"] = True
             db = folder.parent / "state.vscdb"
@@ -68,12 +68,12 @@ def main() -> int:
             report["editor_memento"] = read_key(db, "memento/workbench.parts.editor")
             break
     if not report["workspace_is_code_workspace"]:
-        report["fail"].append("active storage is not Talon.code-workspace")
+        report["fail"].append("active storage is not Orion.code-workspace")
 
     expanded = report["explorer_expanded"] or ""
     kit_uri = kit.resolve().as_uri()
     if f"{kit_uri}::{kit_uri}" in expanded:
-        report["fail"].append("Talon root is still in explorer expanded list")
+        report["fail"].append("Orion root is still in explorer expanded list")
 
     mem = report["editor_memento"] or ""
     if "USAGE.md" in mem:

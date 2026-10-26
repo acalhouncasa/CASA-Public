@@ -1,7 +1,7 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-echo Talon — Local AI installer
+echo Orion — Local AI installer
 echo This runs setup.ps1. It installs VSCodium and Ollama from official sources.
 echo It does not turn off Windows Defender or SmartScreen.
 echo.

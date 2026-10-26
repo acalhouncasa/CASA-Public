@@ -27,6 +27,6 @@
   },
   {
     "key": "ctrl+alt+t",
-    "command": "talon.reopenWorkspace"
+    "command": "orion.reopenWorkspace"
   }
 ]

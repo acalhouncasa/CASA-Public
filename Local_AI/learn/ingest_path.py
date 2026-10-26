@@ -4,7 +4,7 @@ Module: ingest_path.py
 Author: Alan Calhoun, Senior Data Analyst, CASA-Trinity
 Created: 2026-09-21
 Last Modified: 2026-09-21
-AI Assistant: Talon
+AI Assistant: Orion
 
 Description:
   Connect a local folder or file the user named, map CSV/Excel/SQLite/SQL/JSON
@@ -12,7 +12,7 @@ Description:
 
 Usage:
   .venv\\Scripts\\python.exe learn\\ingest_path.py --path "D:\\Extracts"
-  .venv\\Scripts\\python.exe learn\\ingest_path.py --kit C:\\Talon --path "D:\\Extracts\\file.csv"
+  .venv\\Scripts\\python.exe learn\\ingest_path.py --kit C:\\Orion --path "D:\\Extracts\\file.csv"
 
 License: UNLICENSED
 """
@@ -31,11 +31,11 @@ LEARN = Path(__file__).resolve().parent
 if str(LEARN) not in sys.path:
     sys.path.insert(0, str(LEARN))
 
-from talon_learn import DATA_EXT, cycle, utc_now, write_index  # noqa: E402
+from orion_learn import DATA_EXT, cycle, utc_now, write_index  # noqa: E402
 
 
 def kit_from_env() -> Path:
-    raw = os.environ.get("TALON_KIT") or ""
+    raw = os.environ.get("ORION_KIT") or ""
     if raw:
         candidate = Path(raw)
         if candidate.is_dir():
@@ -138,7 +138,7 @@ def apply_sources(kit: Path) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Connect a local path and map it into Talon memory")
+    parser = argparse.ArgumentParser(description="Connect a local path and map it into Orion memory")
     parser.add_argument("--kit", default="")
     parser.add_argument("--path", required=True, help="Local folder or file the user named")
     parser.add_argument("--role", default="", choices=["", "phi", "project", "other"])
@@ -177,7 +177,7 @@ def main() -> int:
         if not args.skip_apply:
             apply_sources(kit)
     else:
-        print(f"Path is inside the Talon kit. Mapping only: {folder}", flush=True)
+        print(f"Path is inside the Orion kit. Mapping only: {folder}", flush=True)
 
     memory = kit / "memory"
     cline_home = kit / "ide-data" / "cline-home"

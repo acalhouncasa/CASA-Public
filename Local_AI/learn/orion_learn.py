@@ -1,4 +1,4 @@
-"""Talon background learner. Local disk only, including PHI on this PC."""
+"""Orion background learner. Local disk only, including PHI on this PC."""
 
 from __future__ import annotations
 
@@ -81,7 +81,7 @@ def ensure_memory_dirs(memory: Path) -> None:
 
 
 def memory_db(memory: Path) -> sqlite3.Connection:
-    con = sqlite3.connect(str(memory / "talon-memory.sqlite"))
+    con = sqlite3.connect(str(memory / "orion-memory.sqlite"))
     con.execute(
         """
         CREATE TABLE IF NOT EXISTS files (
@@ -288,7 +288,7 @@ def write_data_map(memory: Path, path: Path, payload: dict) -> None:
         f"Local path: `{path}`",
         f"May contain PHI: {phi}",
         "",
-        "This map is for Talon on this PC. It may include example values so later questions can reuse joins and codes. Do not copy this file to email, git, or a cloud chat.",
+        "This map is for Orion on this PC. It may include example values so later questions can reuse joins and codes. Do not copy this file to email, git, or a cloud chat.",
         "",
         "```json",
         json.dumps(payload, indent=2),
@@ -302,7 +302,7 @@ def write_index(memory: Path) -> None:
     maps = sorted((memory / "data-maps").glob("*.md"))
     lessons = sorted((memory / "lessons").glob("*.md"))
     lines = [
-        "# Talon memory index",
+        "# Orion memory index",
         "",
         "Local only. These files may describe PHI. Do not commit or upload them.",
         "",
@@ -453,7 +453,7 @@ def scan_sessions(cline_home: Path, memory: Path, state: dict) -> int:
             f"Cline status: `{status or 'ended'}`\n\n"
             f"Workspace: `{cwd}`\n\n"
             f"Ask: {title}\n\n"
-            "Recorded so Talon can reuse what worked and skip a failed approach. "
+            "Recorded so Orion can reuse what worked and skip a failed approach. "
             "Read `memory/WHAT_WORKED.md`, `memory/FAILED.md`, and `memory/data-maps/` first."
         )
         write_lesson(memory, sid, title, body, failed)
@@ -540,7 +540,7 @@ def already_running(pid_path: Path) -> bool:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Talon local learner")
+    parser = argparse.ArgumentParser(description="Orion local learner")
     parser.add_argument("--kit", default=str(Path(__file__).resolve().parents[1]))
     parser.add_argument("--workspace", action="append", default=[])
     parser.add_argument("--watch", action="store_true")
@@ -552,11 +552,11 @@ def main() -> int:
     memory = kit / "memory"
     cline_home = kit / "ide-data" / "cline-home"
     state_path = memory / "state.json"
-    pid_path = kit / "logs" / "talon-learn.pid"
+    pid_path = kit / "logs" / "orion-learn.pid"
     pid_path.parent.mkdir(parents=True, exist_ok=True)
 
     if args.watch and already_running(pid_path):
-        print("talon-learn already running", flush=True)
+        print("orion-learn already running", flush=True)
         return 0
 
     pid_path.write_text(str(os.getpid()), encoding="utf-8")

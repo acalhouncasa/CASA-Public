@@ -196,3 +196,12 @@ Agency DocumentCode catalogs, logos with PHI, Core Assessment builders, and Rx s
 | `SmartCare/Client_Chart_Flags_Report/` | Portable SmartCare report: client chart flags, checkbox filters, RDL. No environment-name guard. |
 
 Site report folders, role grants, and connection strings stay private.
+
+---
+
+## 10/26/2026 — Orion rebrand (was Talon)
+
+| Public path | What |
+|-------------|------|
+| `Local_AI/` | Product rename Talon / LocalCoder → **Orion** (kit 1.5.0). New icon, wordmark, letterpress, SVG marks. Guard extension `orion.orion-guard`. Working path docs use `C:\Orion`. |
+

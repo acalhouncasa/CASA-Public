@@ -194,7 +194,7 @@ def main() -> int:
     if not is_patched(updated):
         print("patch applied but verification failed")
         return 1
-    backup = path.with_suffix(".js.talon-bak")
+    backup = path.with_suffix(".js.orion-bak")
     if not backup.is_file():
         backup.write_bytes(path.read_bytes())
     path.write_bytes(updated.encode("utf-8"))

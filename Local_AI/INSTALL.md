@@ -1,4 +1,4 @@
-# Install Talon
+# Install Orion
 
 This is the full install path for another agency or a new workstation. Read [NOTICE.md](../NOTICE.md) and [HIPAA.md](HIPAA.md) first. Stock VSCodium/Cline vs this wrapper: [FROM_STOCK.md](FROM_STOCK.md).
 
@@ -77,8 +77,8 @@ Copy **this entire `Local_AI` folder** to a working path that is **not** the Git
 Good:
 
 ```text
-C:\\Talon\
-D:\Tools\LocalCoder\
+C:\\Orion\
+D:\Tools\Orion\
 ```
 
 Avoid:
@@ -89,7 +89,7 @@ Avoid:
 | OneDrive / Desktop (if Desktop is redirected) | Consumer sync can take PHI off the box. |
 | A path you later zip and email | Runtime folders can contain client data. |
 
-If the path has a space (`Talon`), that is fine. Scripts quote their arguments.
+If the path has a space (`Orion`), that is fine. Scripts quote their arguments.
 
 After first run you will see extra folders. **Do not commit them:**
 
@@ -112,8 +112,8 @@ On a machine that may use git (this is the **public** repo; still no PHI):
 ```powershell
 gh auth switch --user YOUR_ORG_ACCOUNT   # if you use more than one GitHub login
 git clone https://github.com/acalhouncasa/CASA-Public.git
-Copy-Item -Recurse .\CASA-Public\Local_AI C:\\Talon
-cd C:\\Talon
+Copy-Item -Recurse .\CASA-Public\Local_AI C:\\Orion
+cd C:\\Orion
 ```
 
 ### Option B — Download ZIP from GitHub
@@ -121,26 +121,26 @@ cd C:\\Talon
 1. Open [https://github.com/acalhouncasa/CASA-Public](https://github.com/acalhouncasa/CASA-Public).
 2. Code → Download ZIP.
 3. Unzip.
-4. Copy the `Local_AI` folder to `C:\\Talon` (or your chosen path).
+4. Copy the `Local_AI` folder to `C:\\Orion` (or your chosen path).
 5. If Windows marked the zip: only unblock **after** you trust the source.
 
 ```powershell
 # Example after you copy out of the unzipped tree
-Unblock-File C:\\Talon\*.ps1, C:\\Talon\*.cmd, C:\\Talon\*.vbs
+Unblock-File C:\\Orion\*.ps1, C:\\Orion\*.cmd, C:\\Orion\*.vbs
 ```
 
 ### Option C — Agency share kit
 
-If a coworker already built `LocalCoder-1.0.0.zip` with `.\Pack-ShareKit.ps1`:
+If a coworker already built `Orion-1.0.0.zip` with `.\Pack-ShareKit.ps1`:
 
 1. Compare the SHA-256 of the zip to `SHA256SUMS.txt`.
 2. Unblock the zip **only if the hash matches**.
 3. Unzip and continue at section 5.
 
 ```powershell
-Get-FileHash .\LocalCoder-1.0.0.zip -Algorithm SHA256
+Get-FileHash .\Orion-1.0.0.zip -Algorithm SHA256
 # compare to SHA256SUMS.txt
-Unblock-File .\LocalCoder-1.0.0.zip
+Unblock-File .\Orion-1.0.0.zip
 ```
 
 Details: [IT.md](IT.md).
@@ -153,7 +153,7 @@ Details: [IT.md](IT.md).
 2. Change to the working copy:
 
 ```powershell
-cd C:\\Talon
+cd C:\\Orion
 ```
 
 3. Confirm execution policy will allow a local script. The `.cmd` launchers already pass `-ExecutionPolicy Bypass` for that one file. From PowerShell you can also run:
@@ -176,7 +176,7 @@ Or double-click `Install.cmd` (same script; it pauses at the end so you can read
 
 ```text
 Setup finished.
-  Start Menu: Talon
+  Start Menu: Orion
   Or: .\run.ps1
   Verify: .\doctor.ps1
 ```
@@ -204,12 +204,12 @@ Shared PC (front desk / training room): add `-Strict` so the agent does not auto
 5. Sets user environment `OLLAMA_HOST=127.0.0.1:11434`.
 6. Creates `ide-data\` and `ide-extensions\`.
 7. Copies `templates\settings.json` and `templates\argv.json` into the isolated profile.
-8. Optionally replaces VSCodium watermark SVGs with Talon marks (unsigned resource files only; it does **not** patch `VSCodium.exe`).
+8. Optionally replaces VSCodium watermark SVGs with Orion marks (unsigned resource files only; it does **not** patch `VSCodium.exe`).
 9. Installs **Cline** (`saoudrizwan.claude-dev`) into the isolated extensions dir.
 10. Runs `seed_cline.py` so Cline is Ollama-only, telemetry off, ClinePass banners dismissed, web/MCP off.
 11. Installs Open VSX extensions: Python, debugpy, Ruff, SQLTools, SQLTools SQLite, Jupyter.
 12. Runs `setup-datasci.ps1` (venv + pip + empty SQLite) and pins `.venv\Scripts\python.exe` in workspace and User settings.
-13. Creates Start Menu and Desktop shortcuts that launch `Launch-LocalCoder.vbs` → `run.ps1`.
+13. Creates Start Menu and Desktop shortcuts that launch `Launch-Orion.vbs` → `run.ps1`.
 
 Useful switches:
 
@@ -255,21 +255,21 @@ Do **not** pull a second 30B “SQL model” on a 24 GB card. The coding model p
 ## 7. First launch
 
 ```powershell
-cd C:\\Talon
+cd C:\\Orion
 .\run.ps1
 ```
 
-Or use **Start Menu → Talon** or `Start Talon.cmd`.
+Or use **Start Menu → Orion** or `Start Orion.cmd`.
 
 `run.ps1` will:
 
-1. Start Ollama if `http://127.0.0.1:11434/api/tags` does not answer, then wait up to 45 seconds. If it stays down, Talon still opens on a local **Ollama is not running** page. Do not pick a cloud provider.
+1. Start Ollama if `http://127.0.0.1:11434/api/tags` does not answer, then wait up to 45 seconds. If it stays down, Orion still opens on a local **Ollama is not running** page. Do not pick a cloud provider.
 2. Rebuild settings from `templates\settings.json` (Windows interpreter path, SQLite path, git locked off).
 3. Re-run `seed_cline.py`.
 4. Put `.venv\Scripts` on PATH for that process (`PYTHONNOUSERSITE=1`).
 5. Block GitHub remotes **in this process only** (`GIT_CONFIG_COUNT` `insteadOf`). Clear `GH_TOKEN` / `GITHUB_TOKEN`.
 6. Set `CLINE_DIR` to `ide-data\cline-home` so Cline does not open a cloud free-model picker from `%USERPROFILE%\.cline`.
-7. Launch VSCodium through `Open-Talon.cmd` with quoted `--user-data-dir`, `--extensions-dir`, and the Talon workspace. Paths that contain spaces stay one argument.
+7. Launch VSCodium through `Open-Orion.cmd` with quoted `--user-data-dir`, `--extensions-dir`, and the Orion workspace. Paths that contain spaces stay one argument.
 
 The first time, if no last workspace is stored, it opens this kit folder. To open a project:
 
@@ -281,18 +281,18 @@ The path is remembered in `ide-data\last-workspace.txt`.
 
 ### First-run checklist (do this once)
 
-1. Title bar says **Talon**.
+1. Title bar says **Orion**.
 2. Getting started is the first editor tab. VSCodium Release Notes should not be in front.
-3. The **Talon** root in Explorer is collapsed.
+3. The **Orion** root in Explorer is collapsed.
 4. Right sidebar is **Cline**, already open, provider **Ollama** at `http://127.0.0.1:11434`.
 5. Model is `qwen3-coder:30b` (or the smaller model you pulled).
-6. You are not asked to create a Cline account. If you are, close Talon, run `python .\seed_cline.py .\ide-data`, then `.\run.ps1`.
+6. You are not asked to create a Cline account. If you are, close Orion, run `python .\seed_cline.py .\ide-data`, then `.\run.ps1`.
 7. Auto-approve: Read, Edit, and Commands may be on. Web Fetch and MCP stay off.
 8. Source Control (git) is hidden. You are not asked to connect a parent Git repository or GitHub. That prompt is locked to **Never**.
 9. Python interpreter is `.\.venv\Scripts\python.exe`. There is no “interpreter could not be resolved” toast and no Python Environments prompt.
 10. SQLTools knows about **Local SQLite** (`data\local.sqlite`) but does not auto-connect or ask to npm-install `sqlite3` on launch. Connect when you need the database.
-11. Explorer roots are the Talon kit (and any folders you attached). Profile folders such as Cache or Backups are not workspace roots.
-12. Attach work with **Talon Connect** or File → Add Folder to Workspace. File → Open Folder is not on the File menu or in the command palette.
+11. Explorer roots are the Orion kit (and any folders you attached). Profile folders such as Cache or Backups are not workspace roots.
+12. Attach work with **Orion Connect** or File → Add Folder to Workspace. File → Open Folder is not on the File menu or in the command palette.
 
 Type a simple prompt in Cline, for example: “Create `data\hello.py` that prints hello, run it with the venv python.” Confirm it uses `.venv\Scripts\python.exe`.
 
@@ -300,27 +300,27 @@ Type a simple prompt in Cline, for example: “Create `data\hello.py` that print
 
 ## 8. Python interpreter
 
-Talon should open with the kit venv already selected. You should not be asked where Python is.
+Orion should open with the kit venv already selected. You should not be asked where Python is.
 
 ### What setup does
 
 1. If `py` or `python` is missing, `setup.ps1` installs **Python 3.12** with winget (`Python.Python.3.12`, user scope). It also looks in `%LOCALAPPDATA%\Programs\Python\`.
-2. `setup-datasci.ps1` creates `C:\Talon\.venv\Scripts\python.exe` and installs pandas, SQLAlchemy, Jupyter, and ruff into that venv only.
+2. `setup-datasci.ps1` creates `C:\Orion\.venv\Scripts\python.exe` and installs pandas, SQLAlchemy, Jupyter, and ruff into that venv only.
 3. Launch writes that path into:
    - `ide-data\User\settings.json`
-   - `ide-data\Talon.code-workspace`
+   - `ide-data\Orion.code-workspace`
    - `.vscode\settings.json` (local, not committed)
 4. Settings also turn off the Python Environments picker (`python.useEnvironmentsExtension=false`) and the “create environment” toast (`python.createEnvironment.trigger=off`).
 
 You can rebuild the venv and re-bind the editor at any time:
 
 ```powershell
-cd C:\Talon
+cd C:\Orion
 .\setup-datasci.ps1
 .\doctor.ps1
 ```
 
-Then close Talon if it is open, and start it from **Start Talon.cmd**.
+Then close Orion if it is open, and start it from **Start Orion.cmd**.
 
 ### If Python is not installed
 
@@ -339,31 +339,31 @@ py -3 --version
 You want `Python 3.12` or newer. Then:
 
 ```powershell
-cd C:\Talon
+cd C:\Orion
 .\setup-datasci.ps1
 .\doctor.ps1
 ```
 
 If winget is blocked, install Python 3.12 from [python.org/downloads/windows](https://www.python.org/downloads/windows/). On the first installer page, check **Add python.exe to PATH**. Do not use the Microsoft Store python stub. Then run `.\setup-datasci.ps1`.
 
-### If Talon still asks for a Python location
+### If Orion still asks for a Python location
 
-Close Talon. In PowerShell:
+Close Orion. In PowerShell:
 
 ```powershell
-cd C:\Talon
+cd C:\Orion
 Test-Path .\.venv\Scripts\python.exe
 .\setup-datasci.ps1
 .\doctor.ps1
 ```
 
-`Test-Path` must print `True`. Doctor must show `venv C:\Talon\.venv\Scripts\python.exe` and `Python interpreter pinned`. Start Talon only from **Start Menu → Talon** or `Start Talon.cmd`.
+`Test-Path` must print `True`. Doctor must show `venv C:\Orion\.venv\Scripts\python.exe` and `Python interpreter pinned`. Start Orion only from **Start Menu → Orion** or `Start Orion.cmd`.
 
 If a picker still appears:
 
 1. Click the Python version in the **status bar** (bottom right).
 2. Choose **Enter interpreter path…** (or **Find…**).
-3. Browse to `C:\Talon\.venv\Scripts\python.exe`.
+3. Browse to `C:\Orion\.venv\Scripts\python.exe`.
 4. Select that file. Do not pick a global `Python312\python.exe` and do not pick the Store stub.
 
 From the Command Palette (Ctrl+Shift+P):
@@ -376,7 +376,7 @@ Jupyter “Select Kernel” is the same venv: pick **Python Environments** → `
 ### Verify Python and SQL
 
 ```powershell
-cd C:\Talon
+cd C:\Orion
 .\.venv\Scripts\python.exe -c "import pandas, numpy, sklearn, sqlalchemy, matplotlib; print('ok', pandas.__version__)"
 .\.venv\Scripts\python.exe -c "import sqlite3; sqlite3.connect(r'data\local.sqlite').execute('create table if not exists smoke(id int)'); print('sqlite ok')"
 ```
@@ -394,18 +394,18 @@ In the editor:
 Elevated PowerShell:
 
 ```powershell
-cd C:\\Talon
+cd C:\\Orion
 .\harden-firewall.ps1
 ```
 
-This adds LocalCoder firewall rules: allow `127.0.0.1` / `::1`, block Internet for `VSCodium.exe`.
+This adds Orion firewall rules: allow `127.0.0.1` / `::1`, block Internet for `VSCodium.exe`.
 
 Confirm in Resource Monitor that VSCodium has no public sockets. Rule order on Windows can be sensitive; treat this as a **defense in depth** layer, not a guarantee.
 
 Remove later:
 
 ```powershell
-Get-NetFirewallRule | Where-Object DisplayName -like 'LocalCoder *' | Remove-NetFirewallRule
+Get-NetFirewallRule | Where-Object DisplayName -like 'Orion *' | Remove-NetFirewallRule
 ```
 
 Do this **after** install and model pull. If you firewall first, winget / Open VSX / `ollama pull` will fail.
@@ -417,7 +417,7 @@ Do this **after** install and model pull. If you firewall first, winget / Open V
 1. On a networked PC, download publisher-signed installers (do not rename):
 
 ```powershell
-cd C:\\Talon
+cd C:\\Orion
 winget download -e --id VSCodium.VSCodium -d payload --accept-package-agreements --accept-source-agreements
 winget download -e --id Ollama.Ollama -d payload --accept-package-agreements --accept-source-agreements
 ```
@@ -435,7 +435,7 @@ winget download -e --id Ollama.Ollama -d payload --accept-package-agreements --a
 ## 11. Daily use
 
 ```powershell
-cd C:\\Talon
+cd C:\\Orion
 .\run.ps1
 # or
 .\run.ps1 -Workspace "D:\Work\MyProject"
@@ -446,7 +446,7 @@ Habits:
 - Keep Cline on **Ollama**. If anyone picks OpenAI / Anthropic / OpenRouter / ClinePass, prompts leave the box.
 - Keep Web Fetch and MCP off.
 - Save query output under `data\` on this PC. Do not gist it.
-- Git remotes to github.com fail **inside Talon only**. Everyday git outside this window is unchanged.
+- Git remotes to github.com fail **inside Orion only**. Everyday git outside this window is unchanged.
 - Do not open this working copy in a hosted IDE or Microsoft VS Code for PHI work.
 
 ---
@@ -461,16 +461,16 @@ Habits:
 | Cline shows “Create my Account” / free cloud models | You launched without `CLINE_DIR`. Use `.\run.ps1` (not a raw VSCodium shortcut). Then `python .\seed_cline.py .\ide-data`. |
 | ClinePass banner | Re-run seed. Banner ids are dismissed in `seed_cline.py`. |
 | Agent stuck on “Proceed While Running” | Seed sets `vscodeTerminalExecutionMode=backgroundExec`. Re-run `.\run.ps1`. Avoid `&&` chains that never exit. |
-| Git parent-repo / GitHub connect toast | Settings force `git.enabled=false` and `git.openRepositoryInParentFolders=never`. Seed also disables `vscode.git` and `vscode.git-base`. Restart Talon from `Start Talon.cmd` if an old window is still open. |
-| Explorer shows Cache, Backups, or `%LOCALAPPDATA%` as roots | A launch split a path that contains a space. Close that window. Start only from `Start Talon.cmd` / `Open-Talon.cmd`, not a raw `VSCodium.exe` command line. |
+| Git parent-repo / GitHub connect toast | Settings force `git.enabled=false` and `git.openRepositoryInParentFolders=never`. Seed also disables `vscode.git` and `vscode.git-base`. Restart Orion from `Start Orion.cmd` if an old window is still open. |
+| Explorer shows Cache, Backups, or `%LOCALAPPDATA%` as roots | A launch split a path that contains a space. Close that window. Start only from `Start Orion.cmd` / `Open-Orion.cmd`, not a raw `VSCodium.exe` command line. |
 | SQLTools asks to install `sqlite3@…` or announces Node | Expected only if you click Connect. Launch does not auto-connect. Node-detect notifications are off. |
-| Python “interpreter could not be resolved” or a Python location picker | Follow [section 8](#8-python-interpreter). Run `.\setup-datasci.ps1`, then pick `C:\Talon\.venv\Scripts\python.exe` only if the picker is still there. |
+| Python “interpreter could not be resolved” or a Python location picker | Follow [section 8](#8-python-interpreter). Run `.\setup-datasci.ps1`, then pick `C:\Orion\.venv\Scripts\python.exe` only if the picker is still there. |
 | Python packages fail | Confirm `py -3 --version`. Install Python 3.12 if missing (section 8). Re-run `.\setup-datasci.ps1`. |
-| File → Open Folder is still listed | Close Talon fully. Run `python .\learn\patch_vscodium_menus.py` then `.\doctor.ps1`. Start only from `Start Talon.cmd`. A VSCodium update can put the item back until that patch runs. Use Add Folder to Workspace or Connect. |
-| Cline asked what to do with a local folder or CSV path | Close Talon and start from `Start Talon.cmd` so 1.4.10 instructions load. Paste the exact path again. First tool call must be `learn\ingest_path.py --path "..."`. Do not invent a filename. Maps land in `memory\data-maps\`. |
+| File → Open Folder is still listed | Close Orion fully. Run `python .\learn\patch_vscodium_menus.py` then `.\doctor.ps1`. Start only from `Start Orion.cmd`. A VSCodium update can put the item back until that patch runs. Use Add Folder to Workspace or Connect. |
+| Cline asked what to do with a local folder or CSV path | Close Orion and start from `Start Orion.cmd` so 1.4.10 instructions load. Paste the exact path again. First tool call must be `learn\ingest_path.py --path "..."`. Do not invent a filename. Maps land in `memory\data-maps\`. |
 | “Ollama is not running” page | Start Ollama from the Start Menu, or wait. Do not pick OpenAI / ClinePass or paste an API key. |
-| Cline shows a cloud provider or API key box | Close that prompt. Guard resets Cline to Ollama and reloads. If it returns, close Talon and run `Start Talon.cmd`. |
-| Desktop shortcut does nothing | Shortcut must call `wscript.exe` + `Launch-LocalCoder.vbs`. Re-run `.\setup.ps1` to recreate it. |
+| Cline shows a cloud provider or API key box | Close that prompt. Guard resets Cline to Ollama and reloads. If it returns, close Orion and run `Start Orion.cmd`. |
+| Desktop shortcut does nothing | Shortcut must call `wscript.exe` + `Launch-Orion.vbs`. Re-run `.\setup.ps1` to recreate it. |
 | Title bar still looks like VSCodium | Cosmetic only. `setup.ps1` copies SVGs into `resources\app\out\media`. It will not patch `VSCodium.exe` (that would break Authenticode). |
 | winget blocked by policy | Use section 10 (`payload\`). |
 | SmartScreen on a custom Setup.exe | Expected if unsigned. Prefer the zip + `Install.cmd`. See [IT.md](IT.md). |
@@ -483,18 +483,18 @@ Habits:
 ## 13. Uninstall
 
 ```powershell
-cd C:\\Talon
-.\Uninstall-LocalCoder.ps1
+cd C:\\Orion
+.\Uninstall-Orion.ps1
 ```
 
 That removes Start Menu shortcuts. It leaves VSCodium and Ollama installed unless you pass `-RemoveDeps` (those apps may be used for other work).
 
-Then delete the working folder in Explorer (`C:\\Talon`), including `ide-data` and `data` if they hold PHI — follow your agency’s media sanitization procedure.
+Then delete the working folder in Explorer (`C:\\Orion`), including `ide-data` and `data` if they hold PHI — follow your agency’s media sanitization procedure.
 
 Firewall rules (if you applied them):
 
 ```powershell
-Get-NetFirewallRule | Where-Object DisplayName -like 'LocalCoder *' | Remove-NetFirewallRule
+Get-NetFirewallRule | Where-Object DisplayName -like 'Orion *' | Remove-NetFirewallRule
 ```
 
 ---
@@ -507,15 +507,15 @@ Do **not** email a used kit that already has `ide-data` or `data\*.sqlite`. Pack
 .\Pack-ShareKit.ps1
 ```
 
-On the receiving PC, if Talon is already installed:
+On the receiving PC, if Orion is already installed:
 
 ```powershell
-.\Update-LocalCoder.ps1 -From "D:\Incoming\Local_AI"
+.\Update-Orion.ps1 -From "D:\Incoming\Local_AI"
 python .\seed_cline.py .\ide-data
 .\doctor.ps1
 ```
 
-Send `dist\LocalCoder-1.1.0.zip` and `dist\SHA256SUMS.txt` for a first-time drop. Recipients follow section 4 option C, then section 5.
+Send `dist\Orion-1.1.0.zip` and `dist\SHA256SUMS.txt` for a first-time drop. Recipients follow section 4 option C, then section 5.
 
 IT notes, Intune sketch, and Authenticode: [IT.md](IT.md). Small-team rules: [TEAM.md](TEAM.md).
 

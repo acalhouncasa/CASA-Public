@@ -1,7 +1,7 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Attach a local project/PHI folder or database, then open Talon.
+  Attach a local project/PHI folder or database, then open Orion.
 #>
 param(
     [string]$Folder = "",
@@ -67,9 +67,9 @@ function Pick-File([string]$Filter) {
 }
 
 function Folder-Exists($sources, [string]$Path) {
-    $norm = Normalize-TalonPath $Path
+    $norm = Normalize-OrionPath $Path
     foreach ($item in @($sources.folders)) {
-        if ($item.path -and ((Normalize-TalonPath $item.path) -eq $norm)) { return $true }
+        if ($item.path -and ((Normalize-OrionPath $item.path) -eq $norm)) { return $true }
     }
     return $false
 }
@@ -86,7 +86,7 @@ function Database-Exists($sources, [string]$Kind, [string]$Key) {
 
 function Add-ConnectedFolder($sources, [string]$Path, [string]$FolderRole) {
     if (-not $Path) { return $false }
-    if (-not (Confirm-TalonLocalPath $Path "connect")) { return $false }
+    if (-not (Confirm-OrionLocalPath $Path "connect")) { return $false }
     $full = [IO.Path]::GetFullPath($Path)
     if (-not ($script:JustAdded -contains $full)) {
         [void]$script:JustAdded.Add($full)
@@ -183,7 +183,7 @@ $interactive = -not ($Folder -or $Sqlite -or $SqlServer)
 if ($interactive) {
     do {
         Write-Host ""
-        Write-Host "Talon Connect" -ForegroundColor Cyan
+        Write-Host "Orion Connect" -ForegroundColor Cyan
         Write-Host "Keep the kit as the main root. Attach project and PHI beside it."
         Write-Host "Do not pick OneDrive / Desktop / Downloads if they hold PHI."
         Write-Host ""
@@ -194,7 +194,7 @@ if ($interactive) {
         Write-Host "5) Remove a connection"
         Write-Host "6) Backup memory to a local folder"
         Write-Host "7) Show current connections"
-        Write-Host "8) Save and open Talon"
+        Write-Host "8) Save and open Orion"
         Write-Host "9) Quit"
         $choice = Read-Host "Choice"
         switch ($choice) {
@@ -215,7 +215,7 @@ if ($interactive) {
             "5" { Remove-Connection $sources }
             "6" {
                 Save-Sources $sources
-                & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "Backup-TalonMemory.ps1")
+                & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "Backup-OrionMemory.ps1")
             }
             "7" { Show-Sources $sources }
             "8" { $launched = $true }
@@ -223,7 +223,7 @@ if ($interactive) {
         }
 
         if ($Sqlite) {
-            if (Confirm-TalonLocalPath $Sqlite "connect") {
+            if (Confirm-OrionLocalPath $Sqlite "connect") {
                 $full = [IO.Path]::GetFullPath($Sqlite)
                 if (Database-Exists $sources "sqlite" $full) {
                     Write-Host "Already connected: $full"
@@ -266,7 +266,7 @@ if ($interactive) {
         if (-not $Role) { $Role = "phi" }
         [void](Add-ConnectedFolder $sources $Folder $Role)
     }
-    if ($Sqlite -and (Confirm-TalonLocalPath $Sqlite "connect")) {
+    if ($Sqlite -and (Confirm-OrionLocalPath $Sqlite "connect")) {
         $full = [IO.Path]::GetFullPath($Sqlite)
         if (-not (Database-Exists $sources "sqlite" $full)) {
             $name = [IO.Path]::GetFileNameWithoutExtension($full)

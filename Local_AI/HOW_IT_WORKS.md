@@ -1,4 +1,4 @@
-# How Talon works
+# How Orion works
 
 This page is the architecture. Install steps are in [INSTALL.md](INSTALL.md). PHI limits are in [HIPAA.md](HIPAA.md).
 
@@ -6,7 +6,7 @@ This page is the architecture. Install steps are in [INSTALL.md](INSTALL.md). PH
 
 Hosted coding IDEs still send prompts off-box, even when you attach a local model. Microsoft VS Code + Copilot and Visual Studio + Copilot are the same class of problem.
 
-Talon is a thin, auditable wrapper around three existing open-source pieces:
+Orion is a thin, auditable wrapper around three existing open-source pieces:
 
 | Piece | Role |
 |-------|------|
@@ -20,7 +20,7 @@ The value of this folder is **how those three are launched and seeded**, not a n
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│  Talon process (run.ps1)                              │
+│  Orion process (run.ps1)                              │
 │                                                             │
 │   VSCodium.exe                                              │
 │     --user-data-dir   <kit>\ide-data                        │
@@ -54,13 +54,13 @@ VSCodium without flags uses `%APPDATA%\VSCodium`. That would mix with any other 
 - `--user-data-dir` → `ide-data\` (settings, window layout, Cline sqlite, last workspace)
 - `--extensions-dir` → `ide-extensions\` (Cline, Python, Ruff, SQLTools, Jupyter only)
 
-A Desktop shortcut that opens stock VSCodium is **not** Talon. Use `Launch-LocalCoder.vbs` → `run.ps1` → `Open-Talon.cmd`.
+A Desktop shortcut that opens stock VSCodium is **not** Orion. Use `Launch-Orion.vbs` → `run.ps1` → `Open-Orion.cmd`.
 
-Talon Guard 1.3.0 (`extensions\talon.talon-guard-1.3.0`) stays in the isolated extensions dir. Launch copies it only after Talon is closed (replacing it while VSCodium is running marks it invalid). `package.json` must have no UTF-8 BOM. Getting started is a Guard **webview**, not an HTML file tab (a file tab shows source and expands the Talon tree).
+Orion Guard 1.3.0 (`extensions\orion.orion-guard-1.3.0`) stays in the isolated extensions dir. Launch copies it only after Orion is closed (replacing it while VSCodium is running marks it invalid). `package.json` must have no UTF-8 BOM. Getting started is a Guard **webview**, not an HTML file tab (a file tab shows source and expands the Orion tree).
 
-**File → Open Folder** is removed by `learn\patch_vscodium_menus.py`: those File menu items use `ContextKeyExpr.false()` (`C.false()` or `y.false()`) in `workbench.desktop.main.js`. The patcher matches File-menu group `2_open` and the Open Folder command IDs, so a VSCodium update that only renames minified identifiers still works. A profile hide-list (`menu.hiddenCommands`) does not take them off this VSCodium’s File menu. Do not use `when: false` (boolean); this build treats that as “always show.” After the edit, the script writes the **raw-byte** SHA-256 of that file into `product.json` `checksums` so VSCodium does not toast “installation appears to be corrupt.” **Open File** stays. File → Add Folder to Workspace and Talon Connect remain. If someone opens a folder another way (Open Recent), Guard restores the kit workspace and adds the chosen folder. `Install-Guard.cmd` reinstalls the VSIX into this profile only.
+**File → Open Folder** is removed by `learn\patch_vscodium_menus.py`: those File menu items use `ContextKeyExpr.false()` (`C.false()` or `y.false()`) in `workbench.desktop.main.js`. The patcher matches File-menu group `2_open` and the Open Folder command IDs, so a VSCodium update that only renames minified identifiers still works. A profile hide-list (`menu.hiddenCommands`) does not take them off this VSCodium’s File menu. Do not use `when: false` (boolean); this build treats that as “always show.” After the edit, the script writes the **raw-byte** SHA-256 of that file into `product.json` `checksums` so VSCodium does not toast “installation appears to be corrupt.” **Open File** stays. File → Add Folder to Workspace and Orion Connect remain. If someone opens a folder another way (Open Recent), Guard restores the kit workspace and adds the chosen folder. `Install-Guard.cmd` reinstalls the VSIX into this profile only.
 
-`run.ps1` writes settings, seeds Cline, and copies Guard **after** it quits any running Talon window. Seeding while VSCodium is still open lets shutdown overwrite the profile store.
+`run.ps1` writes settings, seeds Cline, and copies Guard **after** it quits any running Orion window. Seeding while VSCodium is still open lets shutdown overwrite the profile store.
 
 ## How Cline is locked to Ollama
 
@@ -82,7 +82,7 @@ It also:
 
 `run.ps1` re-runs the seed every launch so a stray click is less sticky.
 
-During the session, Talon Guard watches `providers.json`, `global-settings.json`, and `globalState.json`. If the provider is not `ollama`, or a cloud API key appears, Guard rewrites those files to Ollama only and reloads the window so Cline drops the in-memory cloud provider.
+During the session, Orion Guard watches `providers.json`, `global-settings.json`, and `globalState.json`. If the provider is not `ollama`, or a cloud API key appears, Guard rewrites those files to Ollama only and reloads the window so Cline drops the in-memory cloud provider.
 
 `run.ps1` also starts Ollama if needed and waits up to 45 seconds. If `127.0.0.1:11434` still does not answer, Guard shows `ollama-down.html` and tells the user not to pick a cloud model.
 
@@ -98,7 +98,7 @@ This is a tradeoff: fewer clicks, more need to watch the terminal. See residual 
 
 `run.ps1` sets `GIT_CONFIG_COUNT` and six `insteadOf` mappings so any `git` child process in that window treats GitHub URLs as invalid. It also clears `GH_*` tokens.
 
-It does **not** write `%USERPROFILE%\.gitconfig`. Everyday git outside Talon is unchanged. That is deliberate: a global rewrite would break agency source control on the same PC.
+It does **not** write `%USERPROFILE%\.gitconfig`. Everyday git outside Orion is unchanged. That is deliberate: a global rewrite would break agency source control on the same PC.
 
 ## Python and SQL (local toolchain)
 
@@ -116,14 +116,14 @@ A second 30B “SQL model” would fight a 24 GB GPU for VRAM. Coding quality fo
 
 ## Path ingest (pasted folders)
 
-If the user names a local folder or file, Talon is supposed to **connect it and map it**, not ask what the path is for.
+If the user names a local folder or file, Orion is supposed to **connect it and map it**, not ask what the path is for.
 
 | Piece | Role |
 |-------|------|
 | `learn\ingest_path.py` | Add the folder to `ide-data\sources.json`, scan CSV/Excel/SQLite/SQL/JSON/Parquet, write `memory\data-maps\` |
 | Cline `.clinerules` + `customInstructions` | Run that script when a `C:\` / UNC / `file://` path appears in chat |
-| Talon Guard | Add Folder to Workspace also spawns ingest; a `sources.json` change adds the folder in Explorer |
-| `talon_learn.py --watch` | Re-reads `sources.json` every cycle so a folder added after launch stays watched |
+| Orion Guard | Add Folder to Workspace also spawns ingest; a `sources.json` change adds the folder in Explorer |
+| `orion_learn.py --watch` | Re-reads `sources.json` every cycle so a folder added after launch stays watched |
 
 Maps stay on this disk. Do not copy `memory\` off the PC.
 
@@ -136,9 +136,9 @@ Maps stay on this disk. Do not copy `memory\` off the PC.
 1. Find `VSCodium.exe`.
 2. Probe Ollama; if down, start `ollama serve` and wait up to 45 seconds. Write `ide-data\ollama-status.json`.
 3. Remember / accept `-Workspace`.
-4. Copy Talon Guard 1.3.0, rebuild settings from the template, seed Cline.
+4. Copy Orion Guard 1.3.0, rebuild settings from the template, seed Cline.
 5. Export venv PATH, GitHub block, `CLINE_DIR`, `OLLAMA_HOST`.
-6. Launch through `Open-Talon.cmd` so `--user-data-dir` and the workspace path stay quoted (names with spaces stay one argument).
+6. Launch through `Open-Orion.cmd` so `--user-data-dir` and the workspace path stay quoted (names with spaces stay one argument).
 
 ## Trust boundaries (honest)
 

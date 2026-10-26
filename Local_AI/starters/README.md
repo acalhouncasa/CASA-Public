@@ -2,9 +2,9 @@
 
 These are also Command Palette items (Ctrl+Shift+P):
 
-- **Talon: Starter — map this folder**
-- **Talon: Starter — list SQL tables**
-- **Talon: Starter — read memory index**
+- **Orion: Starter — map this folder**
+- **Orion: Starter — list SQL tables**
+- **Orion: Starter — read memory index**
 
 Each command copies the prompt and focuses Cline. Paste with Ctrl+V.
 

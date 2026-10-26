@@ -9,7 +9,7 @@ let openedGuide = false;
 let sourcesWatchTimer = null;
 
 function resolveKit(context) {
-  const fromEnv = process.env.TALON_KIT;
+  const fromEnv = process.env.ORION_KIT;
   if (fromEnv && fs.existsSync(fromEnv)) {
     return path.normalize(fromEnv);
   }
@@ -26,7 +26,7 @@ function norm(p) {
 }
 
 function workspaceFile() {
-  return kit ? path.join(kit, "ide-data", "Talon.code-workspace") : "";
+  return kit ? path.join(kit, "ide-data", "Orion.code-workspace") : "";
 }
 
 function sourcesFile() {
@@ -106,7 +106,7 @@ function saveSources(sources) {
 }
 
 function rewriteWorkspace(sources) {
-  const folders = [{ name: "Talon", path: kit.replace(/\\/g, "/") }];
+  const folders = [{ name: "Orion", path: kit.replace(/\\/g, "/") }];
   const seen = new Set([norm(kit)]);
   for (const item of sources.folders || []) {
     const raw = item && item.path;
@@ -137,7 +137,7 @@ function rewriteWorkspace(sources) {
   const workspace = {
     folders,
     settings: Object.assign({}, priorSettings, {
-      "window.title": "Talon — local — " + extraText + " — ${rootName}${separator}${activeEditorShort}",
+      "window.title": "Orion — local — " + extraText + " — ${rootName}${separator}${activeEditorShort}",
       "explorer.autoReveal": false,
     }),
   };
@@ -256,7 +256,7 @@ function syncFromOpenFolders() {
 async function reopenKit() {
   const ws = workspaceFile();
   if (!ws || !fs.existsSync(ws)) {
-    vscode.window.showErrorMessage("Talon workspace file is missing. Run Connect.cmd or run.ps1.");
+    vscode.window.showErrorMessage("Orion workspace file is missing. Run Connect.cmd or run.ps1.");
     return;
   }
   await vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(ws), false);
@@ -338,9 +338,9 @@ async function openGettingStarted() {
   const htmlPath = path.join(__dirname, "getting-started.html");
   const html = fs.existsSync(htmlPath)
     ? fs.readFileSync(htmlPath, "utf8")
-    : "<h1>Getting started</h1><p>Talon Local AI</p>";
+    : "<h1>Getting started</h1><p>Orion Local AI</p>";
   const panel = vscode.window.createWebviewPanel(
-    "talon.gettingStarted",
+    "orion.gettingStarted",
     "Getting started",
     vscode.ViewColumn.One,
     { enableScripts: false, retainContextWhenHidden: true }
@@ -348,7 +348,7 @@ async function openGettingStarted() {
   panel.webview.html = html;
 }
 
-async function collapseTalonRoot() {
+async function collapseOrionRoot() {
   if (!kitIsOpen()) {
     return;
   }
@@ -383,7 +383,7 @@ async function enforceKit() {
   try {
     if (kitIsOpen()) {
       syncFromOpenFolders();
-      await collapseTalonRoot();
+      await collapseOrionRoot();
       return;
     }
     const extras = (vscode.workspace.workspaceFolders || [])
@@ -393,11 +393,11 @@ async function enforceKit() {
     const cloud = extras.filter(looksCloud);
     if (cloud.length) {
       vscode.window.showWarningMessage(
-        "That folder looks like OneDrive or a synced path. It was added to Talon anyway. Prefer a local disk for PHI."
+        "That folder looks like OneDrive or a synced path. It was added to Orion anyway. Prefer a local disk for PHI."
       );
     } else if (added.length) {
       vscode.window.showInformationMessage(
-        "Talon kept the kit open and added the folder to this workspace. Use File → Add Folder to Workspace next time."
+        "Orion kept the kit open and added the folder to this workspace. Use File → Add Folder to Workspace next time."
       );
     }
     await reopenKit();
@@ -549,7 +549,7 @@ function writeOllamaProviders(model) {
           baseUrl: "http://127.0.0.1:11434",
         },
         updatedAt: now,
-        tokenSource: "localcoder",
+        tokenSource: "orion",
       },
     },
   });
@@ -611,7 +611,7 @@ async function showOllamaDown() {
     ? fs.readFileSync(htmlPath, "utf8")
     : "<h1>Ollama is not running</h1><p>Do not pick a cloud provider.</p>";
   ollamaPanel = vscode.window.createWebviewPanel(
-    "talon.ollamaDown",
+    "orion.ollamaDown",
     "Ollama is not running",
     vscode.ViewColumn.One,
     { enableScripts: false, retainContextWhenHidden: true }
@@ -648,13 +648,13 @@ async function enforceClineLock(reason) {
   const now = Date.now();
   if (now - lastClineReload < 20000) {
     vscode.window.showErrorMessage(
-      "Talon reset Cline to Ollama. Cloud models are not allowed. Do not paste an API key."
+      "Orion reset Cline to Ollama. Cloud models are not allowed. Do not paste an API key."
     );
     return;
   }
   lastClineReload = now;
   vscode.window.showErrorMessage(
-    "Talon reset Cline to Ollama. Cloud models are not allowed. Reloading so Cline drops the cloud provider."
+    "Orion reset Cline to Ollama. Cloud models are not allowed. Reloading so Cline drops the cloud provider."
   );
   await vscode.commands.executeCommand("workbench.action.reloadWindow");
 }
@@ -702,13 +702,13 @@ function activate(context) {
   kit = resolveKit(context);
   writeStatus({ phase: "activate" });
   context.subscriptions.push(
-    vscode.commands.registerCommand("talon.reopenWorkspace", reopenKit),
-    vscode.commands.registerCommand("talon.addFolder", addFolderToWorkspace),
-    vscode.commands.registerCommand("talon.warnOpenFolder", addFolderToWorkspace),
-    vscode.commands.registerCommand("talon.starterIngestPath", () => openStarter("ingest-this-path.md")),
-    vscode.commands.registerCommand("talon.starterMapFolder", () => openStarter("map-this-folder.md")),
-    vscode.commands.registerCommand("talon.starterListSql", () => openStarter("list-sql-tables.md")),
-    vscode.commands.registerCommand("talon.starterMemory", () => openStarter("read-memory-index.md")),
+    vscode.commands.registerCommand("orion.reopenWorkspace", reopenKit),
+    vscode.commands.registerCommand("orion.addFolder", addFolderToWorkspace),
+    vscode.commands.registerCommand("orion.warnOpenFolder", addFolderToWorkspace),
+    vscode.commands.registerCommand("orion.starterIngestPath", () => openStarter("ingest-this-path.md")),
+    vscode.commands.registerCommand("orion.starterMapFolder", () => openStarter("map-this-folder.md")),
+    vscode.commands.registerCommand("orion.starterListSql", () => openStarter("list-sql-tables.md")),
+    vscode.commands.registerCommand("orion.starterMemory", () => openStarter("read-memory-index.md")),
     vscode.workspace.onDidChangeWorkspaceFolders(() => {
       enforceKit();
     })
@@ -728,19 +728,19 @@ function activate(context) {
     if (ollamaReady) {
       await openGettingStarted();
     }
-    await collapseTalonRoot();
+    await collapseOrionRoot();
     writeStatus({
       phase,
       closedNotes: closed,
       openedGuide: ollamaReady ? "webview" : "ollama-down",
       folderCount: (vscode.workspace.workspaceFolders || []).length,
-      workspaceFile: !!(vscode.workspace.workspaceFile && /talon\.code-workspace/i.test(vscode.workspace.workspaceFile.fsPath || "")),
+      workspaceFile: !!(vscode.workspace.workspaceFile && /orion\.code-workspace/i.test(vscode.workspace.workspaceFile.fsPath || "")),
     });
   };
   settle("immediate");
   setTimeout(() => settle("500ms"), 500);
   setTimeout(() => settle("1600ms"), 1600);
-  setTimeout(() => collapseTalonRoot(), 4000);
+  setTimeout(() => collapseOrionRoot(), 4000);
 }
 
 function deactivate() {}

@@ -1,4 +1,4 @@
-# IT notes: sharing Talon without tripping security tools
+# IT notes: sharing Orion without tripping security tools
 
 This kit is meant to look like ordinary internal software. The way to do that
 is **transparency and publisher signatures**, not packing tricks.
@@ -44,13 +44,13 @@ Quiet installs come from one of these, in order of preference:
 .\Pack-ShareKit.ps1
 ```
 
-That writes `dist\LocalCoder-1.4.6.zip` plus `dist\SHA256SUMS.txt`.
+That writes `dist\Orion-1.4.6.zip` plus `dist\SHA256SUMS.txt`.
 
-On a PC that already has Talon, refresh scripts without wiping the
+On a PC that already has Orion, refresh scripts without wiping the
 profile:
 
 ```powershell
-.\Update-LocalCoder.ps1 -From "D:\Incoming\Local_AI"
+.\Update-Orion.ps1 -From "D:\Incoming\Local_AI"
 python .\seed_cline.py .\ide-data
 .\doctor.ps1
 ```
@@ -64,28 +64,28 @@ Optional offline payload (vendor-signed files, still separate):
 ## Hash check after download
 
 ```powershell
-Get-FileHash .\LocalCoder-1.4.6.zip -Algorithm SHA256
+Get-FileHash .\Orion-1.4.6.zip -Algorithm SHA256
 # compare to SHA256SUMS.txt from the same drop
-Unblock-File .\LocalCoder-1.4.6.zip   # only after the hash matches
+Unblock-File .\Orion-1.4.6.zip   # only after the hash matches
 ```
 
 ## Sign (when the agency has a cert)
 
 ```powershell
 # Thumbprint of the org code-signing cert in the local machine store
-.\Sign-LocalCoder.ps1 -Thumbprint "YOURTHUMBPRINT"
+.\Sign-Orion.ps1 -Thumbprint "YOURTHUMBPRINT"
 ```
 
 IT can also sign only the zip’s PowerShell files and keep the zip as the
 distribution unit.
 
-An Inno Setup script is in `pack\LocalCoder.iss` if you want an EXE *after*
+An Inno Setup script is in `pack\Orion.iss` if you want an EXE *after*
 you can sign it. Unsigned `Setup.exe` will show SmartScreen; that is expected.
 
 ## Intune Win32 sketch
 
 - Install command: `Install.cmd`
-- Detection: folder exists and `VERSION` is present (or `%LOCALAPPDATA%\Programs\LocalCoder\VERSION` if you copy there)
+- Detection: folder exists and `VERSION` is present (or `%LOCALAPPDATA%\Programs\Orion\VERSION` if you copy there)
 - Requirement: 64-bit Windows; NVIDIA GPU recommended for `qwen3-coder:30b`
 - Do not run as SYSTEM if you want a per-user VSCodium profile
 - Run model pull as a separate, long-running step (`ollama pull`) so the

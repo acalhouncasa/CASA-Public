@@ -1,8 +1,8 @@
-# What Talon changes from stock
+# What Orion changes from stock
 
 **Stock** means VSCodium, Cline, and Ollama as those publishers ship them, opened the usual way (Start Menu VSCodium, Cline’s first-run wizard, Ollama on its default settings).
 
-`VSCodium.exe`, the Cline VSIX, and `ollama.exe` stay publisher-signed. Talon is a **wrapper**: isolated profile, launch flags, and seeded settings. Launch also edits **File menu when-clauses** in `workbench.desktop.main.js` (not the EXE) so Open Folder is actually gone. A `.talon-bak` sits next to that file.
+`VSCodium.exe`, the Cline VSIX, and `ollama.exe` stay publisher-signed. Orion is a **wrapper**: isolated profile, launch flags, and seeded settings. Launch also edits **File menu when-clauses** in `workbench.desktop.main.js` (not the EXE) so Open Folder is actually gone. A `.orion-bak` sits next to that file.
 
 Why each row exists: [HIPAA.md](HIPAA.md). Architecture: [HOW_IT_WORKS.md](HOW_IT_WORKS.md).
 
@@ -10,7 +10,7 @@ Why each row exists: [HIPAA.md](HIPAA.md). Architecture: [HOW_IT_WORKS.md](HOW_I
 
 ---
 
-## Left alone (not Talon)
+## Left alone (not Orion)
 
 | Item | Stock behavior stays |
 |------|----------------------|
@@ -20,7 +20,7 @@ Why each row exists: [HIPAA.md](HIPAA.md). Architecture: [HOW_IT_WORKS.md](HOW_I
 | Ollama installer / weights | Same app. We set `OLLAMA_HOST=127.0.0.1:11434` for this user/process. |
 | Windows Defender / SmartScreen | Never turned off. |
 | Everyday VS Code, Cursor, Chrome, Outlook | Untouched. They can still send PHI if someone opens files there. |
-| `%USERPROFILE%\.gitconfig` | Not edited. GitHub remotes fail **inside the Talon window only**. |
+| `%USERPROFILE%\.gitconfig` | Not edited. GitHub remotes fail **inside the Orion window only**. |
 | Other Windows accounts / other copies of VSCodium | Their profiles are separate. |
 
 Optional: [harden-firewall.ps1](harden-firewall.ps1) (admin) blocks this `VSCodium.exe` from the public internet. That is not on by default.
@@ -29,13 +29,13 @@ Optional: [harden-firewall.ps1](harden-firewall.ps1) (admin) blocks this `VSCodi
 
 ## Launch and profile
 
-| Stock VSCodium | Talon |
+| Stock VSCodium | Orion |
 |----------------|-------|
 | Uses `%APPDATA%\VSCodium` and the default extensions dir | `--user-data-dir ide-data\` and `--extensions-dir ide-extensions\` |
 | Cline stores onboarding in `%USERPROFILE%\.cline` | `CLINE_DIR=ide-data\cline-home` |
 | `--disable-telemetry` is optional | Always passed |
-| Start Menu “VSCodium” | Start Menu / Desktop **Talon** → `run.ps1` → `Open-Talon.cmd` (quoted paths) |
-| Opens the last folder or an empty window | Opens `ide-data\Talon.code-workspace` (kit first) |
+| Start Menu “VSCodium” | Start Menu / Desktop **Orion** → `run.ps1` → `Open-Orion.cmd` (quoted paths) |
+| Opens the last folder or an empty window | Opens `ide-data\Orion.code-workspace` (kit first) |
 | Restores previous windows and editor tabs | `window.restoreWindows=none`, `files.hotExit=off` |
 | Release Notes / Welcome on upgrade | Seeded so Release Notes do not take the first tab; Getting started is a Guard webview |
 | Crash reporter default location | `--crash-reporter-directory ide-data\crashes` |
@@ -44,7 +44,7 @@ Optional: [harden-firewall.ps1](harden-firewall.ps1) (admin) blocks this `VSCodi
 
 ## Cline (the agent)
 
-| Stock Cline | Talon |
+| Stock Cline | Orion |
 |-------------|-------|
 | First run: account, ClinePass, “free cloud models” | Seeded as not a new user; ClinePass banners dismissed |
 | Provider picker (OpenAI, Anthropic, OpenRouter, …) | Seeded to **Ollama** at `http://127.0.0.1:11434` every launch |
@@ -60,7 +60,7 @@ Optional: [harden-firewall.ps1](harden-firewall.ps1) (admin) blocks this `VSCodi
 
 ## Editor (VSCodium settings in this profile only)
 
-| Stock | Talon |
+| Stock | Orion |
 |-------|-------|
 | Telemetry / experiments / cloud Changes / tips | Off |
 | Built-in chat, inline chat, MCP access | Disabled (`chat.disableAIFeatures`, `chat.mcp.access=none`) |
@@ -74,14 +74,14 @@ Optional: [harden-firewall.ps1](harden-firewall.ps1) (admin) blocks this `VSCodi
 | Python: Pylance + Python Environments | Jedi; `ms-python.vscode-python-envs` disabled |
 | Interpreter: whatever the machine has | Kit `.venv\Scripts\python.exe` pinned in User, workspace, and `.vscode` settings. Python Environments picker off. |
 | SQLTools may auto-connect and ask to npm-install `sqlite3` | Connection listed; no auto-connect; Node-detect toasts off |
-| Title bar is the product name | `Talon — local — … — Ollama up/down` |
+| Title bar is the product name | `Orion — local — … — Ollama up/down` |
 | Workspace Trust default | On; startup prompt stays |
 
 ---
 
 ## Python, SQL, and memory (kit extras — not stock)
 
-Stock VSCodium/Cline do not create these. Talon setup does:
+Stock VSCodium/Cline do not create these. Orion setup does:
 
 - `.venv` with pandas, numpy, scikit-learn, matplotlib, SQLAlchemy, Jupyter, ruff — **no** OpenAI / Anthropic / Azure / Google LLM SDKs
 - `data\local.sqlite`
@@ -94,10 +94,10 @@ Stock VSCodium/Cline do not create these. Talon setup does:
 
 ## How to tell you are not in stock
 
-1. Shortcut name is **Talon**, not VSCodium.
-2. Title bar starts with **Talon — local**.
+1. Shortcut name is **Orion**, not VSCodium.
+2. Title bar starts with **Orion — local**.
 3. File menu has **Add Folder to Workspace**, not **Open Folder**.
 4. Cline is on the right and says **Ollama**.
 5. `doctor.ps1` reports provider `ollama`.
 
-If any of those fail, close the window and start from `Start Talon.cmd`. A stock VSCodium shortcut is a different product and is not safe for PHI.
+If any of those fail, close the window and start from `Start Orion.cmd`. A stock VSCodium shortcut is a different product and is not safe for PHI.

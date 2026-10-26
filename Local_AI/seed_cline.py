@@ -120,7 +120,7 @@ def cline_payload(model: str) -> dict:
         "clineWebToolsEnabled": False,
         "customPrompt": "compact",
         "customInstructions": (
-            "You are Talon, the on-device Local AI agent. Use only Ollama on 127.0.0.1. "
+            "You are Orion, the on-device Local AI agent. Use only Ollama on 127.0.0.1. "
             "Prefer Python and SQL. Run code with this kit's .venv (pandas, numpy, "
             "SQLAlchemy, scikit-learn, Jupyter, ruff). Default DB is data/local.sqlite. "
             "Do not call cloud APIs, ClinePass, or web fetch. Do not pip-install OpenAI "
@@ -286,7 +286,7 @@ def write_cline_home(ide_data: Path, payload: dict, model: str) -> None:
             raw = default_state.read_text(encoding="utf-8")
         except OSError:
             raw = ""
-        if "Local AI" in raw.replace("/", "\\") or "localcoder" in raw.lower():
+        if "Local AI" in raw.replace("/", "\\") or "orion" in raw.lower():
             homes.append(default_home)
 
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -317,7 +317,7 @@ def write_cline_home(ide_data: Path, payload: dict, model: str) -> None:
                     "baseUrl": OLLAMA,
                 },
                 "updatedAt": now,
-                "tokenSource": "localcoder",
+                "tokenSource": "orion",
             }
         },
     }

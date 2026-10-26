@@ -18,7 +18,7 @@ function Find-VSCodium {
 }
 
 $exe = Find-VSCodium
-$rulePrefix = "LocalCoder"
+$rulePrefix = "Orion"
 
 Get-NetFirewallRule -ErrorAction SilentlyContinue |
     Where-Object { $_.DisplayName -like "$rulePrefix *" } |
@@ -43,7 +43,7 @@ New-NetFirewallRule `
 
 Write-Host "Firewall rules installed for: $exe"
 Write-Host "VSCodium may still reach 127.0.0.1 (Ollama). Public internet is blocked."
-Write-Host "To remove later: Get-NetFirewallRule | ? DisplayName -like 'LocalCoder *' | Remove-NetFirewallRule"
+Write-Host "To remove later: Get-NetFirewallRule | ? DisplayName -like 'Orion *' | Remove-NetFirewallRule"
 Write-Host ""
 Write-Host "Note: Windows 'block Internet' + 'allow localhost' can still be order-sensitive."
 Write-Host "After launching Local Coder, confirm Resource Monitor shows no VSCodium connections except 127.0.0.1."

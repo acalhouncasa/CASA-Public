@@ -8,5 +8,5 @@ if not exist "%CODIUM%" (
   echo VSCodium.exe not found. Run setup.ps1 first.
   exit /b 1
 )
-start "Talon" "%CODIUM%" --user-data-dir "%KIT%\ide-data" --extensions-dir "%KIT%\ide-extensions" --disable-telemetry --new-window --crash-reporter-directory "%KIT%\ide-data\crashes" "%KIT%\ide-data\Talon.code-workspace"
+start "Orion" "%CODIUM%" --user-data-dir "%KIT%\ide-data" --extensions-dir "%KIT%\ide-extensions" --disable-telemetry --new-window --crash-reporter-directory "%KIT%\ide-data\crashes" "%KIT%\ide-data\Orion.code-workspace"
 endlocal

@@ -1,4 +1,4 @@
-﻿#define MyAppName "Talon"
+#define MyAppName "Orion"
 #define MyAppVersion "1.4.5"
 #define MyAppPublisher "CASA-Trinity"
 #define SourceRoot ".."
@@ -9,7 +9,7 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL=https://github.com/acalhouncasa/CASA-Public
-DefaultDirName={localappdata}\Programs\LocalCoder
+DefaultDirName={localappdata}\Programs\Orion
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
@@ -20,9 +20,9 @@ SolidCompression=yes
 WizardStyle=modern
 SetupLogging=yes
 OutputDir=..\dist
-OutputBaseFilename=LocalCoder-{#MyAppVersion}-Setup
+OutputBaseFilename=Orion-{#MyAppVersion}-Setup
 UninstallDisplayName={#MyAppName}
-; Unsigned builds WILL show SmartScreen. Sign with Sign-LocalCoder.ps1 / signtool.
+; Unsigned builds WILL show SmartScreen. Sign with Sign-Orion.ps1 / signtool.
 ; This installer copies readable scripts. It does not embed Ollama or VSCodium EXEs.
 
 [Languages]
@@ -43,26 +43,26 @@ Source: "{#SourceRoot}\setup-datasci.ps1"; DestDir: "{app}"; Flags: ignoreversio
 Source: "{#SourceRoot}\run.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\seed_cline.py"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\.clinerules"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SourceRoot}\Launch-LocalCoder.vbs"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\Launch-Orion.vbs"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\harden-firewall.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SourceRoot}\Sign-LocalCoder.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SourceRoot}\Uninstall-LocalCoder.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\Sign-Orion.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\Uninstall-Orion.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\doctor.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SourceRoot}\Update-LocalCoder.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\Update-Orion.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\TEAM.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\Check.cmd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\ruff.toml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\examples\*"; DestDir: "{app}\examples"; Flags: ignoreversion
 Source: "{#SourceRoot}\Install.cmd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SourceRoot}\Start Talon.cmd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceRoot}\Start Orion.cmd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\templates\*"; DestDir: "{app}\templates"; Flags: ignoreversion
 Source: "{#SourceRoot}\payload\README.txt"; DestDir: "{app}\payload"; Flags: ignoreversion
 Source: "{#SourceRoot}\data\README.txt"; DestDir: "{app}\data"; Flags: ignoreversion
 Source: "{#SourceRoot}\branding\*"; DestDir: "{app}\branding"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\Install or repair Talon"; Filename: "{app}\Install.cmd"
-Name: "{group}\Talon"; Filename: "{app}\Start Talon.cmd"
+Name: "{group}\Install or repair Orion"; Filename: "{app}\Install.cmd"
+Name: "{group}\Orion"; Filename: "{app}\Start Orion.cmd"
 Name: "{group}\Install instructions"; Filename: "{app}\INSTALL.md"
 Name: "{group}\HIPAA limits"; Filename: "{app}\HIPAA.md"
 Name: "{group}\IT notes"; Filename: "{app}\IT.md"

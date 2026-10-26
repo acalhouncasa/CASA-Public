@@ -1,20 +1,20 @@
 # Getting started
 
-**Talon 1.4.10** · Local AI
+**Orion 1.4.10** · Local AI
 
-Talon is a coding agent that stays on this workstation. The file explorer is on the left. Cline is on the right and must remain on **Ollama**. Do not create a Cline account.
+Orion is a coding agent that stays on this workstation. The file explorer is on the left. Cline is on the right and must remain on **Ollama**. Do not create a Cline account.
 
 ---
 
 ## Highlights
 
-- The **Talon** kit is always the first Explorer root. It starts collapsed so project and PHI files stay in front.
-- Attach work with **Talon Connect** or **File → Add Folder to Workspace**. Those folders appear beside the kit.
-- If you paste a local folder or file path in Cline, Talon connects it and maps CSV/Excel/SQLite into `memory\` for later chats. First action is `learn\ingest_path.py` on the exact path. No menu of options. No invented filenames.
+- The **Orion** kit is always the first Explorer root. It starts collapsed so project and PHI files stay in front.
+- Attach work with **Orion Connect** or **File → Add Folder to Workspace**. Those folders appear beside the kit.
+- If you paste a local folder or file path in Cline, Orion connects it and maps CSV/Excel/SQLite into `memory\` for later chats. First action is `learn\ingest_path.py` on the exact path. No menu of options. No invented filenames.
 - **File → Open Folder** and **Open Workspace from File** are not on the File menu. **Open File** stays. Use Add Folder to Workspace or Connect.
 - Python uses this kit’s `.venv`. SQLTools starts with `data\local.sqlite`.
 - Maps and lessons are written under `memory\` on this disk. Treat that folder as PHI.
-- Talon waits for Ollama before the editor is useful. If Cline is not on Ollama, Talon resets it and reloads. Do not paste a cloud API key.
+- Orion waits for Ollama before the editor is useful. If Cline is not on Ollama, Orion resets it and reloads. Do not paste a cloud API key.
 
 ---
 
@@ -24,16 +24,16 @@ Keep the kit separate from extracts.
 
 | Explorer root | Purpose |
 |---------------|---------|
-| **Talon** | This kit: Python environment, memory, and scripts. Not a dump of extracts. |
+| **Orion** | This kit: Python environment, memory, and scripts. Not a dump of extracts. |
 | **Project** | SQL, notebooks, and scripts for one job. |
 | **PHI** | Local extracts, CSVs, and SQLite files that may contain PHI. |
 
 Example:
 
 ```text
-C:\Talon\                 kit
-D:\TalonProjects\Ops\     project
-D:\TalonPHI\Extracts\     PHI
+C:\Orion\                 kit
+D:\OrionProjects\Ops\     project
+D:\OrionPHI\Extracts\     PHI
 ```
 
 If code and PHI already live in one agency folder, connect that folder once. Three roots are not required.
@@ -46,26 +46,26 @@ If code and PHI already live in one agency folder, connect that folder once. Thr
 
 | Area | What you should see |
 |------|---------------------|
-| Left | Explorer. Talon is collapsed. Open files from Project or PHI. |
+| Left | Explorer. Orion is collapsed. Open files from Project or PHI. |
 | Center | The file you are editing. This page on first launch. |
 | Right | Cline. Provider is Ollama at `http://127.0.0.1:11434`. |
-| Title bar | `Talon — local — 2 folders — Ollama up` |
+| Title bar | `Orion — local — 2 folders — Ollama up` |
 | Status bar | Python is `.venv\Scripts\python.exe` |
 | Database icon | SQLTools. **Local SQLite** plus anything you connected. |
 
 Command Palette starters (Ctrl+Shift+P):
 
-- **Talon: Starter — ingest this path**
-- **Talon: Starter — read memory index**
-- **Talon: Starter — map this folder**
-- **Talon: Starter — list SQL tables**
+- **Orion: Starter — ingest this path**
+- **Orion: Starter — read memory index**
+- **Orion: Starter — map this folder**
+- **Orion: Starter — list SQL tables**
 
 ---
 
 ## Daily use
 
-1. Start **Talon** from the desktop or Start Menu. Do not open stock VSCodium.
-2. If Explorer shows only the kit, run **Talon Connect**, Add Folder to Workspace, or paste the folder path in Cline.
+1. Start **Orion** from the desktop or Start Menu. Do not open stock VSCodium.
+2. If Explorer shows only the kit, run **Orion Connect**, Add Folder to Workspace, or paste the folder path in Cline.
 3. Keep Cline on the right. An empty pane is still this window’s agent. Do not open a cloud chat.
 4. Back up `memory\` with **Backup.cmd** to a local disk or USB. Not OneDrive.
 
@@ -77,14 +77,14 @@ The first reply after a cold start can take a minute while the local model loads
 
 | Symptom | Action |
 |---------|--------|
-| Only the Talon root is listed | Talon Connect, Add Folder to Workspace, or paste the folder path in Cline |
-| Cline asked what to do with a local folder you pasted | Close Talon and start from `Start Talon.cmd` so 1.4.10 instructions load. Paste the exact path again (example `C:\Power BI`). First reply should run `learn\ingest_path.py`, not a menu of options. |
-| Cline asks to create an account | Close Talon. Run `.\run.ps1` from this kit. |
-| Python is not the venv / location picker | Close Talon. Run `.\setup-datasci.ps1` then `.\doctor.ps1`. Full steps: [INSTALL.md section 8](INSTALL.md#8-python-interpreter). |
+| Only the Orion root is listed | Orion Connect, Add Folder to Workspace, or paste the folder path in Cline |
+| Cline asked what to do with a local folder you pasted | Close Orion and start from `Start Orion.cmd` so 1.4.10 instructions load. Paste the exact path again (example `C:\Power BI`). First reply should run `learn\ingest_path.py`, not a menu of options. |
+| Cline asks to create an account | Close Orion. Run `.\run.ps1` from this kit. |
+| Python is not the venv / location picker | Close Orion. Run `.\setup-datasci.ps1` then `.\doctor.ps1`. Full steps: [INSTALL.md section 8](INSTALL.md#8-python-interpreter). |
 | SQLTools is empty | Connect a SQLite file or local SQL Server, or use `data\local.sqlite` |
 | First Cline reply is slow | Wait. Launch warms `qwen3-coder:30b` in the background. |
 | “Ollama is not running” page | Start Ollama from the Start Menu, or wait. Do not pick a cloud provider. |
-| Cline shows OpenAI / ClinePass / an API key box | Close the prompt. Talon resets Cline to Ollama. If it comes back, close Talon and run `Start Talon.cmd`. |
+| Cline shows OpenAI / ClinePass / an API key box | Close the prompt. Orion resets Cline to Ollama. If it comes back, close Orion and run `Start Orion.cmd`. |
 | Need a copy of lessons | `Backup.cmd` to a local folder. The zip is PHI. |
 
 Further reading: [CONNECT.md](CONNECT.md), [LEARN.md](LEARN.md), [HIPAA.md](HIPAA.md).

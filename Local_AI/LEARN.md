@@ -1,8 +1,8 @@
 # Memory
 
-Talon is expected to work with PHI on this PC. Maps, example values, and lessons stay on this disk. Do not send them to a cloud chat, email, or git remote.
+Orion is expected to work with PHI on this PC. Maps, example values, and lessons stay on this disk. Do not send them to a cloud chat, email, or git remote.
 
-This page is what the learner **actually does**. It does not train a model and it does not “understand” a dataset the way a person does. It writes local notes so the next Talon session can start with file shapes and past outcomes instead of rediscovering them.
+This page is what the learner **actually does**. It does not train a model and it does not “understand” a dataset the way a person does. It writes local notes so the next Orion session can start with file shapes and past outcomes instead of rediscovering them.
 
 ---
 
@@ -10,17 +10,17 @@ This page is what the learner **actually does**. It does not train a model and i
 
 Three writers keep `memory\`:
 
-1. **Background learner** (`learn\talon_learn.py`) — started by `run.ps1`. It scans files and finished Cline sessions on a timer. Each watch cycle re-reads `ide-data\sources.json`, so a folder added after launch still gets mapped.
+1. **Background learner** (`learn\orion_learn.py`) — started by `run.ps1`. It scans files and finished Cline sessions on a timer. Each watch cycle re-reads `ide-data\sources.json`, so a folder added after launch still gets mapped.
 2. **Cline** — instructed to ingest a local path the user names (no “what should I do with this folder?”), read those notes before repeating work, and write a richer map and a short lesson after a task.
 3. **`learn\ingest_path.py`** — connect + one-shot map. Cline, Connect, and Add Folder to Workspace all call this.
 
-The next task is supposed to open `memory\INDEX.md` first, then `WHAT_WORKED.md`, `FAILED.md`, and the data maps that match the files in play. That is how Talon prepares: it reuses columns, types, example values, and known good/bad approaches. It does not load the SQLite memory into the model automatically.
+The next task is supposed to open `memory\INDEX.md` first, then `WHAT_WORKED.md`, `FAILED.md`, and the data maps that match the files in play. That is how Orion prepares: it reuses columns, types, example values, and known good/bad approaches. It does not load the SQLite memory into the model automatically.
 
 ---
 
 ## What the background learner does
 
-`run.ps1` starts `learn\talon_learn.py --watch` against the kit plus every folder in `ide-data\sources.json` (Connect). Default interval is **20 seconds**. A second copy will not start if one is already running. Folders added later are picked up on the next cycle from `sources.json`.
+`run.ps1` starts `learn\orion_learn.py --watch` against the kit plus every folder in `ide-data\sources.json` (Connect). Default interval is **20 seconds**. A second copy will not start if one is already running. Folders added later are picked up on the next cycle from `sources.json`.
 
 If the user pastes a local path in Cline, Cline runs:
 
@@ -37,7 +37,7 @@ Each cycle it:
 3. Looks at files with these extensions: `.csv`, `.tsv`, `.xlsx`, `.xls`, `.sqlite`, `.db`, `.sql`, `.json`, `.parquet`.
 4. Hashes each file. Unchanged files are skipped (`memory\state.json`).
 5. Writes or updates a markdown map under `memory\data-maps\`.
-6. Mirrors the same facts into `memory\talon-memory.sqlite` (`files`, `columns`, `lessons` tables).
+6. Mirrors the same facts into `memory\orion-memory.sqlite` (`files`, `columns`, `lessons` tables).
 7. Reads finished Cline sessions under `ide-data\cline-home\data\sessions\` and writes a lesson the first time a session has `completed`, `failed`, `error`, or an `ended_at` timestamp.
 8. Rebuilds `memory\INDEX.md` when anything new was written.
 
@@ -83,10 +83,10 @@ Command Palette starters:
 
 | Command | What it asks Cline to do |
 |---------|--------------------------|
-| **Talon: Starter — ingest this path** | Run `ingest_path.py` on the path the user named, then use the maps. |
-| **Talon: Starter — read memory index** | Read the index and the ledgers before answering. |
-| **Talon: Starter — map this folder** | Walk connected folders and write maps (path, columns, types, example values, likely join keys, row count) plus a lesson. |
-| **Talon: Starter — list SQL tables** | List tables, then update maps for anything new. |
+| **Orion: Starter — ingest this path** | Run `ingest_path.py` on the path the user named, then use the maps. |
+| **Orion: Starter — read memory index** | Read the index and the ledgers before answering. |
+| **Orion: Starter — map this folder** | Walk connected folders and write maps (path, columns, types, example values, likely join keys, row count) plus a lesson. |
+| **Orion: Starter — list SQL tables** | List tables, then update maps for anything new. |
 
 The map-this-folder starter asks for **join keys**. The Python watcher does not infer joins. If a map has join notes, a person or Cline added them.
 
@@ -98,7 +98,7 @@ The map-this-folder starter asks for **join keys**. The Python watcher does not 
 |----------|----------------|
 | `memory\INDEX.md` | Links to every current map and lesson. Start here. |
 | `memory\data-maps\` | One markdown file per scanned data file, with a JSON payload. |
-| `memory\talon-memory.sqlite` | Same facts in tables: `files`, `columns`, `lessons`. |
+| `memory\orion-memory.sqlite` | Same facts in tables: `files`, `columns`, `lessons`. |
 | `memory\lessons\` | One file per recorded Cline session. |
 | `memory\WHAT_WORKED.md` | Date, topic, “reuse this approach.” Created when the first success is recorded. |
 | `memory\FAILED.md` | Date, topic, “do not retry this exact approach.” Created when the first failure is recorded. |
@@ -122,10 +122,10 @@ The map-this-folder starter asks for **join keys**. The Python watcher does not 
 
 ```powershell
 .\.venv\Scripts\python.exe .\learn\ingest_path.py --path "D:\Extracts"
-.\.venv\Scripts\python.exe .\learn\talon_learn.py --kit "$PWD" --workspace "$PWD"
+.\.venv\Scripts\python.exe .\learn\orion_learn.py --kit "$PWD" --workspace "$PWD"
 ```
 
-`ingest_path.py` is the usual command when someone just named a folder. Add more `--workspace` paths on `talon_learn.py` only when you want a scan without updating `sources.json`.
+`ingest_path.py` is the usual command when someone just named a folder. Add more `--workspace` paths on `orion_learn.py` only when you want a scan without updating `sources.json`.
 
 ---
 

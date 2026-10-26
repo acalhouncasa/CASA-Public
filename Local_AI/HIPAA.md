@@ -20,7 +20,7 @@ If you need a covered-entity determination, stop and talk to compliance. Do not 
 | Local inference replaces a BAA, audit log, or disk encryption | **No** |
 | A user can still leak PHI (OneDrive, USB, browser, a prompt sent before Guard reloads, another editor) | **Yes** |
 
-**Do not put PHI in a hosted IDE or browser chat.** Those products still send prompt-construction traffic through a vendor backend, even when you point them at a local model. Talon exists so the default path never does that.
+**Do not put PHI in a hosted IDE or browser chat.** Those products still send prompt-construction traffic through a vendor backend, even when you point them at a local model. Orion exists so the default path never does that.
 
 ---
 
@@ -95,13 +95,13 @@ Stock vs this wrapper (same facts, comparison layout): [FROM_STOCK.md](FROM_STOC
 | Control | Where | Why |
 |---------|--------|-----|
 | `github.gitAuthentication=false` and related GitHub UI off | `templates/settings.json` | No GitHub login prompt in the PHI window |
-| `GIT_CONFIG_COUNT` `url.*.insteadof` rewrites `https://github.com/`, `git@github.com:`, gist, and `http://github.com/` | `run.ps1` | `git push` / clone to GitHub fail **inside Talon only**. Your user `.gitconfig` is not edited |
+| `GIT_CONFIG_COUNT` `url.*.insteadof` rewrites `https://github.com/`, `git@github.com:`, gist, and `http://github.com/` | `run.ps1` | `git push` / clone to GitHub fail **inside Orion only**. Your user `.gitconfig` is not edited |
 | `GH_TOKEN`, `GITHUB_TOKEN`, `GH_ENTERPRISE_TOKEN` cleared | `run.ps1` | `gh` cannot silently use a token from the environment |
 | Copilot, GitHub PRs, GitHub auth, Remote Repositories, Azure Repos disabled in the isolated profile | `seed_cline.py` `DISABLED_EXTENSIONS` | Those extensions exist to talk to Microsoft / GitHub |
 | Source Control hidden; `git.enabled=false`; `git.openRepositoryInParentFolders=never`; `vscode.git` / `vscode.git-base` disabled | settings + `seed_cline.py` | Stops the parent-folder Git / GitHub connect prompt and a git icon that invites remotes |
 | `git.autofetch=false`, `git.terminalAuthentication=false` | `templates/settings.json` | No background fetch / askpass to a host |
 
-This **does not** block git remotes in an ordinary Windows terminal outside Talon.
+This **does not** block git remotes in an ordinary Windows terminal outside Orion.
 
 ### Python and SQL kept on-box
 
@@ -113,7 +113,7 @@ This **does not** block git remotes in an ordinary Windows terminal outside Talo
 | Default DB is `data\local.sqlite` (file, no server) | `setup-datasci.ps1`, SQLTools settings | SQL work can stay on disk |
 | Python language server = **Jedi**, not Pylance | `templates/settings.json` | Pylance / Microsoft language servers can send code for analysis |
 | `python.telemetry` / `python.experiments` off | `templates/settings.json` | Microsoft Python extension telemetry |
-| Windows path for `.venv\Scripts\python.exe` in User settings, `Talon.code-workspace`, and kit `.vscode\settings.json` | `learn/apply_sources.py` | Stops the first-launch Python location picker |
+| Windows path for `.venv\Scripts\python.exe` in User settings, `Orion.code-workspace`, and kit `.vscode\settings.json` | `learn/apply_sources.py` | Stops the first-launch Python location picker |
 | `python.useEnvironmentsExtension=false`, `python.createEnvironment.trigger=off` | `templates/settings.json` | The Python Environments helper still asks for a location even when `defaultInterpreterPath` is set |
 | `ms-python.vscode-python-envs` disabled | `seed_cline.py` | That helper toasts and can talk to Microsoft account / env services |
 | SQLTools does not auto-connect; Node-detect toasts off; driver install auto-accept if they click Connect | `templates/settings.json` | First launch must not npm-install `sqlite3` or announce Node |
@@ -123,15 +123,15 @@ This **does not** block git remotes in an ordinary Windows terminal outside Talo
 
 | Control | Where | Why |
 |---------|--------|-----|
-| Launch only through `Open-Talon.cmd` with quoted `--user-data-dir` | `run.ps1`, `Open-Talon.cmd` | A path with a space otherwise opens the wrong folders and drops the isolated profile |
+| Launch only through `Open-Orion.cmd` with quoted `--user-data-dir` | `run.ps1`, `Open-Orion.cmd` | A path with a space otherwise opens the wrong folders and drops the isolated profile |
 | `window.restoreWindows=none`, `files.hotExit=off` | `templates/settings.json` | Do not restore Release Notes or a previous unsafe layout |
 | `releaseNotes/lastVersion` = real VSCodium version | `seed_cline.py` | Fake versions made Release Notes open on every launch |
 | **File → Open Folder** and **Open Workspace from File** off the File menu | `learn/patch_vscodium_menus.py` sets those items’ `when` to `ContextKeyExpr.false()` in `workbench.desktop.main.js` (not the EXE), matching File-menu group `2_open` rather than one VSCodium minify. Then it updates `product.json` checksums with the raw file hash so the install is not flagged corrupt. `menu.hiddenCommands` alone does not remove them on this VSCodium. `doctor.ps1` FAILs if the patch is missing. | Those commands replace the workspace and drop Guard / Cline isolation. **Open File** stays |
 | Ctrl+K Ctrl+O is Add Folder, not Open Folder | `templates/keybindings.json` | Same replacement risk on the default shortcut |
-| Talon Guard: Open Folder / Open Recent adds beside the kit | `extensions/talon.talon-guard-1.3.0` | If the menu item still runs, the kit stays the first root |
-| Kit root starts collapsed; Connect adds project/PHI folders | `learn/apply_sources.py`, `Connect-Talon.ps1` | Staff keep extracts out of the kit dump and out of File → Open Folder |
+| Orion Guard: Open Folder / Open Recent adds beside the kit | `extensions/orion.orion-guard-1.3.0` | If the menu item still runs, the kit stays the first root |
+| Kit root starts collapsed; Connect adds project/PHI folders | `learn/apply_sources.py`, `Connect-Orion.ps1` | Staff keep extracts out of the kit dump and out of File → Open Folder |
 | `doctor.ps1` / `Check.cmd` | kit root | Staff can confirm Ollama, Cline provider, Guard, and venv without screenshots of PHI |
-| `Backup.cmd` refuses OneDrive / consumer sync paths | `Backup-TalonMemory.ps1` | Memory zip is treated as PHI |
+| `Backup.cmd` refuses OneDrive / consumer sync paths | `Backup-OrionMemory.ps1` | Memory zip is treated as PHI |
 | `setup.ps1 -Strict` | `setup.ps1` | Shared PCs: commands are not auto-approved, so `curl` / `pip` to a vendor needs a click |
 
 ### Process and sharing hygiene
@@ -151,7 +151,7 @@ This **does not** block git remotes in an ordinary Windows terminal outside Talo
 
 ## Local PHI is in scope
 
-Talon is meant to **open, query, and remember PHI on this workstation**. `data\`, `memory\`, and `ide-data\` may hold charts, maps, and lessons. That is the point of a local kit.
+Orion is meant to **open, query, and remember PHI on this workstation**. `data\`, `memory\`, and `ide-data\` may hold charts, maps, and lessons. That is the point of a local kit.
 
 The line is **off the box**, not “never touch PHI”:
 
@@ -188,8 +188,8 @@ Be explicit with your privacy officer. Residual paths we know about:
 - [ ] Disk encryption (BitLocker) and patching already required
 - [ ] Working folder is **not** consumer-synced
 - [ ] Named Windows accounts; screen lock; no shared PHI login
-- [ ] One Talon folder **per user** (do not copy `ide-data` between PCs)
-- [ ] Workforce told: Talon only; never Copilot or a hosted chat for PHI
+- [ ] One Orion folder **per user** (do not copy `ide-data` between PCs)
+- [ ] Workforce told: Orion only; never Copilot or a hosted chat for PHI
 - [ ] Workforce told: do not switch Cline off Ollama
 - [ ] Optional firewall script reviewed by IT
 - [ ] Retention / wipe procedure for `ide-data` and `data\`
@@ -216,4 +216,4 @@ Even after this kit is installed on the same PC:
 2. Follow [SECURITY.md](../SECURITY.md) (private vulnerability reporting).
 3. Follow your agency incident process.
 
-Related hosted-tool habits (different product): [AI/Working_With_Cursor/SAFETY.md](../AI/Working_With_Cursor/SAFETY.md). That folder is not Talon.
+Related hosted-tool habits (different product): [AI/Working_With_Cursor/SAFETY.md](../AI/Working_With_Cursor/SAFETY.md). That folder is not Orion.

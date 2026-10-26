@@ -1,6 +1,6 @@
 # Third-party software
 
-Talon does not replace these projects. The kit installs them from
+Orion does not replace these projects. The kit installs them from
 their official sources (winget or publisher-signed installers you place in
 `payload\`).
 

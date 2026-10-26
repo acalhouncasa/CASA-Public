@@ -1,8 +1,8 @@
-﻿# Talon — Local AI
+# Orion — Local AI
 
 A local coding agent for Windows: **VSCodium + Cline + Ollama**.
 
-Prompts stay on the workstation (`127.0.0.1:11434`). Talon is its own kit.
+Prompts stay on the workstation (`127.0.0.1:11434`). Orion is its own kit.
 
 | Document | Subject |
 |----------|---------|
@@ -12,17 +12,17 @@ Prompts stay on the workstation (`127.0.0.1:11434`). Talon is its own kit.
 | [LEARN.md](LEARN.md) | What the learner maps, how Cline should use it, and what it does not do |
 | [TEAM.md](TEAM.md) | Small-team operations |
 | [HIPAA.md](HIPAA.md) | PHI limits and residual risk |
-| [FROM_STOCK.md](FROM_STOCK.md) | Stock VSCodium/Cline/Ollama vs what Talon changes |
+| [FROM_STOCK.md](FROM_STOCK.md) | Stock VSCodium/Cline/Ollama vs what Orion changes |
 | [HOW_IT_WORKS.md](HOW_IT_WORKS.md) | Architecture |
 | [IT.md](IT.md) | Sharing, hashes, Authenticode |
 
 **Use at your own risk.** This kit is not HIPAA certified. Local PHI in `data\` and `memory\` is expected. Do not put PHI in a hosted chat or in this GitHub repository.
 
-Current kit: **1.4.10**. Launch waits for Ollama on `127.0.0.1:11434`. If it is down, Talon opens a local wait page instead of Cline’s cloud picker. If someone switches Cline off Ollama, Guard resets it and reloads. Launch goes through `Open-Talon.cmd` so folder names with spaces stay one path. Git and GitHub stay off. **File → Open Folder** is not on the File menu. **Open File** stays. Setup installs Python if missing and pins the kit `.venv` so the editor should not ask for a Python location. If you paste a local folder or file path in Cline (for example `C:\Power BI`), Talon must run `learn\ingest_path.py` on that exact path first — no menu of options, no invented filenames.
+Current kit: **1.5.0** (rebranded from Talon). Launch waits for Ollama on `127.0.0.1:11434`. If it is down, Orion opens a local wait page instead of Cline’s cloud picker. If someone switches Cline off Ollama, Guard resets it and reloads. Launch goes through `Open-Orion.cmd` so folder names with spaces stay one path. Git and GitHub stay off. **File → Open Folder** is not on the File menu. **Open File** stays. Setup installs Python if missing and pins the kit `.venv` so the editor should not ask for a Python location. If you paste a local folder or file path in Cline (for example `C:\Power BI`), Orion must run `learn\ingest_path.py` on that exact path first — no menu of options, no invented filenames.
 
 ## Folders
 
-Keep the Talon kit as the first Explorer root. It starts collapsed. Attach project and PHI folders with `Connect.cmd` or File → Add Folder to Workspace. Pasting a local path in Cline does the same: connect, map, remember. File → Open Folder is not on the File menu.
+Keep the Orion kit as the first Explorer root. It starts collapsed. Attach project and PHI folders with `Connect.cmd` or File → Add Folder to Workspace. Pasting a local path in Cline does the same: connect, map, remember. File → Open Folder is not on the File menu.
 
 ## Quick start
 
@@ -32,7 +32,7 @@ Keep the Talon kit as the first Explorer root. It starts collapsed. Attach proje
 .\Connect.cmd
 ```
 
-After setup, use **Talon** and **Talon Connect** from the Start Menu. Desktop shortcuts use the Talon icon.
+After setup, use **Orion** and **Orion Connect** from the Start Menu. Desktop shortcuts use the Orion icon.
 
 To copy `memory\` to a local disk or USB (never OneDrive):
 

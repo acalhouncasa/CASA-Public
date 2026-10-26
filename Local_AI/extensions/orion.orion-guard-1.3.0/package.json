@@ -1,0 +1,38 @@
+{
+  "name": "orion-guard",
+  "displayName": "Orion Guard",
+  "description": "Keeps the Orion kit workspace open and offers local Cline starters.",
+  "version": "1.3.0",
+  "publisher": "orion",
+  "engines": { "vscode": "^1.80.0" },
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "orion.reopenWorkspace", "title": "Orion: Reopen kit workspace" },
+      { "command": "orion.addFolder", "title": "Orion: Add folder to workspace" },
+      { "command": "orion.warnOpenFolder", "title": "Orion: Add folder to workspace" },
+      { "command": "orion.starterIngestPath", "title": "Orion: Starter - ingest this path" },
+      { "command": "orion.starterMapFolder", "title": "Orion: Starter - map this folder" },
+      { "command": "orion.starterListSql", "title": "Orion: Starter - list SQL tables" },
+      { "command": "orion.starterMemory", "title": "Orion: Starter - read memory index" }
+    ],
+    "menus": {
+      "MenubarFileMenu": [
+        {
+          "command": "orion.addFolder",
+          "group": "2_open",
+          "order": 2
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "orion.addFolder",
+        "key": "ctrl+k ctrl+o",
+        "mac": "cmd+k cmd+o"
+      }
+    ]
+  }
+}

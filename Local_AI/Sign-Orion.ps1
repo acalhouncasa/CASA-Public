@@ -33,4 +33,4 @@ foreach ($file in $files) {
 
 Write-Host "Signed $($files.Count) script(s) with $($cert.Subject)"
 Write-Host "Inno Setup EXE signing (if you built one):"
-Write-Host '  signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /sha1 THUMBPRINT dist\LocalCoder-*-Setup.exe'
+Write-Host '  signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /sha1 THUMBPRINT dist\Orion-*-Setup.exe'

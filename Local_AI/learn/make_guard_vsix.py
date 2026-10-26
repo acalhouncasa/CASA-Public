@@ -1,4 +1,4 @@
-"""Build a BOM-free VSIX so VSCodium will load Talon Guard."""
+"""Build a BOM-free VSIX so VSCodium will load Orion Guard."""
 
 from __future__ import annotations
 
@@ -7,15 +7,15 @@ import zipfile
 from pathlib import Path
 
 KIT = Path(__file__).resolve().parents[1]
-EXT = KIT / "extensions" / "talon.talon-guard-1.3.0"
-OUT = KIT / "extensions" / "talon-guard-1.3.0.vsix"
+EXT = KIT / "extensions" / "orion.orion-guard-1.3.0"
+OUT = KIT / "extensions" / "orion-guard-1.3.0.vsix"
 
 MANIFEST = """<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
   <Metadata>
-    <Identity Language="en-US" Id="talon-guard" Version="1.3.0" Publisher="talon"/>
-    <DisplayName>Talon Guard</DisplayName>
-    <Description xml:space="preserve">Keeps the Talon kit workspace open and shows Getting started.</Description>
+    <Identity Language="en-US" Id="orion-guard" Version="1.3.0" Publisher="orion"/>
+    <DisplayName>Orion Guard</DisplayName>
+    <Description xml:space="preserve">Keeps the Orion kit workspace open and shows Getting started.</Description>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Code"/>
@@ -39,7 +39,7 @@ CONTENT_TYPES = """<?xml version="1.0" encoding="utf-8"?>
 
 def main() -> int:
     pkg = json.loads(EXT.joinpath("package.json").read_text(encoding="utf-8-sig"))
-    if pkg.get("name") != "talon-guard":
+    if pkg.get("name") != "orion-guard":
         print("bad package.json")
         return 1
     if OUT.exists():

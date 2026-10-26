@@ -27,7 +27,7 @@ function Pass([string]$Message) { Write-Check "OK" $Message }
 function Warn([string]$Message) { $script:warn++; Write-Check "WARN" $Message }
 function Fail([string]$Message) { $script:fail++; Write-Check "FAIL" $Message }
 
-Write-Host "Talon doctor" -ForegroundColor Cyan
+Write-Host "Orion doctor" -ForegroundColor Cyan
 Write-Host "Kit: $Root"
 
 $versionFile = Join-Path $Root "VERSION"
@@ -98,12 +98,12 @@ if (Test-Path $venvPy) {
 }
 
 $settingsPath = Join-Path $ide "User\settings.json"
-$wsPath = Join-Path $ide "Talon.code-workspace"
+$wsPath = Join-Path $ide "Orion.code-workspace"
 $interpOk = $false
 foreach ($cfgPath in @($settingsPath, $wsPath)) {
     if (-not (Test-Path $cfgPath)) { continue }
     $raw = Get-Content $cfgPath -Raw -ErrorAction SilentlyContinue
-    if ($raw -and $raw -like "*__LOCALCODER_PYTHON__*") {
+    if ($raw -and $raw -like "*__ORION_PYTHON__*") {
         Fail "Python path placeholder still in $(Split-Path $cfgPath -Leaf). Run setup-datasci.ps1."
         continue
     }
@@ -130,8 +130,8 @@ if ($smi) {
     Warn "nvidia-smi not found. 30B models need a large NVIDIA GPU."
 }
 
-$learn = Join-Path $Root "learn\talon_learn.py"
-if (Test-Path $learn) { Pass "Background learner learn\\talon_learn.py" } else { Warn "talon_learn.py missing" }
+$learn = Join-Path $Root "learn\orion_learn.py"
+if (Test-Path $learn) { Pass "Background learner learn\\orion_learn.py" } else { Warn "orion_learn.py missing" }
 $ingest = Join-Path $Root "learn\ingest_path.py"
 if (Test-Path $ingest) { Pass "Path ingest learn\\ingest_path.py" } else { Warn "ingest_path.py missing" }
 $mem = Join-Path $Root "memory\INDEX.md"
@@ -151,26 +151,26 @@ $overrides = Join-Path $ide "team-overrides.json"
 if (Test-Path $overrides) { Pass "team-overrides.json present (Strict or custom)" }
 
 $ico = Join-Path $Root "branding\icon.ico"
-if (Test-Path $ico) { Pass "Talon icon branding\\icon.ico" } else { Warn "branding\\icon.ico missing. Shortcuts will look like a script." }
+if (Test-Path $ico) { Pass "Orion icon branding\\icon.ico" } else { Warn "branding\\icon.ico missing. Shortcuts will look like a script." }
 
 $menuPatch = Join-Path $Root "learn\patch_vscodium_menus.py"
 if ((Test-Path $menuPatch) -and (Test-Path $venvPy)) {
     & $venvPy $menuPatch --check
     if ($LASTEXITCODE -eq 0) { Pass "File menu Open Folder is patched off" }
-    else { Fail "File menu still has Open Folder. Close Talon and run: python learn\patch_vscodium_menus.py" }
+    else { Fail "File menu still has Open Folder. Close Orion and run: python learn\patch_vscodium_menus.py" }
 }
-$guard = Join-Path $Root "extensions\talon.talon-guard-1.3.0\extension.js"
-if (Test-Path $guard) { Pass "Talon Guard extension present" } else { Warn "Talon Guard missing. File → Open Folder is not locked off." }
-$guardPkg = Join-Path $Root "extensions\talon.talon-guard-1.3.0\package.json"
+$guard = Join-Path $Root "extensions\orion.orion-guard-1.3.0\extension.js"
+if (Test-Path $guard) { Pass "Orion Guard extension present" } else { Warn "Orion Guard missing. File → Open Folder is not locked off." }
+$guardPkg = Join-Path $Root "extensions\orion.orion-guard-1.3.0\package.json"
 if (Test-Path $guardPkg) {
     $bytes = [System.IO.File]::ReadAllBytes($guardPkg)
     if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
-        Warn "Guard package.json has a UTF-8 BOM. VSCodium will mark Talon Guard invalid."
+        Warn "Guard package.json has a UTF-8 BOM. VSCodium will mark Orion Guard invalid."
     } else {
         Pass "Guard package.json has no UTF-8 BOM"
     }
 }
-$ollamaPage = Join-Path $Root "extensions\talon.talon-guard-1.3.0\ollama-down.html"
+$ollamaPage = Join-Path $Root "extensions\orion.orion-guard-1.3.0\ollama-down.html"
 $guardJs = Get-Content $guard -Raw -ErrorAction SilentlyContinue
 if ((Test-Path $ollamaPage) -and $guardJs -match "lockClineToOllama" -and $guardJs -match "enforceOllamaGate" -and $guardJs -match "spawnIngest") {
     Pass "Ollama wait page, Cline provider lock, and path ingest"
@@ -178,8 +178,8 @@ if ((Test-Path $ollamaPage) -and $guardJs -match "lockClineToOllama" -and $guard
     Warn "Ollama wait page, Cline provider lock, or path ingest missing from Guard"
 }
 
-$backup = Join-Path $Root "Backup-TalonMemory.ps1"
-if (Test-Path $backup) { Pass "Memory backup script present" } else { Warn "Backup-TalonMemory.ps1 missing" }
+$backup = Join-Path $Root "Backup-OrionMemory.ps1"
+if (Test-Path $backup) { Pass "Memory backup script present" } else { Warn "Backup-OrionMemory.ps1 missing" }
 
 $starters = @(
     (Join-Path $Root ".cline\workflows\ingest-this-path.md"),

@@ -65,7 +65,7 @@ if (-not (Test-Ollama)) {
     if (Test-Path $ollama) {
         Start-Process $ollama -ArgumentList "serve" -WindowStyle Hidden
     } else {
-        Write-Host "Ollama.exe was not found. Talon will open on the local 'Ollama is not running' page."
+        Write-Host "Ollama.exe was not found. Orion will open on the local 'Ollama is not running' page."
         Write-Host "Do not pick a cloud provider in Cline."
     }
 }
@@ -82,7 +82,7 @@ Write-OllamaStatus $ollamaReady
 if ($ollamaReady) {
     Write-Host "Ollama is up."
 } else {
-    Write-Host "Ollama is still down. Opening Talon on the local wait page. Do not use a cloud model."
+    Write-Host "Ollama is still down. Opening Orion on the local wait page. Do not use a cloud model."
 }
 
 $lastFile = Join-Path $IdeData "last-workspace.txt"
@@ -112,15 +112,15 @@ if (Test-Path $venvScripts) {
 
 # GitHub and gh.exe must fail inside this window only (does not change your user gitconfig).
 $env:GIT_CONFIG_COUNT = "6"
-$env:GIT_CONFIG_KEY_0 = "url.localcoder-blocked://gh-https/.insteadof"
+$env:GIT_CONFIG_KEY_0 = "url.orion-blocked://gh-https/.insteadof"
 $env:GIT_CONFIG_VALUE_0 = "https://github.com/"
-$env:GIT_CONFIG_KEY_1 = "url.localcoder-blocked://gh-ssh/.insteadof"
+$env:GIT_CONFIG_KEY_1 = "url.orion-blocked://gh-ssh/.insteadof"
 $env:GIT_CONFIG_VALUE_1 = "git@github.com:"
-$env:GIT_CONFIG_KEY_2 = "url.localcoder-blocked://gh-ssh2/.insteadof"
+$env:GIT_CONFIG_KEY_2 = "url.orion-blocked://gh-ssh2/.insteadof"
 $env:GIT_CONFIG_VALUE_2 = "ssh://git@github.com/"
-$env:GIT_CONFIG_KEY_3 = "url.localcoder-blocked://gist-https/.insteadof"
+$env:GIT_CONFIG_KEY_3 = "url.orion-blocked://gist-https/.insteadof"
 $env:GIT_CONFIG_VALUE_3 = "https://gist.github.com/"
-$env:GIT_CONFIG_KEY_4 = "url.localcoder-blocked://gist-ssh/.insteadof"
+$env:GIT_CONFIG_KEY_4 = "url.orion-blocked://gist-ssh/.insteadof"
 $env:GIT_CONFIG_VALUE_4 = "git@gist.github.com:"
 $env:GIT_CONFIG_KEY_5 = "url.prevent-gh-http/.insteadof"
 $env:GIT_CONFIG_VALUE_5 = "http://github.com/"
@@ -129,7 +129,7 @@ $env:GITHUB_TOKEN = ""
 $env:GH_ENTERPRISE_TOKEN = ""
 $env:OLLAMA_HOST = "127.0.0.1:11434"
 $env:OLLAMA_ORIGINS = "http://127.0.0.1"
-$env:TALON_KIT = $Root
+$env:ORION_KIT = $Root
 # Cline's current bundle stores provider/onboarding in CLINE_DIR, not VS Code settings.
 $env:CLINE_DIR = Join-Path $IdeData "cline-home"
 
@@ -163,7 +163,7 @@ if ((Test-Path $warmPy) -and (Test-Path $warmExe)) {
     Write-Host "Warming the local model in the background..."
 }
 
-$wsFile = Join-Path $IdeData "Talon.code-workspace"
+$wsFile = Join-Path $IdeData "Orion.code-workspace"
 $openTarget = $Workspace
 if (Test-Path $wsFile) { $openTarget = $wsFile }
 
@@ -175,7 +175,7 @@ Get-CimInstance Win32_Process -Filter "Name = 'VSCodium.exe'" | ForEach-Object {
 }
 Start-Sleep -Seconds 2
 
-# Write profile state only after Talon is closed. If seed runs while
+# Write profile state only after Orion is closed. If seed runs while
 # VSCodium is open, shutdown overwrites File-menu hides and Open Folder
 # comes back.
 $settingsDest = Join-Path $IdeData "User\settings.json"
@@ -183,8 +183,8 @@ Copy-Item (Join-Path $Root "templates\settings.json") $settingsDest -Force
 $venvPy = Join-Path $Root ".venv\Scripts\python.exe"
 $sqlite = Join-Path $Root "data\local.sqlite"
 $settingsText = Get-Content $settingsDest -Raw -Encoding utf8
-$settingsText = $settingsText.Replace("__LOCALCODER_PYTHON__", ($venvPy -replace "\\", "/"))
-$settingsText = $settingsText.Replace("__LOCALCODER_SQLITE__", ($sqlite -replace "\\", "/"))
+$settingsText = $settingsText.Replace("__ORION_PYTHON__", ($venvPy -replace "\\", "/"))
+$settingsText = $settingsText.Replace("__ORION_SQLITE__", ($sqlite -replace "\\", "/"))
 Set-Content -Path $settingsDest -Value $settingsText -Encoding utf8
 $apply = Join-Path $Root "learn\apply_sources.py"
 if (Test-Path $apply) {
@@ -199,10 +199,10 @@ if (Test-Path $kbSrc) {
     Copy-Item $kbSrc $kbDest -Force
 }
 
-# Copy Guard only after Talon is closed. Replacing it while VSCodium is
+# Copy Guard only after Orion is closed. Replacing it while VSCodium is
 # running marks the extension invalid and Getting started never opens.
-$guardSrc = Join-Path $Root "extensions\talon.talon-guard-1.3.0"
-$guardDst = Join-Path $IdeExt "talon.talon-guard-1.3.0"
+$guardSrc = Join-Path $Root "extensions\orion.orion-guard-1.3.0"
+$guardDst = Join-Path $IdeExt "orion.orion-guard-1.3.0"
 if (Test-Path $guardSrc) {
     if (Test-Path $guardDst) { Remove-Item $guardDst -Recurse -Force }
     Copy-Item $guardSrc $guardDst -Recurse -Force
@@ -210,7 +210,7 @@ if (Test-Path $guardSrc) {
     if ((Test-Path $guardPkg) -and (Test-Path $kitPy)) {
         & $kitPy -c "from pathlib import Path; p=Path(r'''$guardPkg'''); b=p.read_bytes(); p.write_bytes(b[3:] if b.startswith(b'\xef\xbb\xbf') else b)"
     }
-    Write-LaunchLog "copied Talon Guard"
+    Write-LaunchLog "copied Orion Guard"
 }
 
 $menuPatch = Join-Path $Root "learn\patch_vscodium_menus.py"
@@ -229,9 +229,9 @@ foreach ($cacheName in @("CachedData", "Code Cache", "GPUCache", "DawnGraphiteCa
     }
 }
 
-# Launch goes through Open-Talon.cmd so "Local AI" stays one path.
+# Launch goes through Open-Orion.cmd so "Local AI" stays one path.
 # Do not pass USAGE.md as a launch file.
-$learnPy = Join-Path $Root "learn\talon_learn.py"
+$learnPy = Join-Path $Root "learn\orion_learn.py"
 $venvPy = Join-Path $Root ".venv\Scripts\pythonw.exe"
 if (-not (Test-Path $venvPy)) { $venvPy = Join-Path $Root ".venv\Scripts\python.exe" }
 $learnArgs = @("`"$learnPy`"", "--watch", "--kit", "`"$Root`"", "--workspace", "`"$Workspace`"")
@@ -246,17 +246,17 @@ if ((Test-Path $learnPy) -and (Test-Path $venvPy)) {
     Start-Process -FilePath $venvPy -ArgumentList $learnArgs -WindowStyle Hidden
 }
 
-Write-Host "Opening Talon - Local AI (VSCodium + Cline + Ollama)..."
+Write-Host "Opening Orion - Local AI (VSCodium + Cline + Ollama)..."
 Write-Host "Workspace: $openTarget"
 if (-not (Test-Path $sourcesFile)) {
     Write-Host "No PHI folder connected yet. Run Connect.cmd to attach a local folder or database."
 }
 Write-Host "Background learner is mapping data and lessons on this PC only."
 Write-Host "GitHub remotes and GitHub login are blocked in this window."
-Write-LaunchLog "opening Open-Talon.cmd"
-cmd.exe /c "`"$Root\Open-Talon.cmd`""
+Write-LaunchLog "opening Open-Orion.cmd"
+cmd.exe /c "`"$Root\Open-Orion.cmd`""
 if ($LASTEXITCODE -ne 0) {
-    Write-LaunchLog "Open-Talon.cmd exit $LASTEXITCODE"
-    throw "Open-Talon.cmd failed with exit $LASTEXITCODE. See $LaunchLog"
+    Write-LaunchLog "Open-Orion.cmd exit $LASTEXITCODE"
+    throw "Open-Orion.cmd failed with exit $LASTEXITCODE. See $LaunchLog"
 }
-Write-LaunchLog "Open-Talon.cmd returned"
+Write-LaunchLog "Open-Orion.cmd returned"
