@@ -76,6 +76,14 @@ function Apply-Letterpress {
             if (Test-Path $dest) { Copy-Item $codeIcon $dest -Force }
         }
     }
+    # Taskbar / window icon (unsigned resource files only — do not patch VSCodium.exe).
+    $iconPy = Join-Path $Root "tools\apply_win32_icons.py"
+    $venvPy = Join-Path $Root ".venv\Scripts\python.exe"
+    if ((Test-Path $iconPy) -and (Test-Path $venvPy)) {
+        & $venvPy $iconPy $exe
+    } elseif (Test-Path $iconPy) {
+        python $iconPy $exe
+    }
     Write-Host "VSCodium marks set to Orion."
 }
 
