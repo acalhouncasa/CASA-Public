@@ -11,10 +11,17 @@ Streamline’s documented way to make a form due on a repeating interval is **Fl
 3. Assign protocols to programs / populations per your site policy.
 4. Confirm staff can open **Client Tracking** / related search pages.
 
-## What this public pack does not include
+## Related complete pack
+
+Staff signed but client pad still open is **not** a due-date protocol. Use the portable flag pack:
+
+→ [Missing client signature chart flag](../Missing_Client_Signature_Flag/README.md)  
+(Flag Types + sync procedure + clear-on-sign trigger; replace **`AGENCYID`**)
+
+## What this folder does not include
 
 Site-specific form due catalogs, DocumentCode maps, and seed SQL for one agency’s programs. Rebuild those locally.
 
 Use vendor Help Center articles for UI field-by-field steps.
 
-A list of flags already on client charts is a separate package: [Client chart flags report](../Client_Chart_Flags_Report/README.md).
+A list of flags already on client charts: [Client chart flags report](../Client_Chart_Flags_Report/README.md).

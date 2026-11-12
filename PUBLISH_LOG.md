@@ -205,3 +205,17 @@ Site report folders, role grants, and connection strings stay private.
 |-------------|------|
 | `Local_AI/` | Product rename Talon / LocalCoder → **Orion** (kit 1.5.0). New icon, wordmark, letterpress, SVG marks. Guard extension `orion.orion-guard`. Working path docs use `C:\Orion`. |
 
+---
+
+## 11/12/2026 — Missing client signature flag + SmartCare completeness
+
+| Public path | What |
+|-------------|------|
+| `SmartCare/Missing_Client_Signature_Flag/` | Full portable pack: discovery, Flag Types, sync ssp, clear trigger, undo. Token **`AGENCYID`** (not CASA). Example DocumentCodeIds only. |
+| `SmartCare/Ad_Hoc_Reporting/sql/` | Discovery + Adhoc view + CatalogReports templates (`AGENCYID`) |
+| `SmartCare/Change_Impact_Scan/sql/` | DocumentCode consumer scan |
+| `SmartCare/Discovery_Readonly/` | ClientNotes + DocumentSignatures discovery SELECTs |
+| `SmartCare/Scoring/sql/SC_wire_FormJavascript_template_COMMIT.sql` | Wire FormJavascript by TableName |
+
+Still method-only (on purpose): Consent_Wiring (legal text), DFA_Initialization (site pairs), Client_Tracking due catalogs (site programs). Private `C:\github` was not copied.
+

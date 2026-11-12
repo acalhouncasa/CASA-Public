@@ -28,6 +28,7 @@ You can use both.
 | [examples/scoring_total_from_radios.js](examples/scoring_total_from_radios.js) | Likert-style sum via `parseInt` on radio values |
 | [examples/scoring_yes_count_radioyn.js](examples/scoring_yes_count_radioyn.js) | Count Yes on RADIOYN (do not parseInt Y/N) |
 | [sql/verify_scoring_formitems_and_globalcodes.sql](sql/verify_scoring_formitems_and_globalcodes.sql) | Read-only verify |
+| [sql/SC_wire_FormJavascript_template_COMMIT.sql](sql/SC_wire_FormJavascript_template_COMMIT.sql) | Wire `Forms.FormJavascript` by TableName (replace **`AGENCYID`** stamp) |
 
 ## Pitfalls
 

@@ -10,6 +10,16 @@ SmartCare’s Ad-hoc builder is limited. For joins and logic the GUI cannot expr
 
 **Do not test in Prod.**
 
+## Files
+
+| File | Purpose |
+|------|---------|
+| [sql/01_discovery_catalogs.sql](sql/01_discovery_catalogs.sql) | Read-only catalogs / Adhoc views / reports |
+| [sql/02_create_adhoc_view_template_COMMIT.sql](sql/02_create_adhoc_view_template_COMMIT.sql) | `Adhoc.vw_AGENCYID_ExampleDocumentList` |
+| [sql/03_register_catalog_report_template_COMMIT.sql](sql/03_register_catalog_report_template_COMMIT.sql) | CatalogReports insert/update template |
+
+Replace **`AGENCYID`**. Edit the view SELECT and CatalogXML entity wiring for your site before Prod.
+
 ## Forbidden
 
 | Do not | Why |
@@ -26,6 +36,6 @@ SmartCare’s Ad-hoc builder is limited. For joins and logic the GUI cannot expr
 
 ## Naming
 
-Prefer a clear agency prefix on view names if your site uses one. Avoid publishing PHI in view definitions.
+Prefer **`AGENCYID`** (or your prefix) on view and report names. Avoid publishing PHI in view definitions.
 
-This folder ships the **method** only. Site-specific views and reports stay private.
+CatalogXML Table/Entity markup differs by SmartCare build — discovery first; do not paste another agency’s full CatalogXML.
