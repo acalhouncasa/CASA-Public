@@ -219,3 +219,14 @@ Site report folders, role grants, and connection strings stay private.
 
 Still method-only (on purpose): Consent_Wiring (legal text), DFA_Initialization (site pairs), Client_Tracking due catalogs (site programs). Private `C:\github` was not copied.
 
+---
+
+## 11/12/2026 — SC Icons cheatsheet PDF
+
+| Public path | What |
+|-------------|------|
+| `SmartCare/SC_Icons/SC_Icons_Cheatsheet.pdf` | Shareable full `dbo.Icons` picker (tiles). No org Flag Type / QuickLink assignment lists, no BitmapImage dumps. |
+| `SmartCare/SC_Icons/README.md` | How to use; confirm IconId on your DB |
+
+Private already had the same file at `Smart Care/SC Icons/Output/SC_Icons_Cheatsheet.pdf` (identical hash).
+

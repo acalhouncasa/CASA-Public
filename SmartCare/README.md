@@ -10,6 +10,7 @@ Optional packages and patterns for **Streamline SmartCare**. Not Streamline Help
 |--------|------------|--------------|
 | [Staff_Appointment_Overlap/](Staff_Appointment_Overlap/) | Busy staff double-book hard-stop | Full SQL (apply / unwire / drop) |
 | [Missing_Client_Signature_Flag/](Missing_Client_Signature_Flag/) | Chart flag when staff signed / client pad open | Full SQL (Flag Types, sync ssp, clear trigger, undo) — replace **`AGENCYID`** |
+| [SC_Icons/](SC_Icons/) | Full `dbo.Icons` picker cheatsheet | PDF (tiles only; confirm IconId on your DB) |
 | [Client_Chart_Flags_Report/](Client_Chart_Flags_Report/) | Client chart flags report | Full SQL + RDL |
 | [DFA_From_PDF/](DFA_From_PDF/) | Build a new DFA from PDF/screenshots | Process + starter generator |
 | [GlobalCodes/](GlobalCodes/) | Add picklist category + codes | SQL template |

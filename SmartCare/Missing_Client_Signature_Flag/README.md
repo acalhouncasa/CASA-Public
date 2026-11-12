@@ -33,10 +33,11 @@ Replace the token **`AGENCYID`** everywhere (object names, stamps, comments) wit
 
 1. Find/replace **`AGENCYID`** → your prefix (example `ACME`).
 2. Edit the `@Cfg` / `@Wanted` tables: your `DocumentCodeId`, Flag Type display name, and stamp (`CreatedBy` on notes).
-3. Confirm `IconId` exists on your database (discovery lists icons).
+3. Confirm `IconId` exists on your database (discovery lists icons). Visual picker: [SC Icons cheatsheet](../SC_Icons/SC_Icons_Cheatsheet.pdf).
 4. Select the target database in SSMS. Scripts have **no** `USE` of a customer DB name.
 
 ## Related
 
 - Method overview: [Client Tracking](../Client_Tracking/README.md)
+- Icon picker PDF: [SC Icons](../SC_Icons/README.md)
 - List flags already on charts: [Client chart flags report](../Client_Chart_Flags_Report/README.md)
